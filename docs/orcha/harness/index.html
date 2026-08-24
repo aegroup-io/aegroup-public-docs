@@ -92,6 +92,9 @@
     text-transform: uppercase;
     color: var(--accent);
   }
+  .kicker-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+  .exec-link { font-size: 13px; font-weight: 600; text-decoration: none; }
+  .exec-link:hover, .exec-link:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
   h1 { font-size: clamp(30px, 4.4vw, 44px); font-weight: 700; line-height: 1.08; margin-top: 6px; }
   .deck { max-width: 68ch; margin-top: 12px; color: var(--muted); font-size: 16px; }
   .deck strong { color: var(--ink); font-weight: 600; }
@@ -332,7 +335,7 @@
 
 <div class="wrap">
   <header class="hero">
-    <div class="kicker">Orcha · Agentic delivery harness</div>
+    <div class="kicker-row"><div class="kicker">Orcha · Agentic delivery harness</div><a class="exec-link" href="../exec/">Executive view →</a></div>
     <h1>How a change earns its merge</h1>
     <p class="deck">Versioned skills arm isolated agent lanes. Every pull request is proven by <strong>changed-area CI, AI review, visual evidence, and security policy in parallel</strong> — and a single readiness verdict puts the final decision in a human hand. Click any node for its receipts, or <strong>trace a change</strong> end to end.</p>
     <div class="stats" aria-label="Harness at a glance">

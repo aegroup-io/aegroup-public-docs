@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Executive view of the Orcha agentic delivery harness — the one-slide story, linked into the deep system view.">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+<title>AI-Powered Engineering</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #F4F6F5;
+    --surface: #FFFFFF;
+    --surface-2: #ECF0EE;
+    --ink: #1A2422;
+    --muted: #5C6B67;
+    --line: #D3DBD8;
+    --line-strong: #A8B5B1;
+    --accent: #0E8A7B;
+    --accent-soft: #DCEEEA;
+    --human: #8A5F00;
+    --human-soft: #F3E8CE;
+    --cyber: #5F4EB3;
+    --cyber-soft: #E6E1F6;
+    --shadow: 0 10px 30px rgb(26 36 34 / 8%);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #101615;
+      --surface: #17201E;
+      --surface-2: #1D2826;
+      --ink: #E6ECE9;
+      --muted: #97A6A1;
+      --line: #2A3835;
+      --line-strong: #465652;
+      --accent: #46C7B4;
+      --accent-soft: #143430;
+      --human: #E0AC48;
+      --human-soft: #33270E;
+      --cyber: #A79BE8;
+      --cyber-soft: #252039;
+      --shadow: 0 10px 30px rgb(0 0 0 / 35%);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #101615;
+    --surface: #17201E;
+    --surface-2: #1D2826;
+    --ink: #E6ECE9;
+    --muted: #97A6A1;
+    --line: #2A3835;
+    --line-strong: #465652;
+    --accent: #46C7B4;
+    --accent-soft: #143430;
+    --human: #E0AC48;
+    --human-soft: #33270E;
+    --cyber: #A79BE8;
+    --cyber-soft: #252039;
+    --shadow: 0 10px 30px rgb(0 0 0 / 35%);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  h1, h2, h3, p { margin: 0; }
+  h1, h2 { font-family: "Saira", "IBM Plex Sans", sans-serif; text-wrap: balance; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover, a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- header ---------- */
+  header.hero { padding: 44px 0 10px; }
+  .kicker-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+  .kicker {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .deep-link { font-size: 13px; font-weight: 600; white-space: nowrap; }
+  h1 { font-size: clamp(30px, 4.4vw, 44px); font-weight: 700; line-height: 1.08; margin-top: 6px; }
+  .deck { max-width: 72ch; margin-top: 12px; color: var(--muted); font-size: 16.5px; }
+
+  /* ---------- human ribbon ---------- */
+  .ribbon {
+    display: flex; align-items: center; gap: 18px;
+    margin-top: 26px;
+    color: var(--human);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .ribbon::before, .ribbon::after { content: ""; flex: 1; border-top: 1px solid var(--human); opacity: 0.5; }
+  .ribbon a { color: var(--human); }
+
+  /* ---------- orchestrator bar ---------- */
+  .orch {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 18px;
+    margin-top: 18px; padding: 13px 18px;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+  }
+  .orch .who { font-family: "Saira", sans-serif; font-weight: 600; font-size: 15px; color: var(--accent); letter-spacing: 0.02em; }
+  .orch .what { color: var(--muted); font-size: 13.5px; }
+  .orch .what a { color: inherit; }
+  .orch .chip {
+    margin-left: auto;
+    font-size: 12.5px; font-weight: 600; color: var(--human);
+    border: 1px solid var(--human); border-radius: 999px; padding: 3px 12px;
+    white-space: nowrap;
+  }
+
+  /* ---------- flow ---------- */
+  .flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-top: 34px; position: relative; }
+  .step { display: grid; justify-items: center; text-align: center; gap: 0; color: inherit; position: relative; }
+  .step:hover { text-decoration: none; }
+  .stage {
+    font-family: "Saira", sans-serif; font-weight: 700; font-size: 17px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .step.human .stage { color: var(--human); }
+  .ball {
+    width: 64px; height: 64px; margin-top: 14px;
+    display: grid; place-items: center;
+    border: 2px solid var(--accent); border-radius: 50%;
+    background: var(--surface);
+    font-family: "Saira", sans-serif; font-size: 26px; font-weight: 700;
+    position: relative; z-index: 1;
+    transition: transform 140ms ease;
+  }
+  .step.human .ball { background: var(--human); border-color: var(--human); color: #1A2422; }
+  .step:hover .ball { transform: scale(1.06); }
+  .step:not(:first-child)::before {
+    content: "";
+    position: absolute; top: 77px; right: 50%; left: calc(-50% - 18px);
+    border-top: 2px solid var(--line-strong);
+    z-index: 0;
+  }
+  .step:not(:first-child)::after {
+    content: "▸";
+    position: absolute; top: 66px; left: calc(-9px);
+    color: var(--line-strong); font-size: 15px;
+    z-index: 0;
+  }
+  .step h3 { margin-top: 14px; font-size: 15.5px; font-weight: 600; color: var(--accent); }
+  .step.human h3 { color: var(--human); }
+  .step p { margin-top: 8px; font-size: 13px; color: var(--muted); max-width: 30ch; }
+  .step .peek {
+    margin-top: 9px; font-size: 11.5px; font-weight: 600; color: var(--accent);
+    opacity: 0; transition: opacity 140ms ease;
+  }
+  .step.human .peek { color: var(--human); }
+  .step:hover .peek, .step:focus-visible .peek { opacity: 1; }
+
+  /* ---------- learning loop ---------- */
+  .loopback {
+    display: flex; align-items: center; gap: 14px;
+    margin-top: 26px;
+    color: var(--human);
+  }
+  .loopback .arrow { font-size: 17px; }
+  .loopback .dash { flex: 1; border-top: 2px dashed var(--human); opacity: 0.6; }
+  .loopback a {
+    color: var(--human);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ---------- outcomes ---------- */
+  .outcomes {
+    display: grid; grid-template-columns: auto repeat(4, minmax(0, 1fr)); gap: 22px;
+    margin-top: 30px; padding-top: 20px;
+    border-top: 1px solid var(--line);
+    align-items: start;
+  }
+  .outcomes .label {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--human);
+    padding-top: 3px;
+  }
+  .outcome { border-left: 1px solid var(--line); padding-left: 18px; }
+  .outcome:first-of-type { border-left: 0; padding-left: 0; }
+  .outcome b { display: block; font-family: "Saira", sans-serif; font-size: 16.5px; font-weight: 600; }
+  .outcome span { display: block; margin-top: 5px; font-size: 12.5px; color: var(--muted); }
+  .outcome .stat { color: var(--accent); font-weight: 600; }
+
+  /* ---------- key message + CTA ---------- */
+  .keymsg {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px;
+    margin-top: 30px; padding: 16px 0 8px;
+    border-top: 1px solid var(--line);
+  }
+  .keymsg p { font-size: 13.5px; color: var(--muted); max-width: 70ch; }
+  .cta {
+    display: inline-block;
+    background: var(--accent); color: var(--bg) !important;
+    font-weight: 600; font-size: 13.5px;
+    padding: 8px 18px; border-radius: 999px;
+    white-space: nowrap;
+  }
+  .cta:hover { text-decoration: none; filter: brightness(1.08); }
+
+  /* ---------- roles ---------- */
+  section.roles { padding: 46px 0 10px; }
+  .band-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; border-bottom: 2px solid var(--ink); padding-bottom: 8px; }
+  .band-head h2 { font-size: 21px; font-weight: 700; }
+  .band-head .note { font-size: 12.5px; color: var(--muted); text-align: right; max-width: 48ch; }
+  .role-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 15px;
+  }
+  .card.tone-human { border-left: 3px solid var(--human); }
+  .card h3 { font-size: 13px; font-weight: 600; }
+  .card h3 .n { color: var(--muted); font-weight: 400; font-size: 11.5px; }
+  .card h3 a { color: inherit; }
+  .role { border-top: 1px solid var(--line); padding: 7px 0 0; margin-top: 7px; }
+  .role:first-of-type { margin-top: 10px; }
+  .role b { font-size: 12.5px; font-weight: 600; display: block; }
+  .role span { display: block; font-size: 11.5px; color: var(--muted); }
+  .roles-note { margin-top: 14px; font-size: 12.5px; color: var(--muted); max-width: 88ch; }
+
+  footer { margin-top: 34px; padding: 16px 0 44px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+
+  @media (max-width: 900px) {
+    .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 18px; }
+    .step:nth-child(3)::before, .step:nth-child(3)::after { display: none; }
+    .outcomes { grid-template-columns: 1fr 1fr; }
+    .outcomes .label { grid-column: 1 / -1; }
+    .outcome, .outcome:first-of-type { border-left: 0; padding-left: 0; }
+    .role-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .band-head { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .band-head .note { text-align: left; }
+  }
+  @media (max-width: 560px) {
+    .flow, .role-grid, .outcomes { grid-template-columns: 1fr; }
+    .step::before, .step::after { display: none !important; }
+    .ribbon { white-space: normal; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ball, .peek { transition: none; }
+  }
+  @media print {
+    body { background: #fff; }
+    .deep-link, .peek, .cta { display: none; }
+    section.roles { break-before: page; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker-row">
+      <div class="kicker">Orcha · Harness engineering · Executive view</div>
+      <a class="deep-link" href="../harness/">Deep view: the full harness →</a>
+    </div>
+    <h1>AI-Powered Engineering</h1>
+    <p class="deck">Specialist roles operate in parallel as one governed delivery system under human direction, with evidence at every hand-off.</p>
+
+    <div class="ribbon"><a href="../harness/#lens=human">Human direction · Approvals · Accountability</a></div>
+
+    <div class="orch">
+      <span class="who">ORCHESTRATOR</span>
+      <span class="what"><a href="../harness/#lens=loop">Frames the work · Assigns specialist lanes · Monitors evidence · Routes findings</a></span>
+      <a class="chip" href="#roles">11 reusable agent roles</a>
+    </div>
+
+    <div class="flow">
+      <a class="step" href="../harness/#lens=skills">
+        <span class="stage">Define</span>
+        <span class="ball">1</span>
+        <h3>Shape the Work</h3>
+        <p>Requirements and planning agents turn intent into bounded work and clear acceptance criteria.</p>
+        <span class="peek">In the deep view: skills →</span>
+      </a>
+      <a class="step" href="../harness/#lens=components">
+        <span class="stage">Build</span>
+        <span class="ball">2</span>
+        <h3>Build in Parallel</h3>
+        <p>Specialist builders work across product components in isolated, coordinated lanes.</p>
+        <span class="peek">In the deep view: components →</span>
+      </a>
+      <a class="step" href="../harness/#lens=quality">
+        <span class="stage">Prove</span>
+        <span class="ball">3</span>
+        <h3>Quality, Safety and Packaging</h3>
+        <p>Verification, cyber and review agents assemble decision-ready evidence.</p>
+        <span class="peek">In the deep view: CI + quality →</span>
+      </a>
+      <a class="step human" href="../harness/#lens=human">
+        <span class="stage">Human Control</span>
+        <span class="ball">4</span>
+        <h3>Product Ownership</h3>
+        <p>Reviews the evidence and decides what and when to release. Feedback scales back into the harness.</p>
+        <span class="peek">In the deep view: human keys →</span>
+      </a>
+    </div>
+
+    <div class="loopback">
+      <span class="arrow">←</span>
+      <span class="dash"></span>
+      <a href="../harness/#lens=loop">Continuous learning loop</a>
+    </div>
+
+    <div class="outcomes">
+      <div class="label">CTO outcomes</div>
+      <div class="outcome">
+        <b>Extreme Capacity</b>
+        <span><span class="stat">1,500+ issues and PRs</span> delivered across dozens of parallel lanes — without collisions</span>
+      </div>
+      <div class="outcome">
+        <b>Repeatable Quality</b>
+        <span>Standards applied <strong>and verified</strong> with every change</span>
+      </div>
+      <div class="outcome">
+        <b>Early Risk Detection</b>
+        <span>End to end testing and full cyber assessment in each flow</span>
+      </div>
+      <div class="outcome">
+        <b>Clear Accountability</b>
+        <span>Evidence-backed human decisions</span>
+      </div>
+    </div>
+
+    <div class="keymsg">
+      <p>Leading engineering practice from frontier software teams — adapted for enterprise delivery. Every claim on this page opens as evidence in the deep view.</p>
+      <a class="cta" href="../harness/">Explore the full harness →</a>
+    </div>
+  </header>
+
+  <section class="roles" id="roles">
+    <div class="band-head">
+      <h2>The 11 reusable agent roles</h2>
+      <span class="note">Each role is a versioned, testable contract in the delivery repository — <a href="../harness/#lens=skills">see the skill library in the deep view</a>.</span>
+    </div>
+    <div class="role-grid">
+      <article class="card">
+        <h3><a href="../harness/#lens=skills">Define — Shape the Work</a> <span class="n">3 roles</span></h3>
+        <div class="role"><b>Feedback Converter</b><span>Turns approved feedback into linked, scoped delivery work</span></div>
+        <div class="role"><b>Issue Shaper</b><span>Makes work executable: outcome, scope, acceptance, demo plan</span></div>
+        <div class="role"><b>Delivery Manager</b><span>Moves work through its lifecycle states from intake to done</span></div>
+      </article>
+      <article class="card">
+        <h3><a href="../harness/#lens=components">Build — Build in Parallel</a> <span class="n">2 roles</span></h3>
+        <div class="role"><b>Lane Provisioner</b><span>Sets up each isolated lane so parallel work never collides</span></div>
+        <div class="role"><b>Environment Runner</b><span>Stands up, smoke-tests, and resets a full local stack per lane</span></div>
+      </article>
+      <article class="card">
+        <h3><a href="../harness/#lens=quality">Prove — Quality, Safety and Packaging</a> <span class="n">5 roles</span></h3>
+        <div class="role"><b>Test Selector</b><span>Picks the narrowest credible checks for each change, mirroring CI</span></div>
+        <div class="role"><b>Demo Capturer</b><span>Produces screenshots, clips, and diffs as reviewable evidence</span></div>
+        <div class="role"><b>Code Reviewer</b><span>Hunts bugs, regressions, missing tests, and risky boundaries</span></div>
+        <div class="role"><b>Data Transformation Reviewer</b><span>Reviews data pipeline changes for lineage and schema discipline</span></div>
+        <div class="role"><b>PR Packager</b><span>Assembles the evidence-backed change package; screens for sensitive data</span></div>
+      </article>
+      <article class="card tone-human">
+        <h3><a href="../harness/#lens=human">Human Control — Product Ownership</a> <span class="n">1 role</span></h3>
+        <div class="role"><b>Readiness Auditor</b><span>Renders the go / go-with-risks / no-go evidence brief for the Product Owner</span></div>
+      </article>
+    </div>
+    <p class="roles-note">The Orchestrator and the Product Owner sit outside the 11 — coordination and decision are separate concerns. Automation proves and recommends; a human turns the merge key.</p>
+  </section>
+
+  <footer>
+    <span>Companion to the <a href="../harness/">Orcha agentic delivery harness</a> deep view. Snapshot: 2026-08-24.</span>
+  </footer>
+</div>
+
+</body>
+</html>
