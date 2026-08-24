@@ -138,6 +138,7 @@
   svg .human-node .t { fill: var(--human); }
   svg .memory rect { stroke: var(--cyber); fill: none; stroke-dasharray: 5 4; }
   svg .dashed-node rect { stroke-dasharray: 5 4; }
+  svg .cyber-divider { stroke: var(--cyber); stroke-width: 1; opacity: 0.35; }
   svg .rail rect { fill: var(--accent-soft); stroke: var(--accent); opacity: 0.85; }
   svg .fail-path { stroke: var(--fail); stroke-width: 1.4; fill: none; stroke-dasharray: 2 3; }
   svg .fail-label { fill: var(--fail); font-size: 10px; }
@@ -346,7 +347,7 @@
 
   <figure class="schematic">
     <div class="schematic-frame">
-    <svg viewBox="0 0 1180 530" role="img" aria-label="Flow of one change through the harness: a scoped issue passes through the orchestrator into isolated agent lanes, becomes an evidence-bound pull request, fans out to four parallel gates, converges on a readiness verdict, and is merged by a human before deploy and monitoring; a nightly release certification feeds only certified runtime images into deploy; failures return to the owning lane and lessons return to the skill library.">
+    <svg viewBox="0 0 1180 530" role="img" aria-label="Flow of one change through the harness: a scoped issue passes through the orchestrator into isolated agent lanes, becomes an evidence-bound pull request, fans out to four parallel gates, converges on a readiness verdict, and is merged by a human before deploy and monitoring; a standing cyber layer — security policy at the PR, nightly release certification, and credential custody — feeds only certified runtime images into deploy; failures return to the owning lane and lessons return to the skill library.">
       <defs>
         <marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z"/></marker>
         <marker id="ah-fail" class="m-fail" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z"/></marker>
@@ -462,14 +463,20 @@
       </g>
       <line class="edge" x1="726" y1="332" x2="618" y2="332" marker-end="url(#ah)"/>
 
-      <g class="node gate cyber dashed-node" id="sv-cert" data-detail="gate-cert" data-lens="cyber loop" tabindex="0" role="button" aria-label="Nightly release certification">
-        <rect x="726" y="396" width="170" height="56" rx="10"/>
-        <text x="738" y="412" class="k">NIGHTLY · ALWAYS ON</text>
-        <text x="738" y="430" class="t">Release certification</text>
-        <text x="738" y="444" class="s">SBOM · secret + vuln scans</text>
+      <g class="node gate cyber" id="sv-cyber" data-detail="cyber" data-lens="cyber loop" tabindex="0" role="button" aria-label="Cyber layer: security policy at the PR, release certification at release, credential custody at runtime">
+        <rect x="620" y="396" width="540" height="64" rx="10"/>
+        <text x="634" y="414" class="k">CYBER · ALWAYS ON</text>
+        <line x1="794" y1="422" x2="794" y2="452" class="cyber-divider"/>
+        <line x1="974" y1="422" x2="974" y2="452" class="cyber-divider"/>
+        <text x="634" y="436" class="t">Security policy</text>
+        <text x="634" y="450" class="s">blocks unsafe change · at PR</text>
+        <text x="806" y="436" class="t">Release certification</text>
+        <text x="806" y="450" class="s">SBOM · secret + vuln scans</text>
+        <text x="986" y="436" class="t">Credential custody</text>
+        <text x="986" y="450" class="s">agents never hold secrets</text>
       </g>
-      <line class="edge" x1="811" y1="394" x2="811" y2="370" marker-end="url(#ah)"/>
-      <text x="822" y="386" class="edge-label">certified images only</text>
+      <line class="edge" x1="758" y1="394" x2="758" y2="370" marker-end="url(#ah)"/>
+      <text x="770" y="386" class="edge-label">certified images only</text>
 
       <g class="node" id="sv-monitor" data-detail="monitor" data-lens="loop" tabindex="0" role="button" aria-label="Monitor and events">
         <rect x="446" y="300" width="170" height="64" rx="10"/>
@@ -510,7 +517,7 @@
       </g>
     </svg>
     </div>
-    <figcaption>One change, end to end: the orchestrator turns a scoped issue into isolated lane work; the draft PR fans out to four parallel gates whose evidence converges on a single readiness verdict; a human turns the only merge key. Two loops close the system — failures return to the owning lane, and accepted lessons update the versioned skills that armed the run. Cyber stands at two points: the security-policy gate blocks un-hardened changes at the PR, and a nightly certification (SBOM, secret and vulnerability scans) means only certified runtime images ever deploy.</figcaption>
+    <figcaption>One change, end to end: the orchestrator turns a scoped issue into isolated lane work; the draft PR fans out to four parallel gates whose evidence converges on a single readiness verdict; a human turns the only merge key. Two loops close the system — failures return to the owning lane, and accepted lessons update the versioned skills that armed the run. Cyber stands as its own layer with three stations: the security-policy gate at the PR, nightly release certification feeding only certified images into deploy, and credential custody keeping secrets out of agent hands entirely.</figcaption>
   </figure>
 
   <div class="toolbar" id="toolbar">
@@ -771,6 +778,7 @@
     "gate-visual": { t: "Visual regression gate", b: "<p>A deterministic fixture build renders 37 UI routes; Playwright captures snapshots and demo clips; a pixel diff against accepted baselines warns at 0.2% and fails at 1.0%; an AI design review adds a second opinion where only an explicit fail blocks. Baseline changes require a separate human-dispatched acceptance.</p>", r: ["route spec: 37 routes · fixed viewport + theme", "pixelmatch thresholds 0.2% / 1.0%", "artifacts retained 14 days"] },
     "gate-baseline": { t: "Baseline acceptance", b: "<p>Updating what 'correct' looks like is a privileged, human-dispatched act. The workflow verifies the official gate run, the exact PR head SHA, the artifact's identity and digest, and the capture manifest before committing baselines — and a later pixel change never inherits an earlier acceptance.</p>", r: ["maintainer dispatch only", "artifact digest verification", "acceptance record committed with baselines"] },
     "gate-policy": { t: "Security manifest policy", b: "<p>Deployment manifests for long-lived services must pin images by digest, define readiness and liveness probes, and run non-root with no privilege escalation and all capabilities dropped. Exceptions are exact-fingerprint, owned, and time-boxed; expiry or any parse doubt fails the gate closed.</p>", r: ["digest-pinned images", "probes + non-root + drop ALL capabilities", "time-boxed exceptions · fails closed"] },
+    "cyber": { t: "Cyber — the standing layer", b: "<p>Cyber holds three positions in the flow. <strong>At the PR</strong>, the security-policy gate blocks un-hardened deployment changes and fails closed. <strong>At release</strong>, nightly certification rebuilds the worker runtime reproducibly with provenance, emits SBOMs, runs three secret scans, and blocks HIGH/CRITICAL vulnerabilities with available fixes — only certified images deploy. <strong>At runtime</strong>, credential custody keeps secrets out of agent hands entirely: jobs carry references, resolved against exact scope, failing closed.</p><p class='sub'>Operator-run DAST and the sensitive-data gate on every PR round out the layer; SAST, dependency audit, and PR-path secret scanning are tracked follow-up slices.</p>", r: ["security manifest policy · blocking, fails closed", "nightly certification · SBOM + secret/vuln scans", "credential custody · reference-only, exact scope", "sensitive-data gate on every PR"] },
     "gate-cert": { t: "Release certification", b: "<p>Nightly and on demand, the worker runtime image is rebuilt reproducibly with provenance, emits CycloneDX SBOMs (runtime, Python, image), passes three secret scans (build tree, image + history, evidence bundle), and is scanned for vulnerabilities — HIGH/CRITICAL findings with available fixes block certification.</p>", r: ["reproducible build + provenance comparison", "3× SBOM · 3× secret scan", "vulnerability policy: HIGH/CRITICAL with fix ⇒ block"] },
     "custody": { t: "Credential custody", b: "<p>Jobs that touch source systems never carry secrets — only a reference (id, provider, purpose). The runtime resolves references against exact scope: organization, environment, region, source family, handler, provider, purpose. Missing, stale, revoked, or cross-scope references fail before any source is touched. Agents, queues, and logs never hold credential material.</p>", r: ["reference-only job payloads", "exact-scope resolution · fails closed", "credential lineage tracked per source"] },
     "boundaries": { t: "Known boundaries", b: "<p>The cyber story is honest about its edges: static analysis (SAST), dependency auditing, and PR-path secret scanning are scheduled follow-up slices on the platform-guardrails epic. Today, secret scanning runs in the release-certification path, and the sensitive-data gate covers the PR surface.</p><p class='sub'>Claiming only what's wired is itself a control: the readiness verdict cites evidence that exists.</p>", r: ["tracked follow-up slices on the guardrails epic", "no silent coverage claims"] },
@@ -846,7 +854,7 @@
     { k:"STEP 6 · GATES", t:"Four gates fire in parallel", b:"Changed-area CI, AI advisory review, the visual gate, and security policy each produce independent evidence. Any failure returns to the owning lane — and a new head SHA voids stale evidence.", ids:["sv-gate-ci","sv-gate-adv","sv-gate-vis","sv-gate-pol"], tr:"t6" },
     { k:"STEP 7 · VERDICT", t:"Evidence converges", b:"Merge readiness re-audits on every gate completion and answers: ready, ready-with-risks, or not-ready — one comment, one evidence bundle.", ids:["sv-verdict"], tr:"t7" },
     { k:"STEP 8 · DECIDE", t:"A human turns the key", b:"The Product Owner merges. Done starts only after merge — automation holds none of the eight human keys.", ids:["sv-merge"], tr:"t8" },
-    { k:"STEP 9 · SHIP + WATCH", t:"Deploy, then keep watching", b:"Operator-run CD ships the components — only nightly-certified runtime images (SBOM, secret + vulnerability scans) are eligible. Events notify on state changes; a 10-minute deterministic audit reconciles the board with reality.", ids:["sv-deploy","sv-monitor","sv-cert"], tr:"t9" },
+    { k:"STEP 9 · SHIP + WATCH", t:"Deploy, then keep watching", b:"Operator-run CD ships the components — only nightly-certified runtime images (SBOM, secret + vulnerability scans) are eligible. Events notify on state changes; a 10-minute deterministic audit reconciles the board with reality.", ids:["sv-deploy","sv-monitor","sv-cyber"], tr:"t9" },
     { k:"STEP 10 · LEARN", t:"The harness gets stricter", b:"Accepted findings become edits to versioned skills, guidance, and tests — validated by CI, enforceable on the very next run.", ids:["sv-memory","sv-skills"], tr:"t10" }
   ];
   const hud = $("#traceHud");
