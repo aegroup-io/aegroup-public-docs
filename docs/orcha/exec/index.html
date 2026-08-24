@@ -235,6 +235,12 @@
   .role b { font-size: 12.5px; font-weight: 600; display: block; }
   .role span { display: block; font-size: 11.5px; color: var(--muted); }
   .roles-note { margin-top: 14px; font-size: 12.5px; color: var(--muted); max-width: 88ch; }
+  .roles-details summary { list-style: none; cursor: pointer; }
+  .roles-details summary::-webkit-details-marker { display: none; }
+  .roles-details summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 6px; }
+  .roles-details summary:hover h2 { color: var(--accent); }
+  .chev { display: inline-block; margin-left: 10px; color: var(--muted); transition: transform 160ms ease; }
+  .roles-details[open] .chev { transform: rotate(90deg); }
 
   footer { margin-top: 34px; padding: 16px 0 44px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
 
@@ -254,7 +260,7 @@
     .ribbon { white-space: normal; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .ball, .peek { transition: none; }
+    .ball, .peek, .chev { transition: none; }
   }
   @media print {
     body { background: #fff; }
@@ -346,11 +352,15 @@
   </header>
 
   <section class="roles" id="roles">
-    <div class="band-head">
-      <h2>The 11 reusable agent roles</h2>
-      <span class="note">Each role is a versioned, testable contract in the delivery repository — <a href="../harness/#lens=skills">see the skill library in the deep view</a>.</span>
-    </div>
-    <div class="role-grid">
+    <details class="roles-details">
+      <summary>
+        <div class="band-head">
+          <h2>The 11 reusable agent roles</h2>
+          <span class="note"><span class="mono">3 + 2 + 5 + 1</span><span class="chev">▸</span></span>
+        </div>
+      </summary>
+      <p class="roles-note intro">Each role is a versioned, testable contract in the delivery repository — <a href="../harness/#lens=skills">see the skill library in the deep view</a>.</p>
+      <div class="role-grid">
       <article class="card">
         <h3><a href="../harness/#lens=skills">Define — Shape the Work</a> <span class="n">3 roles</span></h3>
         <div class="role"><b>Feedback Converter</b><span>Turns approved feedback into linked, scoped delivery work</span></div>
@@ -375,13 +385,25 @@
         <div class="role"><b>Readiness Auditor</b><span>Renders the go / go-with-risks / no-go evidence brief for the Product Owner</span></div>
       </article>
     </div>
-    <p class="roles-note">The Orchestrator and the Product Owner sit outside the 11 — coordination and decision are separate concerns. Automation proves and recommends; a human turns the merge key.</p>
+      <p class="roles-note">The Orchestrator and the Product Owner sit outside the 11 — coordination and decision are separate concerns. Automation proves and recommends; a human turns the merge key.</p>
+    </details>
   </section>
 
   <footer>
     <span>Companion to the <a href="../harness/">Orcha agentic delivery harness</a> deep view. Snapshot: 2026-08-24.</span>
   </footer>
 </div>
+
+<script>
+(() => {
+  const d = document.querySelector(".roles-details");
+  if (!d) return;
+  const openIfTargeted = () => { if (location.hash === "#roles") d.open = true; };
+  openIfTargeted();
+  window.addEventListener("hashchange", openIfTargeted);
+  window.addEventListener("beforeprint", () => { d.open = true; });
+})();
+</script>
 
 </body>
 </html>
