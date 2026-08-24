@@ -3,1970 +3,876 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Orcha agentic delivery harness — versioned skills, isolated agent lanes, layered assurance, and the human merge loop.">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
-<title>Product Agentic Delivery Harness</title>
-<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+<title>Orcha Delivery Harness</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #F4F6F5;
+    --surface: #FFFFFF;
+    --surface-2: #ECF0EE;
+    --ink: #1A2422;
+    --muted: #5C6B67;
+    --line: #D3DBD8;
+    --line-strong: #A8B5B1;
+    --accent: #0E8A7B;
+    --accent-soft: #DCEEEA;
+    --human: #8A5F00;
+    --human-soft: #F3E8CE;
+    --cyber: #5F4EB3;
+    --cyber-soft: #E6E1F6;
+    --fail: #A8402B;
+    --fail-soft: #F4E0DA;
+    --shadow: 0 10px 30px rgb(26 36 34 / 8%);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #101615;
+      --surface: #17201E;
+      --surface-2: #1D2826;
+      --ink: #E6ECE9;
+      --muted: #97A6A1;
+      --line: #2A3835;
+      --line-strong: #465652;
+      --accent: #46C7B4;
+      --accent-soft: #143430;
+      --human: #E0AC48;
+      --human-soft: #33270E;
+      --cyber: #A79BE8;
+      --cyber-soft: #252039;
+      --fail: #E08A72;
+      --fail-soft: #38190F;
+      --shadow: 0 10px 30px rgb(0 0 0 / 35%);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #101615;
+    --surface: #17201E;
+    --surface-2: #1D2826;
+    --ink: #E6ECE9;
+    --muted: #97A6A1;
+    --line: #2A3835;
+    --line-strong: #465652;
+    --accent: #46C7B4;
+    --accent-soft: #143430;
+    --human: #E0AC48;
+    --human-soft: #33270E;
+    --cyber: #A79BE8;
+    --cyber-soft: #252039;
+    --fail: #E08A72;
+    --fail-soft: #38190F;
+    --shadow: 0 10px 30px rgb(0 0 0 / 35%);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  h1, h2, h3, p { margin: 0; }
+  h1, h2 { font-family: "Saira", "IBM Plex Sans", sans-serif; text-wrap: balance; }
+  code, .mono { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  a { color: var(--accent); }
+
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- header ---------- */
+  header.hero { padding: 44px 0 8px; }
+  .kicker {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  h1 { font-size: clamp(30px, 4.4vw, 44px); font-weight: 700; line-height: 1.08; margin-top: 6px; }
+  .deck { max-width: 68ch; margin-top: 12px; color: var(--muted); font-size: 16px; }
+  .deck strong { color: var(--ink); font-weight: 600; }
+
+  .stats {
+    display: flex; flex-wrap: wrap; gap: 10px 26px;
+    margin-top: 22px; padding: 14px 0;
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  }
+  .stat { display: flex; align-items: baseline; gap: 8px; }
+  .stat b {
+    font-family: "Saira", sans-serif; font-size: 22px; font-weight: 700;
+    font-variant-numeric: tabular-nums; color: var(--accent);
+  }
+  .stat.human b { color: var(--human); }
+  .stat span { font-size: 12.5px; color: var(--muted); }
+
+  /* ---------- schematic ---------- */
+  figure.schematic { margin: 26px 0 0; }
+  .schematic-frame {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 18px 14px 8px;
+    overflow-x: auto;
+  }
+  .schematic svg { display: block; min-width: 980px; width: 100%; height: auto; }
+  figcaption { margin-top: 10px; font-size: 12.5px; color: var(--muted); max-width: 90ch; }
+
+  svg .node rect, svg .node polygon { fill: var(--surface-2); stroke: var(--line-strong); stroke-width: 1.2; }
+  svg .node { cursor: pointer; transition: opacity 160ms ease; }
+  svg .node:hover rect, svg .node:hover polygon, svg .node:focus-visible rect { stroke: var(--accent); stroke-width: 1.6; }
+  svg .node:focus-visible { outline: none; }
+  svg text { font-family: "IBM Plex Sans", sans-serif; fill: var(--ink); }
+  svg .t { font-size: 12.5px; font-weight: 600; }
+  svg .s { font-size: 10.5px; fill: var(--muted); }
+  svg .k { font-family: "IBM Plex Mono", monospace; font-size: 9px; letter-spacing: 0.1em; fill: var(--muted); }
+  svg .edge { stroke: var(--line-strong); stroke-width: 1.3; fill: none; }
+  svg .edge-label { font-size: 10px; fill: var(--muted); }
+  svg .gate rect { stroke: var(--accent); fill: var(--accent-soft); }
+  svg .gate.cyber rect { stroke: var(--cyber); fill: var(--cyber-soft); }
+  svg .human-node polygon { stroke: var(--human); fill: var(--human-soft); stroke-width: 1.6; }
+  svg .human-node .t { fill: var(--human); }
+  svg .memory rect { stroke: var(--cyber); fill: none; stroke-dasharray: 5 4; }
+  svg .rail rect { fill: var(--accent-soft); stroke: var(--accent); opacity: 0.85; }
+  svg .fail-path { stroke: var(--fail); stroke-width: 1.4; fill: none; stroke-dasharray: 2 3; }
+  svg .fail-label { fill: var(--fail); font-size: 10px; }
+  svg .learn-path { stroke: var(--cyber); stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; }
+  svg .learn-label { fill: var(--cyber); font-size: 10px; }
+  svg .observe { stroke: var(--line-strong); stroke-width: 1; stroke-dasharray: 1 4; fill: none; }
+  svg marker path { fill: var(--line-strong); }
+  svg marker.m-fail path { fill: var(--fail); }
+  svg marker.m-learn path { fill: var(--cyber); }
+
+  /* ---------- toolbar ---------- */
+  .toolbar {
+    position: sticky; top: 0; z-index: 30;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    margin-top: 30px;
+  }
+  .toolbar-inner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 0; }
+  .toolbar .label {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+    margin-right: 4px;
+  }
+  .chip {
+    border: 1px solid var(--line-strong); border-radius: 999px;
+    background: var(--surface); color: var(--ink);
+    padding: 4px 14px; font-size: 13px;
+  }
+  .chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .chip.human-chip[aria-pressed="true"] { background: var(--human); border-color: var(--human); color: var(--bg); }
+  .chip:focus-visible, .trace-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .trace-btn {
+    margin-left: auto;
+    border: 1px solid var(--accent); border-radius: 999px;
+    background: var(--accent); color: var(--bg);
+    padding: 4px 16px; font-size: 13px; font-weight: 600;
+  }
+  .lens-note { width: 100%; font-size: 12.5px; color: var(--muted); padding-bottom: 8px; display: none; }
+  .lens-note.show { display: block; }
+
+  /* ---------- bands ---------- */
+  section.band { padding: 40px 0 6px; }
+  .band-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; border-bottom: 2px solid var(--ink); padding-bottom: 8px; }
+  .band-head h2 { font-size: 21px; font-weight: 700; }
+  .band-head .note { font-size: 12.5px; color: var(--muted); text-align: right; max-width: 46ch; }
+  .band-grid { display: grid; gap: 12px; margin-top: 16px; }
+  .g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 15px;
+    transition: opacity 160ms ease, border-color 160ms ease;
+  }
+  .card.dim, svg .dim { opacity: 0.16; }
+  .card.lit { border-color: var(--accent); }
+  .card.inspectable { cursor: pointer; }
+  .card.inspectable:hover, .card.inspectable:focus-visible { border-color: var(--accent); outline: none; }
+  .card h3 { font-size: 14px; font-weight: 600; display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .card h3 code { font-size: 11px; color: var(--muted); font-weight: 400; }
+  .card p { margin-top: 6px; font-size: 12.5px; color: var(--muted); }
+  .card .proof { margin-top: 9px; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink); border-top: 1px dashed var(--line); padding-top: 7px; }
+  .card.tone-human { border-left: 3px solid var(--human); }
+  .card.tone-cyber { border-left: 3px solid var(--cyber); }
+  .card.tone-accent { border-left: 3px solid var(--accent); }
+  .card.dashed { border-style: dashed; }
+
+  .skill-item { border-top: 1px solid var(--line); padding: 7px 0 0; margin-top: 7px; }
+  .skill-item:first-of-type { border-top: 0; margin-top: 9px; padding-top: 0; }
+  .skill-item code { font-size: 12px; font-weight: 500; }
+  .skill-item span { display: block; font-size: 11.5px; color: var(--muted); }
+
+  .router {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 14px;
+    margin-top: 16px;
+  }
+  .router .arrow { color: var(--muted); font-size: 18px; }
+
+  .ci-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
+  .ci-grid .card { padding: 10px 12px; }
+  .ci-grid h3 { font-size: 13px; }
+  .ci-grid p { font-size: 11.5px; margin-top: 3px; }
+  .col-label {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
+  }
+  .assurance-col { display: grid; gap: 9px; align-content: start; }
+
+  .merge-bar {
+    display: grid; grid-template-columns: 1.2fr auto 1fr auto 1fr; align-items: center; gap: 12px;
+    margin-top: 18px;
+  }
+  .merge-bar .card { text-align: center; }
+  .merge-bar .card b { display: block; font-size: 14px; }
+  .merge-bar .card span { display: block; margin-top: 4px; font-size: 11.5px; color: var(--muted); }
+  .merge-bar .arrow { color: var(--muted); }
+
+  .keys-strip { margin-top: 18px; border: 1px solid var(--human); border-radius: 12px; background: var(--human-soft); padding: 13px 16px; }
+  .keys-strip h3 { font-size: 13px; color: var(--human); font-weight: 600; }
+  .keys-strip ol { margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 8px; list-style: none; counter-reset: key; }
+  .keys-strip li {
+    counter-increment: key;
+    font-size: 12px; border: 1px solid var(--human); border-radius: 999px;
+    background: var(--surface); padding: 3px 11px;
+  }
+  .keys-strip li::before { content: counter(key, decimal-leading-zero) " "; font-family: "IBM Plex Mono", monospace; font-size: 10px; color: var(--human); }
+
+  .return-bar {
+    display: grid; grid-template-columns: 1fr auto 1.2fr auto 1fr; align-items: center; gap: 12px;
+    margin-top: 14px; border-radius: 12px; padding: 12px 16px; font-size: 12.5px;
+  }
+  .return-bar.fail { border: 1px solid var(--fail); background: var(--fail-soft); color: var(--ink); }
+  .return-bar.cd { border: 1px solid var(--line-strong); background: var(--surface); }
+  .return-bar b { font-weight: 600; }
+  .return-bar .arrow { color: var(--muted); }
+
+  /* ---------- drawer ---------- */
+  .backdrop { position: fixed; inset: 0; background: rgb(0 0 0 / 30%); z-index: 40; display: none; }
+  .backdrop.open { display: block; }
+  .drawer {
+    position: fixed; top: 0; right: 0; bottom: 0; z-index: 50;
+    width: min(440px, 92vw);
+    background: var(--surface);
+    border-left: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    transform: translateX(102%);
+    transition: transform 220ms ease;
+    display: flex; flex-direction: column;
+  }
+  .drawer.open { transform: none; }
+  .drawer-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 22px 12px; border-bottom: 1px solid var(--line); }
+  .drawer-head h3 { font-family: "Saira", sans-serif; font-size: 18px; font-weight: 600; }
+  .drawer-close { border: 1px solid var(--line-strong); background: var(--surface-2); border-radius: 8px; padding: 2px 10px; font-size: 13px; }
+  .drawer-body { padding: 16px 22px 28px; overflow-y: auto; font-size: 13.5px; }
+  .drawer-body p { margin: 0 0 10px; color: var(--ink); }
+  .drawer-body p.sub { color: var(--muted); }
+  .drawer-body .receipts { margin: 14px 0 0; border-top: 1px dashed var(--line); padding-top: 10px; }
+  .drawer-body .receipts h4 { margin: 0 0 6px; font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .drawer-body .receipts ul { margin: 0; padding-left: 0; list-style: none; }
+  .drawer-body .receipts li { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; padding: 3px 0; overflow-wrap: anywhere; }
+  .drawer-body .receipts li::before { content: "▸ "; color: var(--accent); }
+
+  /* ---------- trace hud ---------- */
+  .trace-hud {
+    position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
+    z-index: 45; width: min(680px, calc(100vw - 32px));
+    background: var(--surface); border: 1px solid var(--accent); border-radius: 14px;
+    box-shadow: var(--shadow); padding: 14px 18px; display: none;
+  }
+  .trace-hud.open { display: block; }
+  .trace-hud .step-k { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.08em; }
+  .trace-hud h3 { font-size: 15px; margin-top: 2px; }
+  .trace-hud p { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .trace-hud .row { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+  .trace-hud .row .spacer { flex: 1; font-size: 11.5px; color: var(--muted); }
+  .trace-hud button { border: 1px solid var(--line-strong); background: var(--surface-2); border-radius: 8px; padding: 3px 12px; font-size: 13px; }
+  .trace-hud button.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 600; }
+
+  /* ---------- legend + footer ---------- */
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 36px; font-size: 12px; color: var(--muted); align-items: center; }
+  .legend .sw { display: inline-block; width: 14px; height: 8px; border-radius: 2px; margin-right: 6px; vertical-align: baseline; }
+  footer { margin-top: 26px; padding: 16px 0 44px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+  footer .mono { font-size: 11px; }
+
+  @media (max-width: 960px) {
+    .g4, .g3 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .merge-bar, .return-bar, .router { grid-template-columns: 1fr; }
+    .merge-bar .arrow, .return-bar .arrow, .router .arrow { transform: rotate(90deg); justify-self: center; }
+    .band-head { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .band-head .note { text-align: left; }
+  }
+  @media (max-width: 620px) {
+    .g4, .g3, .ci-grid { grid-template-columns: 1fr; }
+    .trace-btn { margin-left: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .drawer, .card, svg .node { transition: none; }
+  }
+  @media print {
+    .toolbar, .trace-hud, .drawer, .backdrop { display: none !important; }
+    .schematic-frame { box-shadow: none; }
+    section.band { break-inside: avoid; }
+    body { background: #fff; }
+  }
+</style>
 </head>
 <body>
-<iframe sandbox="allow-scripts" referrerpolicy="no-referrer" title="Product Agentic Delivery Harness" srcdoc="&lt;!doctype html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;utf-8&quot;&gt;
-&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
-&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
-&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
-&lt;title&gt;Product Agentic Delivery Harness&lt;/title&gt;
-&lt;style&gt;:root {
-  color-scheme: light dark;
-  background-color: var(
-    --background,
-    var(--color-background-primary, light-dark(rgb(255 255 255), rgb(24 24 24)))
-  ) !important;
-
-  /* Agent-facing contract; keep in sync with SKILL.md. */
-  --background: var(
-    --color-background-primary,
-    light-dark(rgb(255 255 255), rgb(24 24 24))
-  );
-  --foreground: var(
-    --color-text-primary,
-    light-dark(rgb(26 28 31), rgb(255 255 255))
-  );
-  --card: color-mix(in oklab, var(--foreground) 5%, var(--background));
-  --card-foreground: var(
-    --color-text-primary,
-    light-dark(rgb(26 28 31), rgb(255 255 255))
-  );
-  --popover: var(
-    --color-background-secondary,
-    light-dark(rgb(255 255 255), rgb(45 45 45))
-  );
-  --popover-foreground: var(
-    --color-text-primary,
-    light-dark(rgb(26 28 31), rgb(255 255 255))
-  );
-  --primary: var(
-    --color-text-info,
-    light-dark(rgb(51 156 255), rgb(131 195 255))
-  );
-  --primary-foreground: var(
-    --color-text-inverse,
-    light-dark(rgb(255 255 255), rgb(13 13 13))
-  );
-  --secondary: var(
-    --color-background-secondary,
-    light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%))
-  );
-  --secondary-foreground: var(
-    --color-text-primary,
-    light-dark(rgb(26 28 31), rgb(255 255 255))
-  );
-  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
-  --muted-foreground: var(
-    --color-text-secondary,
-    light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%))
-  );
-  --accent: var(
-    --color-background-info,
-    light-dark(rgb(229 242 255), rgb(13 39 63))
-  );
-  --accent-foreground: var(
-    --color-text-info,
-    light-dark(rgb(51 156 255), rgb(131 195 255))
-  );
-  --destructive: var(
-    --color-text-warning,
-    light-dark(rgb(226 85 7), rgb(255 133 73))
-  );
-  --border: var(
-    --color-border-secondary,
-    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
-  );
-  --input: var(
-    --color-border-primary,
-    light-dark(
-      rgb(26 28 31 / 11.8%),
-      color-mix(in oklab, rgb(0 0 0) 10%, transparent)
-    )
-  );
-  --ring: var(
-    --color-ring-primary,
-    light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
-  );
-  --font-size-base: var(--font-text-md-size, 14px);
-  --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
-  --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
-  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
-  --red: light-dark(rgb(224 46 42), rgb(255 103 100));
-  --purple: light-dark(rgb(146 79 247), rgb(173 123 249));
-  --yellow: light-dark(rgb(255 195 0), rgb(255 210 64));
-  --viz-series-1: var(--primary);
-  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
-  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
-  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
-  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
-  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
-
-  /* Internal implementation variables; not part of the agent contract. */
-  --font-sans: -apple-system, system-ui, &quot;Segoe UI&quot;, sans-serif;
-  --font-mono:
-    ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
-    monospace;
-  --font-size-normal: max(11px, var(--font-size-base));
-  --font-size-tooltip: calc(var(--font-size-base) - 1px);
-  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
-  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
-  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
-  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
-  --font-weight-normal: 430;
-  --font-weight-medium: 500;
-  --line-height-normal: calc(var(--font-size-normal) * 1.5);
-  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
-  --line-height-small: calc(var(--font-size-small) + 4px);
-  --radius: var(--border-radius-lg, 12.5px);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-2xl: calc(var(--radius) * 1.6);
-  --radius-full: 9999px;
-  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
-  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
-
-  /* Legacy aliases; not part of the current agent contract. */
-  --viz-bg: transparent;
-  --viz-panel: var(--card);
-  --viz-border: var(--border);
-  --viz-text: var(--foreground);
-  --viz-muted: var(--muted-foreground);
-  --viz-accent: var(--primary);
-  --viz-accent-text: var(--primary-foreground);
-  --viz-accent-bg: var(--accent);
-  --viz-font-size: var(--font-size-base);
-  --viz-warning: var(--destructive);
-}
-
-:root[data-theme=&quot;light&quot;] {
-  color-scheme: light;
-}
-
-:root[data-theme=&quot;dark&quot;] {
-  color-scheme: dark;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html &gt; body {
-  /* Preserve MCP aliases for older inline renderers without creating :root cycles. */
-  --color-background-primary: var(
-    --background,
-    light-dark(rgb(255 255 255), rgb(24 24 24))
-  );
-  --color-text-primary: var(
-    --foreground,
-    light-dark(rgb(26 28 31), rgb(255 255 255))
-  );
-  --color-border-secondary: var(
-    --border,
-    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
-  );
-
-  margin: 0;
-  padding: 5px;
-  color: var(--foreground);
-  background: transparent !important;
-  font-family: var(--font-sans) !important;
-  font-size: var(--font-size-normal);
-  font-weight: var(--font-weight-normal);
-  line-height: var(--line-height-normal);
-}
-
-a {
-  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
-  cursor: pointer;
-  font-weight: var(--font-weight-medium, 500);
-  text-decoration: none;
-  text-underline-offset: 2px;
-}
-
-a:is(:hover, :focus-visible) {
-  text-decoration-line: underline;
-  text-decoration-style: dashed;
-  text-decoration-thickness: 0.5px;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-  margin-block: 0;
-}
-
-h1 {
-  font-size: var(--font-size-h1);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.25;
-}
-
-h2 {
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.25;
-}
-
-h3,
-h4,
-h5,
-h6 {
-  font-size: var(--font-size-h3);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.3;
-}
-
-b,
-strong,
-th {
-  font-weight: var(--font-weight-medium);
-}
-
-code:not(pre code) {
-  display: inline;
-  padding: 1px 6px;
-  border-radius: var(--radius-sm);
-  corner-shape: superellipse(1.5);
-  background: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 0.92em;
-  overflow-wrap: anywhere;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-  word-break: break-word;
-}
-
-.table-responsive {
-  width: 100%;
-  overflow-x: auto;
-  scrollbar-width: thin;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  color: var(--foreground);
-  font: inherit;
-  text-align: start;
-}
-
-.table :is(th, td) {
-  padding-block: 10px;
-  padding-inline: 0 24px;
-  overflow-wrap: anywhere;
-  border-bottom: 1px solid var(--border);
-  text-align: start;
-  vertical-align: top;
-}
-
-.table-responsive &gt; .table :is(th, td) {
-  overflow-wrap: break-word;
-}
-
-.table :is(th, td):last-child {
-  padding-inline-end: 0;
-}
-
-.table :is(caption, thead th) {
-  font-weight: 600;
-}
-
-.table thead th {
-  padding-block: 8px;
-  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
-}
-
-.table tbody tr:last-child :is(th, td) {
-  border-bottom: 0;
-}
-
-.table.table-sm :is(th, td) {
-  padding-block: 6px;
-}
-
-.table.table-sm :is(th, td):not(:last-child) {
-  padding-inline-end: 16px;
-}
-
-.table :is(.text-end, [align=&quot;right&quot;]) {
-  text-align: end;
-  font-variant-numeric: tabular-nums;
-}
-
-.table :is(.text-center, [align=&quot;center&quot;]) {
-  text-align: center;
-}
-
-.table .text-nowrap {
-  white-space: nowrap;
-}
-
-#widget {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-  padding: 0;
-  background: transparent !important;
-}
-
-.card {
-  min-width: 0;
-  padding: 12px;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  border-radius: var(--radius-2xl);
-  corner-shape: superellipse(1.5);
-  color: var(--card-foreground);
-  background: var(--card);
-}
-
-#widget &gt; :not(.card, .progress) {
-  width: 100% !important;
-  max-width: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-.tooltip {
-  position: fixed;
-  z-index: 50;
-  top: 0;
-  left: 0;
-  width: max-content;
-  max-width: min(
-    20rem,
-    var(--tooltip-available-width, calc(100vw - 10px)),
-    calc(100vw - 10px)
-  );
-  max-height: min(
-    var(--tooltip-available-height, calc(100vh - 10px)),
-    calc(100vh - 10px)
-  );
-  padding: 4px 8px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  corner-shape: superellipse(1.5);
-  color: var(--popover-foreground);
-  background: var(--popover);
-  box-shadow: none;
-  font-size: var(--font-size-tooltip);
-  line-height: var(--line-height-tooltip);
-  overflow-wrap: break-word;
-  white-space: normal;
-  pointer-events: none;
-  user-select: none;
-}
-
-.viz-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
-  gap: 10px;
-}
-
-.viz-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.viz-stat-value {
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.25;
-}
-
-.viz-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-}
-
-.progress {
-  display: flex;
-  height: 6px;
-  margin-block: calc((var(--line-height-normal, 1.5em) - 6px) / 2);
-  overflow: hidden;
-  border: 0;
-  border-radius: var(--radius-full);
-  background: var(--muted);
-}
-
-.progress-bar {
-  height: 100%;
-  flex-shrink: 0;
-  border: 0;
-  background: var(--viz-series-1);
-}
-
-.viz-badge {
-  padding: 3px 8px;
-  border-radius: var(--radius-full);
-  color: var(--accent-foreground);
-  background: var(--accent);
-  font-weight: var(--font-weight-medium);
-}
-
-small,
-.text-small,
-.viz-badge {
-  font-size: var(--font-size-small);
-  line-height: var(--line-height-small);
-}
-
-.text-muted {
-  color: var(--muted-foreground);
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-.viz-controls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-}
-
-.viz-controls &gt; .form-label {
-  display: grid;
-  min-width: min(100%, 260px);
-  flex: 1 1 280px;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: baseline;
-  gap: 2px 12px;
-  margin-bottom: 0;
-}
-
-.viz-controls &gt; .form-label &gt; :is(.form-control, .form-range, .form-select) {
-  grid-column: 1 / -1;
-}
-
-.btn,
-.form-check-input,
-.form-control,
-.form-range,
-.form-select {
-  font: inherit;
-}
-
-.btn {
-  appearance: button;
-  display: inline-flex;
-  inline-size: fit-content;
-  max-inline-size: 100%;
-  min-height: 28px;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  margin: 0;
-  padding: 0 8px;
-  -webkit-app-region: no-drag;
-  border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
-  corner-shape: superellipse(1.5);
-  color: var(--secondary-foreground);
-  background: var(--secondary);
-  cursor: var(--cursor-interaction, pointer);
-  text-align: center;
-  text-decoration: none;
-  white-space: nowrap;
-  user-select: none;
-  -webkit-font-smoothing: antialiased;
-}
-
-.btn:is(.btn-block, .viz-tile) {
-  inline-size: 100%;
-}
-
-.btn.viz-tile {
-  min-width: 0;
-  overflow-wrap: anywhere;
-  white-space: normal;
-}
-
-a.btn {
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.btn:not(:disabled):hover {
-  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
-}
-
-.btn-primary {
-  border-color: transparent;
-  color: var(--primary-foreground);
-  background: var(--foreground);
-  background-clip: padding-box;
-}
-
-.btn-primary .text-muted {
-  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
-}
-
-.btn-primary:not(:disabled):hover {
-  background: color-mix(in srgb, var(--foreground) 80%, transparent);
-  background-clip: padding-box;
-}
-
-.btn-ghost {
-  border-color: transparent;
-  color: var(--muted-foreground);
-  background: transparent;
-}
-
-.btn-ghost:not(:disabled):hover {
-  color: var(--foreground);
-  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
-}
-
-.btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.4;
-}
-
-[data-lucide] {
-  stroke-width: 1.6;
-}
-
-.form-label {
-  display: block;
-  margin-bottom: 6px;
-  color: var(--foreground);
-}
-
-.form-control {
-  display: block;
-  width: 100%;
-  min-height: 28px;
-  padding: 0 8px;
-  outline: none;
-  border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
-  corner-shape: superellipse(1.5);
-  color: var(--foreground);
-  background: var(--secondary);
-}
-
-.form-control::placeholder {
-  color: var(--muted-foreground);
-}
-
-.form-control[type=&quot;file&quot;] {
-  padding: 0;
-  overflow: hidden;
-  cursor: var(--cursor-interaction, pointer);
-}
-
-.form-control[type=&quot;file&quot;]::file-selector-button {
-  min-height: 26px;
-  margin-right: 8px;
-  padding: 0 8px;
-  border: 0;
-  border-right: 1px solid var(--input);
-  color: var(--secondary-foreground);
-  background: var(--secondary);
-  cursor: inherit;
-  font: inherit;
-}
-
-.form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
-  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
-}
-
-.form-control-color[type=&quot;color&quot;] {
-  width: 40px;
-  height: 28px;
-  padding: 3px;
-  cursor: var(--cursor-interaction, pointer);
-}
-
-.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch-wrapper {
-  padding: 0;
-}
-
-.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch {
-  border: 0;
-  border-radius: calc(var(--radius-lg) - 4px);
-  corner-shape: superellipse(1.5);
-}
-
-textarea.form-control {
-  height: auto;
-  min-height: 72px;
-  padding: 8px 10px;
-  resize: vertical;
-}
-
-.form-control:focus-visible {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
-}
-
-.form-control:disabled,
-.form-select:disabled {
-  cursor: not-allowed;
-  opacity: 0.4;
-}
-
-.form-select {
-  appearance: none;
-  display: block;
-  width: 100%;
-  min-height: 28px;
-  margin: 0;
-  padding: 0 32px 0 8px;
-  outline: none;
-  border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
-  corner-shape: superellipse(1.5);
-  color: var(--foreground);
-  background-color: var(--secondary);
-  background-image:
-    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
-    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
-  background-position:
-    calc(100% - 14px) 50%,
-    calc(100% - 10px) 50%;
-  background-repeat: no-repeat;
-  background-size: 4px 4px;
-  cursor: var(--cursor-interaction, default);
-}
-
-.form-select:not(:disabled):hover {
-  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
-}
-
-.form-select:focus-visible {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
-}
-
-.form-check {
-  display: flex;
-  min-height: 20px;
-  align-items: center;
-  gap: 6px;
-}
-
-.form-check-input {
-  appearance: none;
-  width: 14px;
-  height: 14px;
-  flex: 0 0 auto;
-  margin: 0;
-  border: 1px solid var(--input);
-  color: var(--primary-foreground);
-  background-color: transparent;
-  cursor: var(--cursor-interaction, default);
-  transition:
-    background-color 150ms,
-    border-color 150ms,
-    box-shadow 150ms;
-}
-
-.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
-  border-color: var(--input);
-  border-radius: var(--radius-sm);
-  corner-shape: superellipse(1.5);
-  background-color: var(--secondary);
-  box-shadow: var(--shadow-sm);
-}
-
-.form-check:not(.form-switch)
-  .form-check-input:not(:disabled):not(:checked):hover {
-  background-color: var(--card);
-}
-
-.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:checked {
-  border-color: var(--primary);
-  background-color: var(--primary);
-}
-
-.form-check:not(.form-switch)
-  .form-check-input[type=&quot;checkbox&quot;]:checked::before {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: var(--primary-foreground);
-  content: &quot;&quot;;
-  mask: var(--checkmark-image) center / 12px 12px no-repeat;
-}
-
-.form-check-input[type=&quot;radio&quot;] {
-  width: 14px;
-  height: 14px;
-  border-radius: var(--radius-full);
-}
-
-.form-check-input[type=&quot;radio&quot;]:checked {
-  border: 2px solid var(--primary);
-  background:
-    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
-    var(--primary);
-}
-
-.form-check:not(.form-switch) .form-check-input:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
-}
-
-.form-check:not(.form-switch) .form-check-input:disabled {
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
-  cursor: not-allowed;
-}
-
-.form-switch .form-check-input:disabled,
-.form-switch .form-check-input:disabled + .form-check-label {
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.form-check-label {
-  color: var(--foreground);
-  cursor: var(--cursor-interaction, default);
-}
-
-.form-switch .form-check-input {
-  position: relative;
-  width: 32px;
-  height: 20px;
-  border: 0;
-  border-radius: var(--radius-full);
-  background: var(--muted);
-  box-shadow: none;
-  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-.form-switch .form-check-input::before {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 16px;
-  height: 16px;
-  box-sizing: border-box;
-  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
-  border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
-  box-shadow: var(--shadow-sm);
-  content: &quot;&quot;;
-  transform: translate(2px, -50%);
-  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-.form-switch .form-check-input:checked {
-  background: var(--primary);
-}
-
-.form-switch .form-check-input:checked::before {
-  transform: translate(14px, -50%);
-}
-
-.form-switch .form-check-input:focus-visible {
-  box-shadow: 0 0 0 2px var(--ring);
-}
-
-.form-range {
-  appearance: none;
-  display: block;
-  width: 100%;
-  height: 28px;
-  flex: 1;
-  margin: 0;
-  padding: 0;
-  outline: none;
-  border: 0;
-  accent-color: var(--primary);
-  background: linear-gradient(
-      color-mix(in srgb, var(--foreground) 7%, transparent),
-      color-mix(in srgb, var(--foreground) 7%, transparent)
-    )
-    center / 100% 2px no-repeat;
-}
-
-.form-range::-webkit-slider-runnable-track {
-  height: 28px;
-  background: transparent;
-}
-
-.form-range::-webkit-slider-thumb {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  margin-top: 4px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
-}
-
-.form-range:focus-visible::-webkit-slider-thumb {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
-}
-
-.form-range::-moz-range-track {
-  height: 28px;
-  background: transparent;
-}
-
-.form-range::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
-}
-
-.form-range:focus-visible::-moz-range-thumb {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
-}
-
-.form-range:disabled {
-  cursor: not-allowed;
-  opacity: 0.4;
-}
-
-.btn:not(.btn-primary, .viz-tile):is(
-  [aria-pressed=&quot;true&quot;],
-  [aria-selected=&quot;true&quot;],
-  .is-selected
-) {
-  border-color: var(--primary);
-  color: var(--primary-foreground);
-  background: var(--primary);
-}
-
-.btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
-  border-color: var(--primary);
-  box-shadow: inset 0 0 0 1px var(--primary);
-}
-
-.btn:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
-}
-
-svg {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-
-#widget &gt; svg {
-  width: 100%;
-}
-
-/* Model-authored chart rules can otherwise stretch icons after these styles load. */
-svg.lucide {
-  display: block;
-  width: 16px !important;
-  height: 16px !important;
-  flex: none;
-  margin: 0 !important;
-  stroke-width: 1.6;
-}
-
-.text-warning,
-.text-destructive {
-  color: var(--destructive);
-}
-
-html&gt;body{padding:0}&lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;div id=&quot;product-agentic-harness&quot; class=&quot;dvh-root&quot;&gt;
-  &lt;style&gt;
-    #product-agentic-harness {
-      color: var(--foreground);
-      background: transparent;
-      width: 100%;
-    }
-
-    #product-agentic-harness * {
-      box-sizing: border-box;
-    }
-
-    #product-agentic-harness .dvh-header {
-      display: grid;
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-
-    #product-agentic-harness h1,
-    #product-agentic-harness h2,
-    #product-agentic-harness h3,
-    #product-agentic-harness p {
-      margin: 0;
-    }
-
-    #product-agentic-harness h1 {
-      font-weight: 500;
-    }
-
-    #product-agentic-harness .dvh-deck {
-      color: var(--muted-foreground);
-      max-width: 80ch;
-    }
-
-    #product-agentic-harness .dvh-controls {
-      align-items: center;
-      gap: 8px;
-    }
-
-    #product-agentic-harness .dvh-focus-summary {
-      display: flex;
-      align-items: center;
-      min-height: 46px;
-      color: var(--card-foreground);
-    }
-
-    #product-agentic-harness .dvh-chart {
-      display: grid;
-      gap: 22px;
-    }
-
-    #product-agentic-harness .dvh-band {
-      position: relative;
-      display: grid;
-      gap: 12px;
-    }
-
-    #product-agentic-harness .dvh-band-head {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 12px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 7px;
-    }
-
-    #product-agentic-harness .dvh-band-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 0;
-    }
-
-    #product-agentic-harness .dvh-index {
-      color: var(--muted-foreground);
-      font-variant-numeric: tabular-nums;
-    }
-
-    #product-agentic-harness .dvh-band-note {
-      color: var(--muted-foreground);
-      text-align: right;
-    }
-
-    #product-agentic-harness .dvh-node,
-    #product-agentic-harness .dvh-stage,
-    #product-agentic-harness .dvh-lane,
-    #product-agentic-harness .dvh-gate,
-    #product-agentic-harness .dvh-loop-step {
-      --dvh-tone: var(--border);
-      border: 1px solid color-mix(in srgb, var(--dvh-tone) 42%, var(--border));
-      border-left: 4px solid var(--dvh-tone);
-      border-radius: 10px;
-      background: color-mix(in srgb, var(--dvh-tone) 9%, transparent);
-      transition: opacity 160ms ease, background-color 160ms ease, border-color 160ms ease;
-    }
-
-    #product-agentic-harness .dvh-orchestration { --dvh-tone: var(--viz-series-1); }
-    #product-agentic-harness .dvh-skill { --dvh-tone: var(--viz-series-2); }
-    #product-agentic-harness .dvh-component { --dvh-tone: var(--viz-series-3); }
-    #product-agentic-harness .dvh-quality { --dvh-tone: var(--viz-series-4); }
-    #product-agentic-harness .dvh-cyber { --dvh-tone: var(--viz-series-5); }
-    #product-agentic-harness .dvh-human { --dvh-tone: var(--viz-series-6); }
-
-    #product-agentic-harness .dvh-focusable.is-dim {
-      opacity: 0.18;
-    }
-
-    #product-agentic-harness .dvh-focusable.is-focus {
-      background: color-mix(in srgb, var(--dvh-tone) 16%, transparent);
-      border-color: var(--dvh-tone);
-    }
-
-    #product-agentic-harness .dvh-spine {
-      display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: 10px;
-      align-items: stretch;
-    }
-
-    #product-agentic-harness .dvh-stage {
-      position: relative;
-      min-height: 132px;
-      padding: 12px 11px;
-    }
-
-    #product-agentic-harness .dvh-stage:not(:last-child)::after {
-      content: &quot;→&quot;;
-      position: absolute;
-      z-index: 2;
-      top: 50%;
-      right: -11px;
-      translate: 50% -50%;
-      color: var(--foreground);
-      background: var(--background);
-      padding: 1px 2px;
-      font-size: calc(var(--font-size-base) * 0.9);
-    }
-
-    #product-agentic-harness .dvh-kicker {
-      color: var(--muted-foreground);
-      font-size: max(11px, calc(var(--font-size-base) * 0.72));
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      font-variant-numeric: tabular-nums;
-    }
-
-    #product-agentic-harness .dvh-stage h3,
-    #product-agentic-harness .dvh-lane h3,
-    #product-agentic-harness .dvh-gate h3,
-    #product-agentic-harness .dvh-loop-step h3 {
-      margin-top: 5px;
-      font-weight: 500;
-      font-size: calc(var(--font-size-base) * 0.88);
-    }
-
-    #product-agentic-harness .dvh-stage p,
-    #product-agentic-harness .dvh-lane p,
-    #product-agentic-harness .dvh-gate p,
-    #product-agentic-harness .dvh-loop-step p {
-      margin-top: 7px;
-      color: var(--muted-foreground);
-      font-size: max(11px, calc(var(--font-size-base) * 0.72));
-    }
-
-    #product-agentic-harness .dvh-artifact {
-      display: block;
-      margin-top: 8px;
-      color: var(--foreground);
-      font-size: max(11px, calc(var(--font-size-base) * 0.7));
-    }
-
-    #product-agentic-harness .dvh-skill-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    #product-agentic-harness .dvh-skill-group {
-      padding: 11px;
-    }
-
-    #product-agentic-harness .dvh-skill-group h3 {
-      font-weight: 500;
-      font-size: calc(var(--font-size-base) * 0.82);
-    }
-
-    #product-agentic-harness .dvh-skill-list {
-      display: grid;
-      gap: 8px;
-      margin-top: 9px;
-    }
-
-    #product-agentic-harness .dvh-skill-item {
-      display: grid;
-      gap: 2px;
-      padding-top: 7px;
-      border-top: 1px solid color-mix(in srgb, var(--border) 68%, transparent);
-    }
-
-    #product-agentic-harness .dvh-skill-item:first-child {
-      padding-top: 0;
-      border-top: 0;
-    }
-
-    #product-agentic-harness .dvh-skill-item code {
-      color: var(--foreground);
-      font-size: max(11px, calc(var(--font-size-base) * 0.72));
-    }
-
-    #product-agentic-harness .dvh-skill-item span {
-      color: var(--muted-foreground);
-      font-size: max(11px, calc(var(--font-size-base) * 0.68));
-    }
-
-    #product-agentic-harness .dvh-router {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-      align-items: center;
-      gap: 12px;
-      padding: 10px 12px;
-    }
-
-    #product-agentic-harness .dvh-router strong {
-      font-weight: 500;
-    }
-
-    #product-agentic-harness .dvh-router span {
-      color: var(--muted-foreground);
-      font-size: max(11px, calc(var(--font-size-base) * 0.72));
-    }
-
-    #product-agentic-harness .dvh-router code {
-      font-size: inherit;
-    }
-
-    #product-agentic-harness .dvh-router-arrow {
-      color: var(--foreground) !important;
-      font-size: max(15px, calc(var(--font-size-base) * 1.05)) !important;
-    }
-
-    #product-agentic-harness .dvh-lanes {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    #product-agentic-harness .dvh-lane {
-      min-height: 126px;
-      padding: 11px;
-    }
-
-    #product-agentic-harness .dvh-lane-head {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    #product-agentic-harness .dvh-lane-head code {
-      color: var(--muted-foreground);
-      font-size: max(11px, calc(var(--font-size-base) * 0.68));
-    }
-
-    #product-agentic-harness .dvh-proof {
-      margin-top: 9px;
-      color: var(--foreground);
-      font-size: max(11px, calc(var(--font-size-base) * 0.68));
-    }
-
-    #product-agentic-harness .dvh-assurance-grid {
-      display: grid;
-      grid-template-columns: 1.45fr 1fr 1fr;
-      gap: 12px;
-      align-items: stretch;
-    }
-
-    #product-agentic-harness .dvh-assurance-column {
-      display: grid;
-      align-content: start;
-      gap: 9px;
-    }
-
-    #product-agentic-harness .dvh-column-label {
-      color: var(--muted-foreground);
-      font-size: max(11px, calc(var(--font-size-base) * 0.72));
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    #product-agentic-harness .dvh-ci-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    #product-agentic-harness .dvh-gate {
-      min-height: 92px;
-      padding: 10px;
-    }
-
-    #product-agentic-harness .dvh-gate.compact {
-      min-height: 74px;
-    }
-
-    #product-agentic-harness .dvh-gate.dashed {
-      border-style: dashed;
-    }
-
-    #product-agentic-harness .dvh-merge-bar {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto minmax(0, 0.82fr) auto minmax(0, 0.82fr);
-      align-items: center;
-      gap: 10px;
-      margin-top: 2px;
-    }
-
-    #product-agentic-harness .dvh-merge-node {
-      padding: 12px;
-      text-align: center;
-    }
-
-    #product-agentic-harness .dvh-merge-node strong {
-      display: block;
-      font-weight: 500;
-    }
-
-    #product-agentic-harness .dvh-merge-node span {
-      display: block;
-      margin-top: 5px;
-      color: var(--muted-foreground);
-      font-size: max(11px, calc(var(--font-size-base) * 0.7));
-    }
-
-    #product-agentic-harness .dvh-loop {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    #product-agentic-harness .dvh-loop-step {
-      min-height: 118px;
-      padding: 11px;
-    }
-
-    #product-agentic-harness .dvh-loop-return {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-    }
-
-    #product-agentic-harness .dvh-loop-return strong {
-      font-weight: 500;
-    }
-
-    #product-agentic-harness .dvh-loop-return span {
-      color: var(--muted-foreground);
-      text-align: center;
-      font-size: max(11px, calc(var(--font-size-base) * 0.7));
-    }
-
-    #product-agentic-harness .dvh-legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px 16px;
-      color: var(--muted-foreground);
-      font-size: max(11px, calc(var(--font-size-base) * 0.68));
-    }
-
-    #product-agentic-harness .dvh-legend-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    #product-agentic-harness .dvh-swatch {
-      width: 14px;
-      height: 8px;
-      border-radius: 2px;
-      background: var(--dvh-tone);
-    }
-
-    #product-agentic-harness .dvh-source {
-      color: var(--muted-foreground);
-      font-size: max(11px, calc(var(--font-size-base) * 0.66));
-      border-top: 1px solid var(--border);
-      padding-top: 8px;
-    }
-
-    @media (max-width: 900px) {
-      #product-agentic-harness .dvh-spine {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      #product-agentic-harness .dvh-stage:nth-child(3)::after {
-        content: &quot;↓&quot;;
-        top: auto;
-        right: 50%;
-        bottom: -11px;
-        translate: 50% 50%;
-      }
-
-      #product-agentic-harness .dvh-stage:nth-child(4) { grid-column: 3; grid-row: 2; }
-      #product-agentic-harness .dvh-stage:nth-child(5) { grid-column: 2; grid-row: 2; }
-      #product-agentic-harness .dvh-stage:nth-child(6) { grid-column: 1; grid-row: 2; }
-      #product-agentic-harness .dvh-stage:nth-child(4)::after,
-      #product-agentic-harness .dvh-stage:nth-child(5)::after {
-        content: &quot;←&quot;;
-        right: auto;
-        left: -11px;
-        translate: -50% -50%;
-      }
-
-      #product-agentic-harness .dvh-skill-grid,
-      #product-agentic-harness .dvh-lanes,
-      #product-agentic-harness .dvh-loop {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      #product-agentic-harness .dvh-assurance-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      #product-agentic-harness .dvh-assurance-column:first-child {
-        grid-column: 1 / -1;
-      }
-    }
-
-    @media (max-width: 620px) {
-      #product-agentic-harness .dvh-band-head,
-      #product-agentic-harness .dvh-router,
-      #product-agentic-harness .dvh-merge-bar,
-      #product-agentic-harness .dvh-loop-return {
-        grid-template-columns: 1fr;
-      }
-
-      #product-agentic-harness .dvh-band-head {
-        display: grid;
-      }
-
-      #product-agentic-harness .dvh-band-note {
-        text-align: left;
-      }
-
-      #product-agentic-harness .dvh-router-arrow,
-      #product-agentic-harness .dvh-merge-arrow,
-      #product-agentic-harness .dvh-loop-arrow {
-        rotate: 90deg;
-        justify-self: center;
-      }
-
-      #product-agentic-harness .dvh-spine,
-      #product-agentic-harness .dvh-skill-grid,
-      #product-agentic-harness .dvh-lanes,
-      #product-agentic-harness .dvh-assurance-grid,
-      #product-agentic-harness .dvh-loop {
-        grid-template-columns: 1fr;
-      }
-
-      #product-agentic-harness .dvh-stage,
-      #product-agentic-harness .dvh-stage:nth-child(4),
-      #product-agentic-harness .dvh-stage:nth-child(5),
-      #product-agentic-harness .dvh-stage:nth-child(6),
-      #product-agentic-harness .dvh-assurance-column:first-child {
-        grid-column: auto;
-        grid-row: auto;
-      }
-
-      #product-agentic-harness .dvh-stage:not(:last-child)::after,
-      #product-agentic-harness .dvh-stage:nth-child(3)::after,
-      #product-agentic-harness .dvh-stage:nth-child(4)::after,
-      #product-agentic-harness .dvh-stage:nth-child(5)::after {
-        content: &quot;↓&quot;;
-        top: auto;
-        right: 50%;
-        bottom: -11px;
-        left: auto;
-        translate: 50% 50%;
-      }
-
-      #product-agentic-harness .dvh-ci-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      #product-agentic-harness .dvh-focusable {
-        transition: none;
-      }
-    }
-  &lt;/style&gt;
-
-  &lt;header class=&quot;dvh-header&quot;&gt;
-    &lt;div&gt;
-      &lt;h1&gt;Product agentic delivery harness&lt;/h1&gt;
-      &lt;p class=&quot;dvh-deck&quot;&gt;Deep system view: versioned skills guide isolated agent lanes; changed-area CI and independent assurance prove the result; the orchestrator closes the loop without automating the final human merge.&lt;/p&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;viz-controls dvh-controls&quot; aria-label=&quot;Highlight a harness layer&quot;&gt;
-      &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; data-focus=&quot;all&quot; aria-pressed=&quot;true&quot;&gt;Everything&lt;/button&gt;
-      &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-focus=&quot;skills&quot; aria-pressed=&quot;false&quot;&gt;Skills&lt;/button&gt;
-      &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-focus=&quot;components&quot; aria-pressed=&quot;false&quot;&gt;Components&lt;/button&gt;
-      &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-focus=&quot;assurance&quot; aria-pressed=&quot;false&quot;&gt;CI + quality&lt;/button&gt;
-      &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-focus=&quot;cyber&quot; aria-pressed=&quot;false&quot;&gt;Cyber&lt;/button&gt;
-      &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-focus=&quot;ops&quot; aria-pressed=&quot;false&quot;&gt;Orchestrator loop&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;card dvh-focus-summary&quot; aria-live=&quot;polite&quot; data-focus-summary&gt;
-      End to end: approved intent → scoped issue → isolated implementation → evidence-backed PR → human merge → monitored project state.
-    &lt;/div&gt;
-  &lt;/header&gt;
-
-  &lt;main class=&quot;dvh-chart&quot; aria-label=&quot;Deep architecture map of the Product development harness&quot;&gt;
-    &lt;section class=&quot;dvh-band&quot; aria-labelledby=&quot;dvh-spine-title&quot;&gt;
-      &lt;div class=&quot;dvh-band-head&quot;&gt;
-        &lt;div class=&quot;dvh-band-title&quot;&gt;&lt;span class=&quot;dvh-index&quot;&gt;01&lt;/span&gt;&lt;h2 id=&quot;dvh-spine-title&quot;&gt;Executive delivery spine&lt;/h2&gt;&lt;/div&gt;
-        &lt;span class=&quot;dvh-band-note&quot;&gt;The same control path governs a narrow issue or a multi-lane epic.&lt;/span&gt;
-      &lt;/div&gt;
-      &lt;div class=&quot;dvh-spine&quot;&gt;
-        &lt;article class=&quot;dvh-stage dvh-skill dvh-focusable&quot; data-tags=&quot;skills ops&quot;&gt;
-          &lt;div class=&quot;dvh-kicker&quot;&gt;01 · Shape&lt;/div&gt;
-          &lt;h3&gt;Executable intent&lt;/h3&gt;
-          &lt;p&gt;Approved feedback or request becomes one scoped issue with outcome, requirements, acceptance criteria, demo plan, and non-goals.&lt;/p&gt;
-          &lt;span class=&quot;dvh-artifact&quot;&gt;Artifact: issue in &lt;strong&gt;Triage → Ready&lt;/strong&gt;&lt;/span&gt;
-        &lt;/article&gt;
-        &lt;article class=&quot;dvh-stage dvh-orchestration dvh-focusable&quot; data-tags=&quot;skills ops&quot;&gt;
-          &lt;div class=&quot;dvh-kicker&quot;&gt;02 · Classify&lt;/div&gt;
-          &lt;h3&gt;Orchestrator chooses mode&lt;/h3&gt;
-          &lt;p&gt;GitHub labels decide single-issue versus epic. Scope, dependencies, and acceptance signals become lane contracts.&lt;/p&gt;
-          &lt;span class=&quot;dvh-artifact&quot;&gt;Single: 1 lane · Epic: integration + bounded lanes&lt;/span&gt;
-        &lt;/article&gt;
-        &lt;article class=&quot;dvh-stage dvh-component dvh-focusable&quot; data-tags=&quot;components skills ops&quot;&gt;
-          &lt;div class=&quot;dvh-kicker&quot;&gt;03 · Isolate + build&lt;/div&gt;
-          &lt;h3&gt;Agent worktree lane(s)&lt;/h3&gt;
-          &lt;p&gt;Each lane gets its own branch, worktree, namespace, ports, temp roots, service stack, scope, non-goals, and tests.&lt;/p&gt;
-          &lt;span class=&quot;dvh-artifact&quot;&gt;State: &lt;strong&gt;In Progress&lt;/strong&gt;&lt;/span&gt;
-        &lt;/article&gt;
-        &lt;article class=&quot;dvh-stage dvh-quality dvh-focusable&quot; data-tags=&quot;skills assurance ops&quot;&gt;
-          &lt;div class=&quot;dvh-kicker&quot;&gt;04 · Package&lt;/div&gt;
-          &lt;h3&gt;Evidence-backed draft PR&lt;/h3&gt;
-          &lt;p&gt;Exact local checks, demo artifacts, docs impact, risks, and one closing issue link are bound to the current head SHA.&lt;/p&gt;
-          &lt;span class=&quot;dvh-artifact&quot;&gt;Artifact: draft PR against &lt;strong&gt;dev&lt;/strong&gt;&lt;/span&gt;
-        &lt;/article&gt;
-        &lt;article class=&quot;dvh-stage dvh-cyber dvh-focusable&quot; data-tags=&quot;assurance cyber ops&quot;&gt;
-          &lt;div class=&quot;dvh-kicker&quot;&gt;05 · Prove&lt;/div&gt;
-          &lt;h3&gt;Parallel assurance fabric&lt;/h3&gt;
-          &lt;p&gt;Changed-area CI, advisory review, visual evidence, manifest policy, and release/security checks produce reviewable evidence.&lt;/p&gt;
-          &lt;span class=&quot;dvh-artifact&quot;&gt;Failure or stale SHA loops back to its owner&lt;/span&gt;
-        &lt;/article&gt;
-        &lt;article class=&quot;dvh-stage dvh-human dvh-focusable&quot; data-tags=&quot;assurance ops&quot;&gt;
-          &lt;div class=&quot;dvh-kicker&quot;&gt;06 · Decide&lt;/div&gt;
-          &lt;h3&gt;Readiness + human merge&lt;/h3&gt;
-          &lt;p&gt;The audit returns ready, ready-with-risks, or not-ready. The Product Owner remains the merge operator; Done begins only after merge.&lt;/p&gt;
-          &lt;span class=&quot;dvh-artifact&quot;&gt;Control point: human judgment&lt;/span&gt;
-        &lt;/article&gt;
-      &lt;/div&gt;
-    &lt;/section&gt;
-
-    &lt;section class=&quot;dvh-band&quot; aria-labelledby=&quot;dvh-skills-title&quot;&gt;
-      &lt;div class=&quot;dvh-band-head&quot;&gt;
-        &lt;div class=&quot;dvh-band-title&quot;&gt;&lt;span class=&quot;dvh-index&quot;&gt;02&lt;/span&gt;&lt;h2 id=&quot;dvh-skills-title&quot;&gt;Versioned workflow memory · 11 repo-local skills&lt;/h2&gt;&lt;/div&gt;
-        &lt;span class=&quot;dvh-band-note&quot;&gt;AGENTS.md routes agents into executable, testable SKILL.md contracts.&lt;/span&gt;
-      &lt;/div&gt;
-      &lt;div class=&quot;dvh-skill-grid&quot;&gt;
-        &lt;article class=&quot;dvh-node dvh-skill dvh-skill-group dvh-focusable&quot; data-tags=&quot;skills ops&quot;&gt;
-          &lt;h3&gt;Shape &amp;amp; govern&lt;/h3&gt;
-          &lt;div class=&quot;dvh-skill-list&quot;&gt;
-            &lt;div class=&quot;dvh-skill-item&quot;&gt;&lt;code&gt;feedback-approval-converter&lt;/code&gt;&lt;span&gt;Approved feedback → linked delivery issue(s)&lt;/span&gt;&lt;/div&gt;
-            &lt;div class=&quot;dvh-skill-item&quot;&gt;&lt;code&gt;issue-shaper&lt;/code&gt;&lt;span&gt;Definition of Ready, scope, acceptance, demo plan&lt;/span&gt;&lt;/div&gt;
-            &lt;div class=&quot;dvh-skill-item&quot;&gt;&lt;code&gt;manager-lifecycle&lt;/code&gt;&lt;span&gt;Triage → Ready → In Progress ↔ Blocked → In Review → Done&lt;/span&gt;&lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/article&gt;
-        &lt;article class=&quot;dvh-node dvh-skill dvh-skill-group dvh-focusable&quot; data-tags=&quot;skills components ops&quot;&gt;
-          &lt;h3&gt;Isolate &amp;amp; run&lt;/h3&gt;
-          &lt;div class=&quot;dvh-skill-list&quot;&gt;
-            &lt;div class=&quot;dvh-skill-item&quot;&gt;&lt;code&gt;worktree-bringup&lt;/code&gt;&lt;span&gt;One lane, one namespace, collision-free ports and roots&lt;/span&gt;&lt;/div&gt;
-            &lt;div class=&quot;dvh-skill-item&quot;&gt;&lt;code&gt;local-bringup&lt;/code&gt;&lt;span&gt;Env generation, Postgres/Azurite, services, smoke, reset&lt;/span&gt;&lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/article&gt;
-        &lt;article class=&quot;dvh-node dvh-skill dvh-skill-group dvh-focusable&quot; data-tags=&quot;skills assurance components&quot;&gt;
-          &lt;h3&gt;Validate &amp;amp; demonstrate&lt;/h3&gt;
-          &lt;div class=&quot;dvh-skill-list&quot;&gt;
-            &lt;div class=&quot;dvh-skill-item&quot;&gt;&lt;code&gt;changed-area-test-selector&lt;/code&gt;&lt;span&gt;Narrowest credible tests, then cross-service smoke&lt;/span&gt;&lt;/div&gt;
-            &lt;div class=&quot;dvh-skill-item&quot;&gt;&lt;code&gt;feature-demo-capture&lt;/code&gt;&lt;span&gt;Screenshots, diffs, route clips, walkthrough evidence&lt;/span&gt;&lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/article&gt;
-        &lt;article class=&quot;dvh-node dvh-skill dvh-skill-group dvh-focusable&quot; data-tags=&quot;skills assurance cyber ops&quot;&gt;
-          &lt;h3&gt;Review &amp;amp; close&lt;/h3&gt;
-          &lt;div class=&quot;dvh-skill-list&quot;&gt;
-            &lt;div class=&quot;dvh-skill-item&quot;&gt;&lt;code&gt;code-reviewer&lt;/code&gt;&lt;span&gt;Correctness, regressions, risky boundaries, missing tests&lt;/span&gt;&lt;/div&gt;
-            &lt;div class=&quot;dvh-skill-item&quot;&gt;&lt;code&gt;dbt-sql-reviewer&lt;/code&gt;&lt;span&gt;ref/source, schema drift, compile/parse/execute semantics&lt;/span&gt;&lt;/div&gt;
-            &lt;div class=&quot;dvh-skill-item&quot;&gt;&lt;code&gt;pr-packager&lt;/code&gt;&lt;span&gt;Template, evidence, sensitive-data gate, one Closes link&lt;/span&gt;&lt;/div&gt;
-            &lt;div class=&quot;dvh-skill-item&quot;&gt;&lt;code&gt;merge-readiness-auditor&lt;/code&gt;&lt;span&gt;Fresh-SHA evidence, blockers, risks, human-ready decision&lt;/span&gt;&lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/article&gt;
-      &lt;/div&gt;
-    &lt;/section&gt;
-
-    &lt;section class=&quot;dvh-band&quot; aria-labelledby=&quot;dvh-components-title&quot;&gt;
-      &lt;div class=&quot;dvh-band-head&quot;&gt;
-        &lt;div class=&quot;dvh-band-title&quot;&gt;&lt;span class=&quot;dvh-index&quot;&gt;03&lt;/span&gt;&lt;h2 id=&quot;dvh-components-title&quot;&gt;Component execution surface · local proof mirrors CI&lt;/h2&gt;&lt;/div&gt;
-        &lt;span class=&quot;dvh-band-note&quot;&gt;Shared contracts intentionally trigger adjacent lanes.&lt;/span&gt;
-      &lt;/div&gt;
-      &lt;div class=&quot;dvh-router dvh-node dvh-orchestration dvh-focusable&quot; data-tags=&quot;components assurance ops&quot;&gt;
-        &lt;div&gt;&lt;strong&gt;Changed files + architecture constraints&lt;/strong&gt;&lt;br&gt;&lt;span&gt;AGENTS routers, target-environment authority, issue scope&lt;/span&gt;&lt;/div&gt;
-        &lt;span class=&quot;dvh-router-arrow&quot;&gt;→&lt;/span&gt;
-        &lt;div&gt;&lt;strong&gt;Changed-area selector&lt;/strong&gt;&lt;br&gt;&lt;span&gt;&lt;code&gt;ci_changed_area_selector.py&lt;/code&gt; maps paths to the narrowest credible checks&lt;/span&gt;&lt;/div&gt;
-      &lt;/div&gt;
-      &lt;div class=&quot;dvh-lanes&quot;&gt;
-        &lt;article class=&quot;dvh-lane dvh-component dvh-focusable&quot; data-tags=&quot;components assurance cyber&quot;&gt;
-          &lt;div class=&quot;dvh-lane-head&quot;&gt;&lt;h3&gt;API&lt;/h3&gt;&lt;code&gt;api/&lt;/code&gt;&lt;/div&gt;
-          &lt;p&gt;FastAPI contracts, auth, migrations, OpenAPI, worker enqueue.&lt;/p&gt;
-          &lt;div class=&quot;dvh-proof&quot;&gt;compile · full unit suite · OpenAPI/APIM alignment&lt;/div&gt;
-        &lt;/article&gt;
-        &lt;article class=&quot;dvh-lane dvh-component dvh-focusable&quot; data-tags=&quot;components assurance cyber&quot;&gt;
-          &lt;div class=&quot;dvh-lane-head&quot;&gt;&lt;h3&gt;Web&lt;/h3&gt;&lt;code&gt;web/&lt;/code&gt;&lt;/div&gt;
-          &lt;p&gt;React/Vite UI, server behavior, deterministic visual fixtures.&lt;/p&gt;
-          &lt;div class=&quot;dvh-proof&quot;&gt;Vitest + server tests · authz smoke · ESLint · build · visual gate&lt;/div&gt;
-        &lt;/article&gt;
-        &lt;article class=&quot;dvh-lane dvh-component dvh-focusable&quot; data-tags=&quot;components assurance cyber&quot;&gt;
-          &lt;div class=&quot;dvh-lane-head&quot;&gt;&lt;h3&gt;Worker&lt;/h3&gt;&lt;code&gt;worker/&lt;/code&gt;&lt;/div&gt;
-          &lt;p&gt;Handlers, queues, retries, idempotency, deployment attestation.&lt;/p&gt;
-          &lt;div class=&quot;dvh-proof&quot;&gt;compile · full unit suite · deploy/env + attestation tests&lt;/div&gt;
-        &lt;/article&gt;
-        &lt;article class=&quot;dvh-lane dvh-component dvh-focusable&quot; data-tags=&quot;components assurance cyber&quot;&gt;
-          &lt;div class=&quot;dvh-lane-head&quot;&gt;&lt;h3&gt;Extractor&lt;/h3&gt;&lt;code&gt;extractor/&lt;/code&gt;&lt;/div&gt;
-          &lt;p&gt;Runtime, shared contract, compatibility BOM, image roles.&lt;/p&gt;
-          &lt;div class=&quot;dvh-proof&quot;&gt;frozen lock · Ruff · unit · boundary/BOM · secret scan · image/role smoke&lt;/div&gt;
-        &lt;/article&gt;
-        &lt;article class=&quot;dvh-lane dvh-component dvh-focusable&quot; data-tags=&quot;components assurance&quot;&gt;
-          &lt;div class=&quot;dvh-lane-head&quot;&gt;&lt;h3&gt;MCP&lt;/h3&gt;&lt;code&gt;mcp/&lt;/code&gt;&lt;/div&gt;
-          &lt;p&gt;Private FastMCP service aligned to API and token contracts.&lt;/p&gt;
-          &lt;div class=&quot;dvh-proof&quot;&gt;compile · package install · app import/manual run&lt;/div&gt;
-        &lt;/article&gt;
-        &lt;article class=&quot;dvh-lane dvh-component dvh-focusable&quot; data-tags=&quot;components assurance cyber&quot;&gt;
-          &lt;div class=&quot;dvh-lane-head&quot;&gt;&lt;h3&gt;Infra&lt;/h3&gt;&lt;code&gt;infra/&lt;/code&gt;&lt;/div&gt;
-          &lt;p&gt;Terraform, AKS, APIM policy, App Service, deployment assets.&lt;/p&gt;
-          &lt;div class=&quot;dvh-proof&quot;&gt;terraform fmt · Node policy tests · manifest policy&lt;/div&gt;
-        &lt;/article&gt;
-        &lt;article class=&quot;dvh-lane dvh-component dvh-focusable&quot; data-tags=&quot;components assurance skills&quot;&gt;
-          &lt;div class=&quot;dvh-lane-head&quot;&gt;&lt;h3&gt;Docs &amp;amp; harness&lt;/h3&gt;&lt;code&gt;docs/ · skills/ · scripts/&lt;/code&gt;&lt;/div&gt;
-          &lt;p&gt;Agent routers, skills, local tooling, runbooks, architecture.&lt;/p&gt;
-          &lt;div class=&quot;dvh-proof&quot;&gt;asset validator · harness unit tests · shell lint · strict internal docs&lt;/div&gt;
-        &lt;/article&gt;
-        &lt;article class=&quot;dvh-lane dvh-component dvh-focusable&quot; data-tags=&quot;components assurance ops&quot;&gt;
-          &lt;div class=&quot;dvh-lane-head&quot;&gt;&lt;h3&gt;Cross-component&lt;/h3&gt;&lt;code&gt;.github/ · contracts&lt;/code&gt;&lt;/div&gt;
-          &lt;p&gt;Workflow edits fan out broadly; extractor contracts intentionally select API + worker + extractor.&lt;/p&gt;
-          &lt;div class=&quot;dvh-proof&quot;&gt;combine narrow suites · add smallest useful smoke pass&lt;/div&gt;
-        &lt;/article&gt;
-      &lt;/div&gt;
-    &lt;/section&gt;
-
-    &lt;section class=&quot;dvh-band&quot; aria-labelledby=&quot;dvh-assurance-title&quot;&gt;
-      &lt;div class=&quot;dvh-band-head&quot;&gt;
-        &lt;div class=&quot;dvh-band-title&quot;&gt;&lt;span class=&quot;dvh-index&quot;&gt;04&lt;/span&gt;&lt;h2 id=&quot;dvh-assurance-title&quot;&gt;CI, review, visual, cyber, and release assurance&lt;/h2&gt;&lt;/div&gt;
-        &lt;span class=&quot;dvh-band-note&quot;&gt;Nine GitHub workflows; independent evidence converges on one readiness view.&lt;/span&gt;
-      &lt;/div&gt;
-      &lt;div class=&quot;dvh-assurance-grid&quot;&gt;
-        &lt;div class=&quot;dvh-assurance-column&quot;&gt;
-          &lt;div class=&quot;dvh-column-label&quot;&gt;CI workflow · router + 8 conditional jobs&lt;/div&gt;
-          &lt;div class=&quot;dvh-ci-grid&quot;&gt;
-            &lt;article class=&quot;dvh-gate compact dvh-quality dvh-focusable&quot; data-tags=&quot;assurance components skills&quot;&gt;&lt;h3&gt;harness&lt;/h3&gt;&lt;p&gt;Skills/AGENTS validation, script tests, shell lint, strict internal docs&lt;/p&gt;&lt;/article&gt;
-            &lt;article class=&quot;dvh-gate compact dvh-quality dvh-focusable&quot; data-tags=&quot;assurance components&quot;&gt;&lt;h3&gt;api&lt;/h3&gt;&lt;p&gt;Install, compile, full unittest discovery&lt;/p&gt;&lt;/article&gt;
-            &lt;article class=&quot;dvh-gate compact dvh-quality dvh-focusable&quot; data-tags=&quot;assurance components&quot;&gt;&lt;h3&gt;worker&lt;/h3&gt;&lt;p&gt;Compile, full tests, deploy and attestation checks&lt;/p&gt;&lt;/article&gt;
-            &lt;article class=&quot;dvh-gate compact dvh-cyber dvh-focusable&quot; data-tags=&quot;assurance components cyber&quot;&gt;&lt;h3&gt;extractor&lt;/h3&gt;&lt;p&gt;Locks, lint, tests, BOM/boundary, secret scan, image smoke&lt;/p&gt;&lt;/article&gt;
-            &lt;article class=&quot;dvh-gate compact dvh-quality dvh-focusable&quot; data-tags=&quot;assurance components cyber&quot;&gt;&lt;h3&gt;web&lt;/h3&gt;&lt;p&gt;Tests, authz smoke, lint, production build&lt;/p&gt;&lt;/article&gt;
-            &lt;article class=&quot;dvh-gate compact dvh-quality dvh-focusable&quot; data-tags=&quot;assurance components&quot;&gt;&lt;h3&gt;mcp&lt;/h3&gt;&lt;p&gt;Install, compile, app import&lt;/p&gt;&lt;/article&gt;
-            &lt;article class=&quot;dvh-gate compact dvh-cyber dvh-focusable&quot; data-tags=&quot;assurance components cyber&quot;&gt;&lt;h3&gt;infra&lt;/h3&gt;&lt;p&gt;Terraform format + policy tests&lt;/p&gt;&lt;/article&gt;
-            &lt;article class=&quot;dvh-gate compact dvh-quality dvh-focusable&quot; data-tags=&quot;assurance components&quot;&gt;&lt;h3&gt;docs-public&lt;/h3&gt;&lt;p&gt;Strict public MkDocs build&lt;/p&gt;&lt;/article&gt;
-          &lt;/div&gt;
-        &lt;/div&gt;
-
-        &lt;div class=&quot;dvh-assurance-column&quot;&gt;
-          &lt;div class=&quot;dvh-column-label&quot;&gt;Review &amp;amp; experience workflows&lt;/div&gt;
-          &lt;article class=&quot;dvh-gate dvh-quality dvh-focusable&quot; data-tags=&quot;assurance skills cyber ops&quot;&gt;
-            &lt;h3&gt;Advisory Code Review&lt;/h3&gt;
-            &lt;p&gt;Codex reviews bugs, regressions, tests, auth, routing, queues, deployment, and boundary normalization; artifact + PR comment; one full receipt per head SHA.&lt;/p&gt;
-          &lt;/article&gt;
-          &lt;article class=&quot;dvh-gate dvh-quality dvh-focusable&quot; data-tags=&quot;assurance components ops&quot;&gt;
-            &lt;h3&gt;Visual Regression Gate&lt;/h3&gt;
-            &lt;p&gt;Deterministic build, Playwright snapshots + demo clips, baseline diff, optional Gemini review, artifact + comment. Failing threshold blocks.&lt;/p&gt;
-          &lt;/article&gt;
-          &lt;article class=&quot;dvh-gate dashed dvh-quality dvh-focusable&quot; data-tags=&quot;assurance ops&quot;&gt;
-            &lt;h3&gt;Visual Gate Accept Baseline&lt;/h3&gt;
-            &lt;p&gt;Maintainer-dispatched; verifies official run, exact PR SHA, artifact ID/digest, capture manifest, and acceptance commit before updating baselines.&lt;/p&gt;
-          &lt;/article&gt;
-        &lt;/div&gt;
-
-        &lt;div class=&quot;dvh-assurance-column&quot;&gt;
-          &lt;div class=&quot;dvh-column-label&quot;&gt;Cyber &amp;amp; release workflows&lt;/div&gt;
-          &lt;article class=&quot;dvh-gate dvh-cyber dvh-focusable&quot; data-tags=&quot;cyber assurance components&quot;&gt;
-            &lt;h3&gt;Security manifest policy&lt;/h3&gt;
-            &lt;p&gt;API/worker/MCP images must be digest-pinned; long-lived containers need probes, non-root execution, no privilege escalation, and dropped capabilities. Exact exceptions expire.&lt;/p&gt;
-          &lt;/article&gt;
-          &lt;article class=&quot;dvh-gate dvh-cyber dvh-focusable&quot; data-tags=&quot;cyber assurance components&quot;&gt;
-            &lt;h3&gt;Extractor Release Certification&lt;/h3&gt;
-            &lt;p&gt;Scheduled/manual: reproducible image + provenance; runtime/Python/image CycloneDX SBOMs; context/image/history/artifact secret scans; Trivy blocks HIGH/CRITICAL findings with fixes available.&lt;/p&gt;
-          &lt;/article&gt;
-          &lt;article class=&quot;dvh-gate dashed dvh-cyber dvh-focusable&quot; data-tags=&quot;cyber assurance&quot;&gt;
-            &lt;h3&gt;ZAP API + auth-flow checks&lt;/h3&gt;
-            &lt;p&gt;Operator-run scripts and runbooks with deterministic alert policy/triage. Present today, but not wired as a PR workflow in this repository.&lt;/p&gt;
-          &lt;/article&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-
-      &lt;div class=&quot;dvh-merge-bar&quot;&gt;
-        &lt;div class=&quot;dvh-node dvh-quality dvh-merge-node dvh-focusable&quot; data-tags=&quot;assurance skills cyber ops&quot;&gt;
-          &lt;strong&gt;Merge Readiness workflow&lt;/strong&gt;
-          &lt;span&gt;One closing issue · PR sections · changed-area CI · advisory · visual · no unresolved review · current head SHA&lt;/span&gt;
-        &lt;/div&gt;
-        &lt;span class=&quot;dvh-merge-arrow&quot;&gt;→&lt;/span&gt;
-        &lt;div class=&quot;dvh-node dvh-orchestration dvh-merge-node dvh-focusable&quot; data-tags=&quot;assurance ops&quot;&gt;
-          &lt;strong&gt;ready / ready-with-risks / not-ready&lt;/strong&gt;
-          &lt;span&gt;Single PR comment + 14-day evidence bundle&lt;/span&gt;
-        &lt;/div&gt;
-        &lt;span class=&quot;dvh-merge-arrow&quot;&gt;→&lt;/span&gt;
-        &lt;div class=&quot;dvh-node dvh-human dvh-merge-node dvh-focusable&quot; data-tags=&quot;ops assurance&quot;&gt;
-          &lt;strong&gt;Product Owner merges to dev&lt;/strong&gt;
-          &lt;span&gt;Independent second approval optional; Done only after merge&lt;/span&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-    &lt;/section&gt;
-
-    &lt;section class=&quot;dvh-band&quot; aria-labelledby=&quot;dvh-loop-title&quot;&gt;
-      &lt;div class=&quot;dvh-band-head&quot;&gt;
-        &lt;div class=&quot;dvh-band-title&quot;&gt;&lt;span class=&quot;dvh-index&quot;&gt;05&lt;/span&gt;&lt;h2 id=&quot;dvh-loop-title&quot;&gt;Product orchestrator control loops&lt;/h2&gt;&lt;/div&gt;
-        &lt;span class=&quot;dvh-band-note&quot;&gt;The manager owns convergence; automation observes and proves, but does not merge.&lt;/span&gt;
-      &lt;/div&gt;
-      &lt;div class=&quot;dvh-loop&quot;&gt;
-        &lt;article class=&quot;dvh-loop-step dvh-orchestration dvh-focusable&quot; data-tags=&quot;ops skills&quot;&gt;
-          &lt;div class=&quot;dvh-kicker&quot;&gt;Active orchestration&lt;/div&gt;
-          &lt;h3&gt;Product orchestrator&lt;/h3&gt;
-          &lt;p&gt;Loads issue labels first, audits scope, chooses single/epic mode, assigns bounded lane contracts, integrates one lane at a time, and tracks tests + risks.&lt;/p&gt;
-        &lt;/article&gt;
-        &lt;article class=&quot;dvh-loop-step dvh-orchestration dvh-focusable&quot; data-tags=&quot;ops assurance&quot;&gt;
-          &lt;div class=&quot;dvh-kicker&quot;&gt;Event loop&lt;/div&gt;
-          &lt;h3&gt;Orchestrator Event Hooks&lt;/h3&gt;
-          &lt;p&gt;Issue/PR activity emits task_started, blocked, pr_opened, and ready_to_merge events. Notification is logged; optional iMessage adapter can forward it.&lt;/p&gt;
-        &lt;/article&gt;
-        &lt;article class=&quot;dvh-loop-step dvh-orchestration dvh-focusable&quot; data-tags=&quot;ops assurance&quot;&gt;
-          &lt;div class=&quot;dvh-kicker&quot;&gt;Observe every 10 min&lt;/div&gt;
-          &lt;h3&gt;Orchestrator Monitor&lt;/h3&gt;
-          &lt;p&gt;Deterministically compares delivery board status with labels and linked PRs, detects failing checks, and uploads a low-token JSON audit. Auto-reconcile remains optional.&lt;/p&gt;
-        &lt;/article&gt;
-        &lt;article class=&quot;dvh-loop-step dvh-human dvh-focusable&quot; data-tags=&quot;ops skills assurance cyber&quot;&gt;
-          &lt;div class=&quot;dvh-kicker&quot;&gt;Human-curated improvement&lt;/div&gt;
-          &lt;h3&gt;Evidence becomes memory&lt;/h3&gt;
-          &lt;p&gt;Accepted findings and operating lessons update versioned skills, AGENTS guidance, tests, or runbooks; harness validation makes that learning enforceable next time.&lt;/p&gt;
-        &lt;/article&gt;
-      &lt;/div&gt;
-
-      &lt;div class=&quot;dvh-loop-return dvh-node dvh-cyber dvh-focusable&quot; data-tags=&quot;ops assurance cyber components&quot;&gt;
-        &lt;strong&gt;Failed check · advisory finding · visual regression · policy violation · stale SHA&lt;/strong&gt;
-        &lt;span class=&quot;dvh-loop-arrow&quot;&gt;→&lt;/span&gt;
-        &lt;strong&gt;Return only to the owning lane; fix, re-run the narrow checks, and push a new head&lt;/strong&gt;
-        &lt;span class=&quot;dvh-loop-arrow&quot;&gt;→&lt;/span&gt;
-        &lt;strong&gt;Invalidate stale evidence; re-run affected workflows; aggregate readiness again ↺&lt;/strong&gt;
-      &lt;/div&gt;
-
-      &lt;div class=&quot;dvh-loop-return dvh-node dvh-human dvh-focusable&quot; data-tags=&quot;ops components assurance&quot;&gt;
-        &lt;strong&gt;After human merge&lt;/strong&gt;
-        &lt;span class=&quot;dvh-loop-arrow&quot;&gt;→&lt;/span&gt;
-        &lt;strong&gt;Operator-driven CD scripts: build/push + AKS deploy for API, worker, extractor, MCP; App Service web; APIM revision + migrations&lt;/strong&gt;
-        &lt;span class=&quot;dvh-loop-arrow&quot;&gt;→&lt;/span&gt;
-        &lt;strong&gt;Remote/prod smoke and operational runbooks&lt;/strong&gt;
-      &lt;/div&gt;
-    &lt;/section&gt;
-
-    &lt;div class=&quot;dvh-legend&quot; aria-label=&quot;Color and line legend&quot;&gt;
-      &lt;span class=&quot;dvh-legend-item dvh-orchestration&quot;&gt;&lt;span class=&quot;dvh-swatch&quot;&gt;&lt;/span&gt;orchestration&lt;/span&gt;
-      &lt;span class=&quot;dvh-legend-item dvh-skill&quot;&gt;&lt;span class=&quot;dvh-swatch&quot;&gt;&lt;/span&gt;skills / workflow memory&lt;/span&gt;
-      &lt;span class=&quot;dvh-legend-item dvh-component&quot;&gt;&lt;span class=&quot;dvh-swatch&quot;&gt;&lt;/span&gt;component lane&lt;/span&gt;
-      &lt;span class=&quot;dvh-legend-item dvh-quality&quot;&gt;&lt;span class=&quot;dvh-swatch&quot;&gt;&lt;/span&gt;quality evidence&lt;/span&gt;
-      &lt;span class=&quot;dvh-legend-item dvh-cyber&quot;&gt;&lt;span class=&quot;dvh-swatch&quot;&gt;&lt;/span&gt;cyber / policy gate&lt;/span&gt;
-      &lt;span class=&quot;dvh-legend-item dvh-human&quot;&gt;&lt;span class=&quot;dvh-swatch&quot;&gt;&lt;/span&gt;human control&lt;/span&gt;
-      &lt;span class=&quot;dvh-legend-item&quot;&gt;Dashed = optional or operator-dispatched&lt;/span&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;dvh-source&quot;&gt;Grounded in the current repository: AGENTS.md, skills/README.md and all 11 cataloged skills, ci_changed_area_selector.py, the nine GitHub workflows, MANAGER_SOP.md, orchestrator-ops-loop.md, advisory/merge-readiness contracts, visual gate policy, deployment-manifest policy, and extractor certification workflow.&lt;/div&gt;
-  &lt;/main&gt;
-
-  &lt;script&gt;
-    (() =&gt; {
-      const root = document.getElementById(&#x27;product-agentic-harness&#x27;);
-      if (!root) return;
-
-      const summaries = {
-        all: &#x27;End to end: approved intent → scoped issue → isolated implementation → evidence-backed PR → human merge → monitored project state.&#x27;,
-        skills: &#x27;Eleven repo-local skills externalize the repeatable decisions: shaping, lifecycle, isolation, validation, evidence, review, packaging, and readiness.&#x27;,
-        components: &#x27;Seven primary change surfaces plus cross-component contracts share one path-aware router, so each lane proves only what its diff can affect.&#x27;,
-        assurance: &#x27;A changed-area CI fan-out runs beside advisory, visual, policy, and release workflows; merge readiness consolidates their current-head evidence.&#x27;,
-        cyber: &#x27;Cyber assurance is layered: sensitive-data hygiene, authz smoke, deployment hardening policy, extractor provenance/SBOM/Trivy scans, and operator-run ZAP checks.&#x27;,
-        ops: &#x27;The orchestrator drives issue-to-merge convergence; GitHub hooks notify on state changes, a 10-minute deterministic monitor audits drift, and blockers loop back to the owning lane.&#x27;
-      };
-
-      const buttons = [...root.querySelectorAll(&#x27;[data-focus]&#x27;)];
-      const focusable = [...root.querySelectorAll(&#x27;.dvh-focusable&#x27;)];
-      const summary = root.querySelector(&#x27;[data-focus-summary]&#x27;);
-
-      function setFocus(value) {
-        buttons.forEach((button) =&gt; {
-          const selected = button.dataset.focus === value;
-          button.setAttribute(&#x27;aria-pressed&#x27;, String(selected));
-          button.classList.toggle(&#x27;btn-primary&#x27;, selected);
-        });
-
-        focusable.forEach((element) =&gt; {
-          const tags = (element.dataset.tags || &#x27;&#x27;).split(/\s+/).filter(Boolean);
-          const selected = value === &#x27;all&#x27; || tags.includes(value);
-          element.classList.toggle(&#x27;is-dim&#x27;, !selected);
-          element.classList.toggle(&#x27;is-focus&#x27;, value !== &#x27;all&#x27; &amp;&amp; selected);
-        });
-
-        if (summary) summary.textContent = summaries[value] || summaries.all;
-      }
-
-      buttons.forEach((button) =&gt; {
-        button.addEventListener(&#x27;click&#x27;, () =&gt; setFocus(button.dataset.focus || &#x27;all&#x27;));
-      });
-    })();
-  &lt;/script&gt;
-&lt;/div&gt;
-
-&lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
-&lt;script src=&quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-(() =&gt; {
-  if (window.FloatingUIDOM == null) {
-    return;
+
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker">Orcha · Agentic delivery harness</div>
+    <h1>How a change earns its merge</h1>
+    <p class="deck">Versioned skills arm isolated agent lanes. Every pull request is proven by <strong>changed-area CI, AI review, visual evidence, and security policy in parallel</strong> — and a single readiness verdict puts the final decision in a human hand. Click any node for its receipts, or <strong>trace a change</strong> end to end.</p>
+    <div class="stats" aria-label="Harness at a glance">
+      <div class="stat"><b>11</b><span>versioned skills</span></div>
+      <div class="stat"><b>9</b><span>GitHub workflows</span></div>
+      <div class="stat"><b>37</b><span>UI routes under visual gate</span></div>
+      <div class="stat"><b>10&#8202;min</b><span>drift-monitor cadence</span></div>
+      <div class="stat human"><b>8</b><span>human control keys</span></div>
+      <div class="stat human"><b>1</b><span>merge gate</span></div>
+    </div>
+  </header>
+
+  <figure class="schematic">
+    <div class="schematic-frame">
+    <svg viewBox="0 0 1180 470" role="img" aria-label="Flow of one change through the harness: a scoped issue passes through the orchestrator into isolated agent lanes, becomes an evidence-bound pull request, fans out to four parallel gates, converges on a readiness verdict, and is merged by a human before deploy and monitoring; failures return to the owning lane and lessons return to the skill library.">
+      <defs>
+        <marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z"/></marker>
+        <marker id="ah-fail" class="m-fail" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z"/></marker>
+        <marker id="ah-learn" class="m-learn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z"/></marker>
+      </defs>
+
+      <!-- skills rail -->
+      <g class="node rail" id="sv-skills" data-detail="skills-rail" data-lens="skills loop" tabindex="0" role="button" aria-label="Skill library">
+        <rect x="24" y="20" width="704" height="34" rx="8"/>
+        <text x="40" y="41" class="t">11 versioned skills</text>
+        <text x="196" y="41" class="s">shape · isolate · validate · demo · review · package · audit — routed by AGENTS.md, structure enforced in CI</text>
+      </g>
+      <line class="observe" x1="90" y1="54" x2="90" y2="118"/>
+      <line class="observe" x1="271" y1="54" x2="271" y2="118"/>
+      <line class="observe" x1="471" y1="54" x2="471" y2="110"/>
+      <line class="observe" x1="662" y1="54" x2="662" y2="118"/>
+
+      <!-- main flow -->
+      <g class="node" id="sv-intent" data-detail="intent" data-lens="skills loop" tabindex="0" role="button" aria-label="Scoped issue">
+        <rect x="24" y="118" width="132" height="64" rx="10"/>
+        <text x="36" y="136" class="k">01 · SHAPE</text>
+        <text x="36" y="154" class="t">Scoped issue</text>
+        <text x="36" y="170" class="s">outcome · acceptance</text>
+      </g>
+      <line class="edge" x1="156" y1="150" x2="194" y2="150" marker-end="url(#ah)"/>
+
+      <g class="node" id="sv-orch" data-detail="orchestrator" data-lens="loop skills" tabindex="0" role="button" aria-label="Orchestrator">
+        <rect x="196" y="118" width="150" height="64" rx="10"/>
+        <text x="208" y="136" class="k">02 · CLASSIFY</text>
+        <text x="208" y="154" class="t">Orchestrator</text>
+        <text x="208" y="170" class="s">single issue or epic</text>
+      </g>
+      <line class="edge" x1="346" y1="150" x2="384" y2="150" marker-end="url(#ah)"/>
+      <text x="365" y="140" class="edge-label" text-anchor="middle">lane</text>
+      <text x="365" y="196" class="edge-label" text-anchor="middle">contracts</text>
+
+      <g class="node" id="sv-lanes" data-detail="lanes" data-lens="components skills" tabindex="0" role="button" aria-label="Agent lanes">
+        <rect x="402" y="102" width="154" height="64" rx="10" opacity="0.45"/>
+        <rect x="394" y="110" width="154" height="64" rx="10" opacity="0.7"/>
+        <rect x="386" y="118" width="154" height="64" rx="10"/>
+        <text x="398" y="136" class="k">03 · ISOLATE + BUILD</text>
+        <text x="398" y="154" class="t">Agent lanes</text>
+        <text x="398" y="170" class="s">one issue = one worktree</text>
+      </g>
+      <line class="edge" x1="556" y1="150" x2="594" y2="150" marker-end="url(#ah)"/>
+
+      <g class="node" id="sv-pr" data-detail="pr" data-lens="skills quality" tabindex="0" role="button" aria-label="Evidence-bound draft PR">
+        <rect x="596" y="118" width="132" height="64" rx="10"/>
+        <text x="608" y="136" class="k">04 · PACKAGE</text>
+        <text x="608" y="154" class="t">Draft PR</text>
+        <text x="608" y="170" class="s">evidence ↔ head SHA</text>
+      </g>
+
+      <!-- fan out -->
+      <line class="edge" x1="728" y1="150" x2="786" y2="66" marker-end="url(#ah)"/>
+      <line class="edge" x1="728" y1="150" x2="786" y2="118" marker-end="url(#ah)"/>
+      <line class="edge" x1="728" y1="150" x2="786" y2="170" marker-end="url(#ah)"/>
+      <line class="edge" x1="728" y1="150" x2="786" y2="222" marker-end="url(#ah)"/>
+      <text x="757" y="100" class="edge-label" text-anchor="middle">parallel</text>
+
+      <g class="node gate" id="sv-gate-ci" data-detail="gate-ci" data-lens="quality components" tabindex="0" role="button" aria-label="Changed-area CI">
+        <rect x="788" y="46" width="168" height="40" rx="8"/>
+        <text x="800" y="63" class="t">Changed-area CI</text>
+        <text x="800" y="77" class="s">area jobs, only what the diff touches</text>
+      </g>
+      <g class="node gate" id="sv-gate-adv" data-detail="gate-advisory" data-lens="quality" tabindex="0" role="button" aria-label="Advisory AI review">
+        <rect x="788" y="98" width="168" height="40" rx="8"/>
+        <text x="800" y="115" class="t">Advisory review · AI</text>
+        <text x="800" y="129" class="s">one receipt per head SHA</text>
+      </g>
+      <g class="node gate" id="sv-gate-vis" data-detail="gate-visual" data-lens="quality components" tabindex="0" role="button" aria-label="Visual regression gate">
+        <rect x="788" y="150" width="168" height="40" rx="8"/>
+        <text x="800" y="167" class="t">Visual gate</text>
+        <text x="800" y="181" class="s">37 routes · pixel + AI review</text>
+      </g>
+      <g class="node gate cyber" id="sv-gate-pol" data-detail="gate-policy" data-lens="cyber" tabindex="0" role="button" aria-label="Security manifest policy">
+        <rect x="788" y="202" width="168" height="40" rx="8"/>
+        <text x="800" y="219" class="t">Manifest policy</text>
+        <text x="800" y="233" class="s">hardening, fails closed</text>
+      </g>
+
+      <!-- converge -->
+      <line class="edge" x1="956" y1="66" x2="1008" y2="140" marker-end="url(#ah)"/>
+      <line class="edge" x1="956" y1="118" x2="1008" y2="146" marker-end="url(#ah)"/>
+      <line class="edge" x1="956" y1="170" x2="1008" y2="152" marker-end="url(#ah)"/>
+      <line class="edge" x1="956" y1="222" x2="1008" y2="160" marker-end="url(#ah)"/>
+
+      <g class="node" id="sv-verdict" data-detail="verdict" data-lens="quality loop" tabindex="0" role="button" aria-label="Readiness verdict">
+        <rect x="1010" y="118" width="146" height="64" rx="10"/>
+        <text x="1022" y="136" class="k">05 · PROVE</text>
+        <text x="1022" y="154" class="t">Readiness verdict</text>
+        <text x="1022" y="170" class="s">ready · with-risks · not</text>
+      </g>
+
+      <!-- down to human merge -->
+      <line class="edge" x1="1083" y1="182" x2="1083" y2="296" marker-end="url(#ah)"/>
+      <text x="1095" y="245" class="edge-label">single</text>
+      <text x="1095" y="258" class="edge-label">verdict</text>
+
+      <g class="node human-node" id="sv-merge" data-detail="merge" data-lens="human loop" tabindex="0" role="button" aria-label="Human merge">
+        <polygon points="1083,298 1160,332 1083,366 1006,332"/>
+        <text x="1083" y="328" class="t" text-anchor="middle">Human merge</text>
+        <text x="1083" y="344" class="s" text-anchor="middle">the one key</text>
+      </g>
+      <line class="edge" x1="1006" y1="332" x2="898" y2="332" marker-end="url(#ah)"/>
+      <text x="952" y="322" class="edge-label" text-anchor="middle">operator CD</text>
+
+      <g class="node" id="sv-deploy" data-detail="deploy" data-lens="loop components" tabindex="0" role="button" aria-label="Deploy and operate">
+        <rect x="726" y="300" width="170" height="64" rx="10"/>
+        <text x="738" y="318" class="k">06 · SHIP</text>
+        <text x="738" y="336" class="t">Deploy + operate</text>
+        <text x="738" y="352" class="s">AKS · App Service · APIM</text>
+      </g>
+      <line class="edge" x1="726" y1="332" x2="618" y2="332" marker-end="url(#ah)"/>
+
+      <g class="node" id="sv-monitor" data-detail="monitor" data-lens="loop" tabindex="0" role="button" aria-label="Monitor and events">
+        <rect x="446" y="300" width="170" height="64" rx="10"/>
+        <text x="458" y="318" class="k">ALWAYS ON</text>
+        <text x="458" y="336" class="t">Monitor + events</text>
+        <text x="458" y="352" class="s">10-min audit · notifications</text>
+      </g>
+      <path class="observe" d="M 500 300 C 480 250, 350 220, 285 186" marker-end="url(#ah)"/>
+      <text x="392" y="243" class="edge-label">reconciles board ↔ reality</text>
+
+      <line class="edge" x1="446" y1="332" x2="344" y2="332" marker-end="url(#ah)"/>
+
+      <g class="node memory" id="sv-memory" data-detail="memory" data-lens="loop skills human" tabindex="0" role="button" aria-label="Evidence becomes memory">
+        <rect x="104" y="300" width="240" height="64" rx="10"/>
+        <text x="116" y="318" class="k">HUMAN-CURATED</text>
+        <text x="116" y="336" class="t">Evidence becomes memory</text>
+        <text x="116" y="352" class="s">findings → skills · guidance · tests</text>
+      </g>
+      <path class="learn-path" d="M 200 300 C 190 200, 150 120, 108 58" marker-end="url(#ah-learn)"/>
+      <text x="120" y="222" class="learn-label">lessons re-arm</text>
+      <text x="120" y="235" class="learn-label">the skills</text>
+
+      <!-- failure return -->
+      <path class="fail-path" d="M 870 250 C 800 288, 600 268, 490 192" marker-end="url(#ah-fail)"/>
+      <text x="672" y="284" class="fail-label" text-anchor="middle">any failure returns to the owning lane · a new head SHA voids stale evidence</text>
+
+      <!-- legend row inside svg -->
+      <g aria-hidden="true">
+        <rect x="24" y="424" width="14" height="8" rx="2" fill="var(--accent)"/>
+        <text x="44" y="432" class="s">automated evidence</text>
+        <rect x="176" y="424" width="14" height="8" rx="2" fill="var(--human)"/>
+        <text x="196" y="432" class="s">human control</text>
+        <rect x="300" y="424" width="14" height="8" rx="2" fill="var(--cyber)"/>
+        <text x="320" y="432" class="s">cyber / policy</text>
+        <rect x="412" y="424" width="14" height="8" rx="2" fill="var(--fail)"/>
+        <text x="432" y="432" class="s">return path</text>
+        <text x="524" y="432" class="s">dashed = optional / operator-dispatched · every node opens its receipts</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>One change, end to end: the orchestrator turns a scoped issue into isolated lane work; the draft PR fans out to four parallel gates whose evidence converges on a single readiness verdict; a human turns the only merge key. Two loops close the system — failures return to the owning lane, and accepted lessons update the versioned skills that armed the run.</figcaption>
+  </figure>
+
+  <div class="toolbar" id="toolbar">
+    <div class="wrap toolbar-inner">
+      <span class="label">Lens</span>
+      <button class="chip" data-lens-btn="all" aria-pressed="true">Everything</button>
+      <button class="chip" data-lens-btn="skills" aria-pressed="false">Skills</button>
+      <button class="chip" data-lens-btn="components" aria-pressed="false">Components</button>
+      <button class="chip" data-lens-btn="quality" aria-pressed="false">CI + quality</button>
+      <button class="chip" data-lens-btn="cyber" aria-pressed="false">Cyber</button>
+      <button class="chip" data-lens-btn="loop" aria-pressed="false">Orchestrator loop</button>
+      <button class="chip human-chip" data-lens-btn="human" aria-pressed="false">Human control</button>
+      <button class="trace-btn" id="traceStart">▶ Trace a change</button>
+      <div class="lens-note" id="lensNote" aria-live="polite"></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <section class="band" id="band-skills">
+    <div class="band-head">
+      <h2>Skill library — versioned workflow memory</h2>
+      <span class="note">AGENTS.md routes any agent into executable SKILL.md contracts; the CI harness job enforces their structure, so process changes ship like code.</span>
+    </div>
+    <div class="band-grid g4">
+      <article class="card inspectable" tabindex="0" data-lens="skills loop human" data-detail="sk-shape" data-trace="t1">
+        <h3>Shape &amp; govern</h3>
+        <div class="skill-item"><code>feedback-approval-converter</code><span>Approved feedback → linked delivery issue(s)</span></div>
+        <div class="skill-item"><code>issue-shaper</code><span>Definition of Ready, scope, acceptance, demo plan</span></div>
+        <div class="skill-item"><code>manager-lifecycle</code><span>Issue states from intake to human-merged Done</span></div>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="skills components" data-detail="sk-isolate" data-trace="t3">
+        <h3>Isolate &amp; run</h3>
+        <div class="skill-item"><code>worktree-bringup</code><span>One lane, one namespace, collision-free ports and roots</span></div>
+        <div class="skill-item"><code>local-bringup</code><span>Env generation, services, smoke, reset</span></div>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="skills quality components" data-detail="sk-validate" data-trace="t4">
+        <h3>Validate &amp; demonstrate</h3>
+        <div class="skill-item"><code>changed-area-test-selector</code><span>Narrowest credible tests, then cross-service smoke</span></div>
+        <div class="skill-item"><code>feature-demo-capture</code><span>Screenshots, diffs, route clips, walkthrough evidence</span></div>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="skills quality cyber loop" data-detail="sk-review" data-trace="t5">
+        <h3>Review &amp; close</h3>
+        <div class="skill-item"><code>code-reviewer</code><span>Correctness, regressions, risky boundaries, missing tests</span></div>
+        <div class="skill-item"><code>dbt-sql-reviewer</code><span>ref/source discipline, schema drift, compile semantics</span></div>
+        <div class="skill-item"><code>pr-packager</code><span>Template, evidence, sensitive-data gate, one Closes link</span></div>
+        <div class="skill-item"><code>merge-readiness-auditor</code><span>Fresh-SHA evidence, blockers, human-ready decision</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="band" id="band-components">
+    <div class="band-head">
+      <h2>Component surface — local proof mirrors CI</h2>
+      <span class="note">One path-aware router decides what each diff must prove; agents run the same commands locally that CI runs remotely.</span>
+    </div>
+    <div class="router">
+      <div class="card" data-lens="components loop">
+        <h3>Changed files + architecture constraints</h3>
+        <p>AGENTS routers, target-environment authority, issue scope</p>
+      </div>
+      <span class="arrow">→</span>
+      <div class="card tone-accent" data-lens="components quality" data-trace="t4">
+        <h3>Changed-area selector</h3>
+        <p><code>ci_changed_area_selector.py</code> maps paths to the narrowest credible checks — the same routing used by CI</p>
+      </div>
+    </div>
+    <div class="band-grid g4">
+      <article class="card" data-lens="components quality cyber"><h3>API <code>api/</code></h3><p>FastAPI contracts, auth, migrations, OpenAPI, worker enqueue.</p><div class="proof">compile · full unit suite · OpenAPI/APIM alignment</div></article>
+      <article class="card" data-lens="components quality cyber"><h3>Web <code>web/</code></h3><p>React/Vite UI, server behavior, deterministic visual fixtures.</p><div class="proof">unit + server tests · authz smoke · lint · build · visual gate</div></article>
+      <article class="card" data-lens="components quality cyber"><h3>Workers <code>worker/</code></h3><p>Handlers, queues, retries, idempotency, deployment attestation — specialized worker runtimes ship as certified images behind their own boundary.</p><div class="proof">compile · full unit suite · deploy/env + attestation · runtime boundary + secret scan · image smoke</div></article>
+      <article class="card" data-lens="components quality"><h3>MCP <code>mcp/</code></h3><p>The product's own in-app agent tool surface, kept aligned to API and token contracts. Product runtime — not the tooling that builds it.</p><div class="proof">compile · package install · app import</div></article>
+      <article class="card" data-lens="components quality cyber"><h3>Infra <code>infra/</code></h3><p>Terraform, AKS, APIM policy, App Service, deployment assets.</p><div class="proof">terraform fmt · policy tests · manifest policy</div></article>
+      <article class="card" data-lens="components quality skills"><h3>Docs &amp; harness <code>docs/ skills/ scripts/</code></h3><p>Agent routers, skills, local tooling, runbooks, architecture.</p><div class="proof">asset validator · harness unit tests · shell lint · strict docs build</div></article>
+      <article class="card" data-lens="components quality loop"><h3>Cross-component <code>.github/ · contracts</code></h3><p>Workflow edits fan out broadly; shared contracts intentionally select adjacent lanes.</p><div class="proof">combine narrow suites · smallest useful smoke pass</div></article>
+    </div>
+  </section>
+
+  <section class="band" id="band-assurance">
+    <div class="band-head">
+      <h2>Assurance — independent evidence, one verdict</h2>
+      <span class="note">Nine workflows produce evidence in parallel; merge readiness consolidates only current-head evidence into one decision for the human.</span>
+    </div>
+    <div class="band-grid g3">
+      <div>
+        <div class="col-label">CI · router + conditional area jobs</div>
+        <div class="ci-grid">
+          <article class="card" data-lens="quality skills" data-trace="t6"><h3>harness</h3><p>Skills/AGENTS validation, script tests, shell lint, strict internal docs</p></article>
+          <article class="card" data-lens="quality components" data-trace="t6"><h3>api</h3><p>Install, compile, full unittest discovery</p></article>
+          <article class="card" data-lens="quality components cyber" data-trace="t6"><h3>workers</h3><p>Compile, full tests, deploy + attestation, runtime locks/BOM, secret scan, image smoke</p></article>
+          <article class="card" data-lens="quality components" data-trace="t6"><h3>web</h3><p>Tests, authz smoke, lint, production build</p></article>
+          <article class="card" data-lens="quality components" data-trace="t6"><h3>mcp</h3><p>Install, compile, app import</p></article>
+          <article class="card" data-lens="quality components cyber" data-trace="t6"><h3>infra</h3><p>Terraform format + policy tests</p></article>
+          <article class="card" data-lens="quality components" data-trace="t6"><h3>docs-public</h3><p>Strict public docs build</p></article>
+        </div>
+      </div>
+      <div class="assurance-col">
+        <div class="col-label">Review &amp; experience</div>
+        <article class="card inspectable" tabindex="0" data-lens="quality loop" data-detail="gate-advisory" data-trace="t6">
+          <h3>Advisory code review · AI</h3>
+          <p>An AI reviewer works the repo's own rubric — bugs, regressions, tests, auth, routing, queues, boundaries. One full receipt per head SHA; advisory by design, so an outage never blocks delivery.</p>
+        </article>
+        <article class="card inspectable" tabindex="0" data-lens="quality components loop" data-detail="gate-visual" data-trace="t6">
+          <h3>Visual regression gate</h3>
+          <p>Deterministic build, 37 routes captured with Playwright, pixel diff against accepted baselines (warn 0.2% · fail 1.0%), plus an AI design review whose <em>fail</em> blocks. Demo clips ride along as evidence.</p>
+        </article>
+        <article class="card inspectable dashed" tabindex="0" data-lens="quality loop human" data-detail="gate-baseline">
+          <h3>Baseline acceptance · human-dispatched</h3>
+          <p>Maintainer-only workflow verifies the official run, exact PR head SHA, artifact identity and digest, and capture manifest before any baseline changes.</p>
+        </article>
+      </div>
+      <div class="assurance-col">
+        <div class="col-label">Cyber &amp; release</div>
+        <article class="card inspectable tone-cyber" tabindex="0" data-lens="cyber" data-detail="gate-policy" data-trace="t6">
+          <h3>Security manifest policy</h3>
+          <p>Deployment images digest-pinned; long-lived containers need probes, non-root execution, no privilege escalation, dropped capabilities. Exceptions are exact, owned, and expire — the gate fails closed.</p>
+        </article>
+        <article class="card inspectable tone-cyber" tabindex="0" data-lens="cyber" data-detail="gate-cert">
+          <h3>Release certification · nightly</h3>
+          <p>Reproducible image + provenance; CycloneDX SBOMs for runtime, Python, and image; three secret scans (tree, image + history, evidence); vulnerability scan blocks HIGH/CRITICAL findings with available fixes.</p>
+        </article>
+        <article class="card inspectable tone-cyber" tabindex="0" data-lens="cyber" data-detail="custody">
+          <h3>Credential custody</h3>
+          <p>Jobs that touch source systems carry a credential <em>reference</em>, never a secret. Resolution requires an exact scope match and fails closed — agents and queues never hold passwords, tokens, or keys.</p>
+        </article>
+        <article class="card dashed tone-cyber" data-lens="cyber" >
+          <h3>DAST · operator-run</h3>
+          <p>API baseline and auth-flow scans with a versioned alert policy and triage runbooks. Deliberately not a PR gate today.</p>
+        </article>
+        <article class="card dashed tone-cyber" data-lens="cyber" data-detail="boundaries">
+          <h3 style="cursor:pointer">Known boundaries →</h3>
+          <p>SAST, dependency audit, and PR-path secret scanning are scheduled follow-up slices on the guardrails epic — tracked, not claimed.</p>
+        </article>
+      </div>
+    </div>
+
+    <div class="merge-bar">
+      <div class="card tone-accent" data-lens="quality loop" data-trace="t7">
+        <b>Merge readiness aggregator</b>
+        <span>one closing issue · PR sections · changed-area CI · advisory · visual · no unresolved review · current head SHA</span>
+      </div>
+      <span class="arrow">→</span>
+      <div class="card" data-lens="quality loop" data-trace="t7">
+        <b>ready / ready-with-risks / not-ready</b>
+        <span>single PR comment + 14-day evidence bundle</span>
+      </div>
+      <span class="arrow">→</span>
+      <div class="card tone-human" data-lens="human loop" data-trace="t8">
+        <b>A human merges</b>
+        <span>Done begins only after merge; second approval optional</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="band-loop">
+    <div class="band-head">
+      <h2>The loop that runs it</h2>
+      <span class="note">Automation observes, proves, and notifies. Convergence — and every consequential promotion — stays with people.</span>
+    </div>
+    <div class="band-grid g4">
+      <article class="card inspectable" tabindex="0" data-lens="loop skills" data-detail="orchestrator" data-trace="t2">
+        <h3>Orchestrator</h3>
+        <p>Reads labels first, audits scope, picks single-issue or epic mode, hands each lane a bounded contract, and integrates one lane at a time with a tracked test-and-risk table.</p>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="loop" data-detail="events" data-trace="t9">
+        <h3>Event hooks</h3>
+        <p>Issue and PR activity emits four lifecycle events — task started, blocked, PR opened, ready to merge. A notification adapter can forward them to chat.</p>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="loop" data-detail="monitor" data-trace="t9">
+        <h3>Drift monitor · every 10 min</h3>
+        <p>A deterministic, low-token audit compares board status against labels, linked PRs, and failing checks, and publishes a JSON report. Auto-reconcile is deliberately held back.</p>
+      </article>
+      <article class="card inspectable tone-human" tabindex="0" data-lens="loop skills human" data-detail="memory" data-trace="t10">
+        <h3>Evidence becomes memory</h3>
+        <p>Accepted findings update versioned skills, guidance, tests, or runbooks — and harness validation makes the lesson enforceable on the next run.</p>
+      </article>
+    </div>
+
+    <div class="return-bar fail" data-lens="loop quality cyber" data-trace="t6">
+      <b>Failed check · advisory finding · visual regression · policy violation · stale SHA</b>
+      <span class="arrow">→</span>
+      <b>Return to the owning lane; fix, re-run the narrow checks, push a new head</b>
+      <span class="arrow">→</span>
+      <b>Stale evidence voided; readiness aggregates again ↺</b>
+    </div>
+
+    <div class="return-bar cd" data-lens="loop components" data-trace="t9">
+      <b>After human merge</b>
+      <span class="arrow">→</span>
+      <b>Operator-run CD: build/push + AKS deploy for API, workers, MCP; App Service web; APIM revision + migrations</b>
+      <span class="arrow">→</span>
+      <b>Remote smoke + operational runbooks</b>
+    </div>
+
+    <div class="keys-strip" data-lens="human loop" data-trace="t8">
+      <h3>The eight human keys — automation cannot turn any of them</h3>
+      <ol>
+        <li>Promote issue to Ready</li>
+        <li>Approve external intake</li>
+        <li>Approve feedback conversion</li>
+        <li>Promote draft PR to review</li>
+        <li>Merge to dev</li>
+        <li>Accept visual baselines</li>
+        <li>Certification escalations</li>
+        <li>Renew policy exceptions</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="legend" aria-label="Legend">
+    <span><span class="sw" style="background: var(--accent)"></span>automated evidence</span>
+    <span><span class="sw" style="background: var(--human)"></span>human control</span>
+    <span><span class="sw" style="background: var(--cyber)"></span>cyber / policy</span>
+    <span><span class="sw" style="background: var(--fail)"></span>return path</span>
+    <span>dashed = optional or operator-dispatched</span>
+  </div>
+
+  <footer>
+    <span>Grounded in the current repository: AGENTS.md, the 11 cataloged skills, <span class="mono">ci_changed_area_selector.py</span>, all nine GitHub workflows, the manager SOP and orchestrator ops loop, advisory and merge-readiness contracts, visual-gate policy, deployment-manifest policy, and the release-certification workflow. Snapshot: 2026-08-24.</span>
+  </footer>
+</div>
+
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+  <div class="drawer-head">
+    <h3 id="drawerTitle"></h3>
+    <button class="drawer-close" id="drawerClose">Esc ✕</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
+
+<div class="trace-hud" id="traceHud" role="dialog" aria-label="Trace a change">
+  <div class="step-k" id="traceK"></div>
+  <h3 id="traceTitle"></h3>
+  <p id="traceBody"></p>
+  <div class="row">
+    <button id="tracePrev">← Back</button>
+    <button id="traceNext" class="primary">Next →</button>
+    <span class="spacer" id="traceCount"></span>
+    <button id="traceExit">Exit</button>
+  </div>
+</div>
+
+<script>
+(() => {
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+
+  /* ---------- drawer ---------- */
+  const DETAILS = {
+    "skills-rail": { t: "Skill library", b: "<p>Eleven versioned skills externalize the repeatable decisions — shaping, lifecycle, isolation, validation, evidence capture, review, packaging, and readiness auditing. AGENTS.md routes any agent to the right skill; a CI validator enforces each skill's required structure, so improving the process is a reviewed code change, not tribal knowledge.</p>", r: ["skills/<name>/SKILL.md — 7 required sections", "skills/README.md — catalog index", "CI harness job — structure validation"] },
+    "intent": { t: "Scoped issue", b: "<p>Work enters as one executable issue: outcome, requirements, acceptance criteria, demo plan, and non-goals. A human promotes it to Ready — the harness's first control point. External notes and approved feedback convert to issues only through explicit human confirmation.</p>", r: ["issue-shaper · feedback-approval-converter", "Definition of Ready", "state: Triage → Ready"] },
+    "orchestrator": { t: "Orchestrator", b: "<p>The orchestrator loads issue labels first and chooses the mode: a single issue gets one lane; an epic gets an integration branch plus bounded lanes merged back one at a time. Each lane receives a written contract — objective, scope, non-goals, validation, handoff — and workers are barred from opening PRs or merging on their own.</p><p class='sub'>It also enforces the advisor-receipt policy: one full AI review per PR head SHA, invalidated only by a new head.</p>", r: ["label-driven single/epic classification", "lane contract: objective · scope · non-goals · validation · handoff", "epic integration: one lane at a time, no-ff merges"] },
+    "lanes": { t: "Agent lanes", b: "<p>One pursued issue = one worktree = one branch = one PR. Every lane gets its own namespace: collision-free ports, temp roots, and a full local service stack, so parallel lanes never contaminate each other's evidence. Dozens of lanes have run this way.</p>", r: ["worktree-bringup · local-bringup", "namespaced ports, temp roots, service stack", "state: In Progress"] },
+    "pr": { t: "Evidence-bound draft PR", b: "<p>The packaging skill assembles the PR: exact local checks run, demo artifacts, docs impact, risks, and exactly one closing-issue link — all bound to the current head SHA. A sensitive-data gate blocks secrets, env files, connection strings, and sensitive samples from code, docs, logs, and screenshots.</p>", r: ["pr-packager · feature-demo-capture", "PR template parity enforced", "evidence ↔ head SHA binding"] },
+    "gate-ci": { t: "Changed-area CI", b: "<p>A path-aware router maps the diff to the narrowest credible checks across the repo's areas — harness, api, workers, web, mcp, infra, public docs. Skipped areas don't run, so signal stays fast; shared contracts intentionally fan out to adjacent areas.</p>", r: ["ci_changed_area_selector.py — same routing locally and in CI", "conditional area jobs behind one router", "blocking"] },
+    "gate-advisory": { t: "Advisory code review · AI", b: "<p>An AI reviewer applies the repo's own rubric — code-reviewer, test-selector, and SQL-reviewer skills plus planning and SOP docs — and posts one structured receipt per head SHA as a PR comment and artifact. It is advisory by design: findings inform the human decision, and an outage degrades to 'review unavailable' instead of blocking.</p>", r: ["one full receipt per head SHA", "schema-validated review artifact + single PR comment", "fork PRs bypass — secrets never meet untrusted code"] },
+    "gate-visual": { t: "Visual regression gate", b: "<p>A deterministic fixture build renders 37 UI routes; Playwright captures snapshots and demo clips; a pixel diff against accepted baselines warns at 0.2% and fails at 1.0%; an AI design review adds a second opinion where only an explicit fail blocks. Baseline changes require a separate human-dispatched acceptance.</p>", r: ["route spec: 37 routes · fixed viewport + theme", "pixelmatch thresholds 0.2% / 1.0%", "artifacts retained 14 days"] },
+    "gate-baseline": { t: "Baseline acceptance", b: "<p>Updating what 'correct' looks like is a privileged, human-dispatched act. The workflow verifies the official gate run, the exact PR head SHA, the artifact's identity and digest, and the capture manifest before committing baselines — and a later pixel change never inherits an earlier acceptance.</p>", r: ["maintainer dispatch only", "artifact digest verification", "acceptance record committed with baselines"] },
+    "gate-policy": { t: "Security manifest policy", b: "<p>Deployment manifests for long-lived services must pin images by digest, define readiness and liveness probes, and run non-root with no privilege escalation and all capabilities dropped. Exceptions are exact-fingerprint, owned, and time-boxed; expiry or any parse doubt fails the gate closed.</p>", r: ["digest-pinned images", "probes + non-root + drop ALL capabilities", "time-boxed exceptions · fails closed"] },
+    "gate-cert": { t: "Release certification", b: "<p>Nightly and on demand, the worker runtime image is rebuilt reproducibly with provenance, emits CycloneDX SBOMs (runtime, Python, image), passes three secret scans (build tree, image + history, evidence bundle), and is scanned for vulnerabilities — HIGH/CRITICAL findings with available fixes block certification.</p>", r: ["reproducible build + provenance comparison", "3× SBOM · 3× secret scan", "vulnerability policy: HIGH/CRITICAL with fix ⇒ block"] },
+    "custody": { t: "Credential custody", b: "<p>Jobs that touch source systems never carry secrets — only a reference (id, provider, purpose). The runtime resolves references against exact scope: organization, environment, region, source family, handler, provider, purpose. Missing, stale, revoked, or cross-scope references fail before any source is touched. Agents, queues, and logs never hold credential material.</p>", r: ["reference-only job payloads", "exact-scope resolution · fails closed", "credential lineage tracked per source"] },
+    "boundaries": { t: "Known boundaries", b: "<p>The cyber story is honest about its edges: static analysis (SAST), dependency auditing, and PR-path secret scanning are scheduled follow-up slices on the platform-guardrails epic. Today, secret scanning runs in the release-certification path, and the sensitive-data gate covers the PR surface.</p><p class='sub'>Claiming only what's wired is itself a control: the readiness verdict cites evidence that exists.</p>", r: ["tracked follow-up slices on the guardrails epic", "no silent coverage claims"] },
+    "verdict": { t: "Readiness verdict", b: "<p>Merge readiness re-audits on every gate completion and consolidates only current-head evidence: one closing issue, complete PR sections, changed-area CI, advisory findings, visual evidence, unresolved reviews. It answers ready, ready-with-risks, or not-ready in a single PR comment with a 14-day evidence bundle — advice for the human, not an auto-merge.</p>", r: ["re-runs on CI / advisory / visual completion", "stale-SHA evidence voided", "single comment + evidence bundle"] },
+    "merge": { t: "Human merge", b: "<p>The Product Owner is the merge operator. Done begins only after a human merges to dev — automation proves and recommends but holds no merge key. An independent second approval stays optional by design.</p>", r: ["Definition of Done = a human merges", "unresolved findings are blockers", "one of eight human keys"] },
+    "deploy": { t: "Deploy + operate", b: "<p>Deployment stays operator-driven: build and push images, AKS rollouts for API, workers, and MCP, App Service for web, APIM revision and database migrations — followed by remote smoke checks and operational runbooks.</p>", r: ["operator-run CD scripts", "remote/prod smoke", "runbooks for every scan and rollout"] },
+    "monitor": { t: "Monitor + events", b: "<p>Every ten minutes a deterministic, low-token audit compares the delivery board against labels, linked PRs, and check status, publishing a JSON drift report. Lifecycle events — task started, blocked, PR opened, ready to merge — can notify chat in real time. Auto-reconcile exists but is deliberately held back: detect and notify first.</p>", r: ["10-min scheduled audit · JSON artifact", "4 lifecycle events + notification adapter", "auto-reconcile: one flag away, off by choice"] },
+    "memory": { t: "Evidence becomes memory", b: "<p>The learning loop is human-curated: accepted review findings and operating lessons become edits to versioned skills, agent guidance, tests, or runbooks. Because CI validates the skill structure, a lesson learned is enforceable on the very next run — the harness gets stricter as it ships.</p>", r: ["findings → skills/ · AGENTS.md · tests · runbooks", "validated by the CI harness job"] },
+    "sk-shape": { t: "Shape & govern", b: "<p>Three skills own the top of the funnel: converting approved feedback into linked delivery issues, shaping issues to the Definition of Ready, and moving them through lifecycle states to a human-merged Done.</p>", r: ["feedback-approval-converter", "issue-shaper", "manager-lifecycle"] },
+    "sk-isolate": { t: "Isolate & run", b: "<p>Two skills make parallelism safe: the worktree contract assigns each lane collision-free ports, temp roots, and namespaces; local bringup stands up the full service stack, smoke-tests it, and resets it cleanly.</p>", r: ["worktree-bringup", "local-bringup"] },
+    "sk-validate": { t: "Validate & demonstrate", b: "<p>Two skills make proof cheap: the test selector picks the narrowest credible checks for the diff (mirroring CI's router), and demo capture turns working software into screenshots, diffs, and route clips that ride the PR.</p>", r: ["changed-area-test-selector", "feature-demo-capture"] },
+    "sk-review": { t: "Review & close", b: "<p>Four skills close the loop: code review against the house rubric, a dbt/SQL-specific review lens, PR packaging with the sensitive-data gate and exactly one closing link, and the merge-readiness audit that renders the final advisory verdict.</p>", r: ["code-reviewer", "dbt-sql-reviewer", "pr-packager", "merge-readiness-auditor"] },
+    "events": { t: "Event hooks", b: "<p>Issue and PR activity emits four lifecycle events — task started, blocked, PR opened, ready to merge. Notifications log by default; an optional adapter forwards them to chat so the operator hears state changes without polling.</p>", r: ["4 lifecycle events", "notification adapter (optional)"] }
+  };
+
+  const drawer = $("#drawer"), backdrop = $("#backdrop"), dBody = $("#drawerBody"), dTitle = $("#drawerTitle");
+  let lastFocus = null;
+  function openDrawer(key) {
+    const d = DETAILS[key]; if (!d) return;
+    lastFocus = document.activeElement;
+    dTitle.textContent = d.t;
+    dBody.innerHTML = d.b + (d.r ? `<div class="receipts"><h4>Receipts</h4><ul>${d.r.map(x => `<li>${x}</li>`).join("")}</ul></div>` : "");
+    drawer.classList.add("open"); backdrop.classList.add("open");
+    $("#drawerClose").focus();
   }
-  const { autoUpdate, computePosition, flip, offset, shift, size } =
-    window.FloatingUIDOM;
-  const tooltipPlacements = new Set([&quot;top&quot;, &quot;right&quot;, &quot;bottom&quot;, &quot;left&quot;]);
-  const tooltipId = `codex-visualization-tooltip-${
-    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
-  }`;
-  const tooltipGap = 5;
-  const hoverDelay = 700;
-  const skipDelay = 300;
-  let activeTrigger = null;
-  let pendingTrigger = null;
-  let tooltip = null;
-  let openTimeout = null;
-  let autoUpdateCleanup = null;
-  let positionRequest = 0;
-  let skipDelayUntil = 0;
+  function closeDrawer() {
+    drawer.classList.remove("open"); backdrop.classList.remove("open");
+    if (lastFocus) lastFocus.focus();
+  }
+  $("#drawerClose").addEventListener("click", closeDrawer);
+  backdrop.addEventListener("click", closeDrawer);
+  $$("[data-detail]").forEach(el => {
+    el.addEventListener("click", () => openDrawer(el.dataset.detail));
+    el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openDrawer(el.dataset.detail); } });
+  });
 
-  const getTrigger = (target) =&gt;
-    target?.nodeType === Node.ELEMENT_NODE
-      ? target.closest(&quot;[data-tooltip]&quot;)
-      : null;
-  const containsTarget = (trigger, target) =&gt;
-    target?.nodeType != null &amp;&amp; trigger.contains(target);
-  const getContent = (trigger) =&gt;
-    trigger.getAttribute(&quot;data-tooltip&quot;)?.trim() ?? &quot;&quot;;
-  const getPlacement = (trigger) =&gt; {
-    const placement = trigger.getAttribute(&quot;data-tooltip-placement&quot;);
-    return tooltipPlacements.has(placement) ? placement : &quot;top&quot;;
+  /* ---------- lenses ---------- */
+  const SUMMARIES = {
+    all: "",
+    skills: "Skills lens: eleven versioned contracts externalize every repeatable decision — and the lessons loop feeds them, so the harness compounds.",
+    components: "Components lens: seven change surfaces share one path-aware router; each lane proves only what its diff can affect, locally and in CI.",
+    quality: "Quality lens: changed-area CI, AI review, and visual evidence run in parallel; merge readiness consolidates current-head evidence into one verdict.",
+    cyber: "Cyber lens: sensitive-data hygiene, hardening policy, SBOM + provenance + secret scans, credential custody by reference — and honest boundaries for what isn't wired yet.",
+    loop: "Loop lens: the orchestrator drives convergence, events notify, a 10-minute audit catches drift, failures return to their owning lane, lessons return to the skills.",
+    human: "Human lens: automation proves and recommends; people hold all eight keys — from Ready promotion to the merge itself."
   };
-  const getTooltip = () =&gt; {
-    if (tooltip == null) {
-      tooltip = document.createElement(&quot;div&quot;);
-      tooltip.id = tooltipId;
-      tooltip.className = &quot;tooltip&quot;;
-      tooltip.setAttribute(&quot;role&quot;, &quot;tooltip&quot;);
-    }
-    return tooltip;
-  };
-  const setDescribedBy = (trigger, described) =&gt; {
-    const ids = new Set(
-      (trigger.getAttribute(&quot;aria-describedby&quot;) ?? &quot;&quot;)
-        .split(/\s+/)
-        .filter(Boolean),
-    );
-    if (described) {
-      ids.add(tooltipId);
-    } else {
-      ids.delete(tooltipId);
-    }
-    if (ids.size === 0) {
-      trigger.removeAttribute(&quot;aria-describedby&quot;);
-    } else {
-      trigger.setAttribute(&quot;aria-describedby&quot;, [...ids].join(&quot; &quot;));
-    }
-  };
-  const clearOpenTimeout = () =&gt; {
-    if (openTimeout != null) {
-      window.clearTimeout(openTimeout);
-      openTimeout = null;
-    }
-    pendingTrigger = null;
-  };
-  const closeTooltip = (activateSkipDelay = true) =&gt; {
-    clearOpenTimeout();
-    positionRequest += 1;
-    autoUpdateCleanup?.();
-    autoUpdateCleanup = null;
-    if (activeTrigger == null) {
-      return;
-    }
-    setDescribedBy(activeTrigger, false);
-    activeTrigger = null;
-    tooltip?.remove();
-    if (activateSkipDelay) {
-      skipDelayUntil = Date.now() + skipDelay;
-    }
-  };
-  const updatePosition = (trigger, floating) =&gt; {
-    const request = ++positionRequest;
-    void computePosition(trigger, floating, {
-      middleware: [
-        offset(tooltipGap),
-        flip({ padding: tooltipGap }),
-        shift({ padding: tooltipGap }),
-        size({
-          padding: tooltipGap,
-          apply({ availableHeight, availableWidth, elements }) {
-            elements.floating.style.setProperty(
-              &quot;--tooltip-available-width&quot;,
-              `${Math.max(0, availableWidth)}px`,
-            );
-            elements.floating.style.setProperty(
-              &quot;--tooltip-available-height&quot;,
-              `${Math.max(0, availableHeight)}px`,
-            );
-          },
-        }),
-      ],
-      placement: getPlacement(trigger),
-      strategy: &quot;fixed&quot;,
-    })
-      .then(({ x, y }) =&gt; {
-        if (activeTrigger !== trigger || request !== positionRequest) {
-          return;
-        }
-        const scale = window.devicePixelRatio || 1;
-        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
-        floating.style.visibility = &quot;visible&quot;;
-      })
-      .catch(() =&gt; {
-        if (activeTrigger === trigger &amp;&amp; request === positionRequest) {
-          closeTooltip(false);
-        }
-      });
-  };
-  const openTooltip = (trigger) =&gt; {
-    const content = getContent(trigger);
-    if (!trigger.isConnected || content.length === 0) {
-      return;
-    }
-    clearOpenTimeout();
-    if (activeTrigger === trigger) {
-      return;
-    }
-    closeTooltip();
-    const floating = getTooltip();
-    floating.textContent = content;
-    floating.style.visibility = &quot;hidden&quot;;
-    floating.style.transform = &quot;translate(0, 0)&quot;;
-    document.body.appendChild(floating);
-    activeTrigger = trigger;
-    setDescribedBy(trigger, true);
-    autoUpdateCleanup = autoUpdate(trigger, floating, () =&gt; {
-      updatePosition(trigger, floating);
+  const lensBtns = $$("[data-lens-btn]");
+  const lensTargets = $$("[data-lens]");
+  const lensNote = $("#lensNote");
+  function setLens(v, updateHash=true) {
+    lensBtns.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lensBtn === v)));
+    lensTargets.forEach(el => {
+      const tags = (el.dataset.lens || "").split(/\s+/);
+      const on = v === "all" || tags.includes(v);
+      el.classList.toggle("dim", !on);
+      el.classList.toggle("lit", v !== "all" && on && el.classList.contains("card"));
     });
-  };
-  const requestOpen = (trigger, immediate = false) =&gt; {
-    if (
-      getContent(trigger).length === 0 ||
-      activeTrigger === trigger ||
-      pendingTrigger === trigger
-    ) {
-      return;
-    }
-    clearOpenTimeout();
-    pendingTrigger = trigger;
-    const delay =
-      immediate || activeTrigger != null || Date.now() &lt; skipDelayUntil
-        ? 0
-        : hoverDelay;
-    if (delay === 0) {
-      openTooltip(trigger);
-      return;
-    }
-    openTimeout = window.setTimeout(() =&gt; {
-      openTimeout = null;
-      pendingTrigger = null;
-      openTooltip(trigger);
-    }, delay);
-  };
-  const handlePointerOpen = (event) =&gt; {
-    if (event.pointerType === &quot;touch&quot;) {
-      return;
-    }
-    const trigger = getTrigger(event.target);
-    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
-      return;
-    }
-    requestOpen(trigger);
-  };
-  const handleLeave = (event) =&gt; {
-    const trigger = getTrigger(event.target);
-    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
-      return;
-    }
-    if (activeTrigger === trigger || pendingTrigger === trigger) {
-      closeTooltip();
-    }
-  };
-  const handleFocusIn = (event) =&gt; {
-    const trigger = getTrigger(event.target);
-    if (trigger?.matches(&quot;:focus-visible&quot;)) {
-      requestOpen(trigger, true);
-    }
-  };
-  const handleKeyDown = (event) =&gt; {
-    if (event.key === &quot;Escape&quot;) {
-      closeTooltip();
-    }
-  };
-  const handleContextMenu = (event) =&gt; {
-    const trigger = getTrigger(event.target);
-    if (activeTrigger === trigger || pendingTrigger === trigger) {
-      closeTooltip();
-    }
-  };
-  const destroy = () =&gt; {
-    closeTooltip(false);
-    document.removeEventListener(&quot;pointerover&quot;, handlePointerOpen);
-    document.removeEventListener(&quot;pointerout&quot;, handleLeave);
-    document.removeEventListener(&quot;focusin&quot;, handleFocusIn);
-    document.removeEventListener(&quot;focusout&quot;, handleLeave);
-    document.removeEventListener(&quot;keydown&quot;, handleKeyDown);
-    document.removeEventListener(&quot;contextmenu&quot;, handleContextMenu);
-    tooltip = null;
-  };
-
-  document.addEventListener(&quot;pointerover&quot;, handlePointerOpen);
-  document.addEventListener(&quot;pointerout&quot;, handleLeave);
-  document.addEventListener(&quot;focusin&quot;, handleFocusIn);
-  document.addEventListener(&quot;focusout&quot;, handleLeave);
-  document.addEventListener(&quot;keydown&quot;, handleKeyDown);
-  document.addEventListener(&quot;contextmenu&quot;, handleContextMenu);
-  window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
-})();
-&lt;/script&gt;
-&lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-(() =&gt; {
-  const initialize = () =&gt; {
-    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
-  };
-  if (globalThis.lucide != null) {
-    initialize();
-    return;
+    lensNote.textContent = SUMMARIES[v] || "";
+    lensNote.classList.toggle("show", v !== "all");
+    if (updateHash) history.replaceState(null, "", v === "all" ? location.pathname : "#lens=" + v);
   }
-  document
-    .getElementById(&quot;codex-visualization-lucide&quot;)
-    ?.addEventListener(&quot;load&quot;, initialize, { once: true });
-})();
-&lt;/script&gt;
+  lensBtns.forEach(b => b.addEventListener("click", () => setLens(b.dataset.lensBtn)));
+  const m = location.hash.match(/lens=(\w+)/);
+  if (m && SUMMARIES[m[1]] !== undefined) setLens(m[1], false);
 
-&lt;/body&gt;
-&lt;/html&gt;
-"></iframe>
+  /* ---------- trace ---------- */
+  const STEPS = [
+    { k:"STEP 1 · SHAPE", t:"Work becomes executable", b:"An approved request is shaped into one scoped issue — outcome, acceptance criteria, demo plan, non-goals — and a human promotes it to Ready.", ids:["sv-intent","sv-skills"], tr:"t1" },
+    { k:"STEP 2 · CLASSIFY", t:"The orchestrator picks the mode", b:"Labels decide single issue vs. epic. Each lane gets a bounded written contract; epics get an integration branch merged one lane at a time.", ids:["sv-orch"], tr:"t2" },
+    { k:"STEP 3 · ISOLATE", t:"A lane spins up", b:"One issue, one worktree, one branch. Namespaced ports, temp roots, and a full local stack keep parallel lanes from touching each other.", ids:["sv-lanes"], tr:"t3" },
+    { k:"STEP 4 · PROVE LOCALLY", t:"Local proof mirrors CI", b:"The changed-area selector picks the narrowest credible checks for the diff — the same routing CI will use — so surprises die before the PR.", ids:["sv-lanes","sv-skills"], tr:"t4" },
+    { k:"STEP 5 · PACKAGE", t:"The PR carries its evidence", b:"Checks run, demo artifacts, risks, and one closing link are bound to the head SHA. The sensitive-data gate screens everything.", ids:["sv-pr"], tr:"t5" },
+    { k:"STEP 6 · GATES", t:"Four gates fire in parallel", b:"Changed-area CI, AI advisory review, the visual gate, and security policy each produce independent evidence. Any failure returns to the owning lane — and a new head SHA voids stale evidence.", ids:["sv-gate-ci","sv-gate-adv","sv-gate-vis","sv-gate-pol"], tr:"t6" },
+    { k:"STEP 7 · VERDICT", t:"Evidence converges", b:"Merge readiness re-audits on every gate completion and answers: ready, ready-with-risks, or not-ready — one comment, one evidence bundle.", ids:["sv-verdict"], tr:"t7" },
+    { k:"STEP 8 · DECIDE", t:"A human turns the key", b:"The Product Owner merges. Done starts only after merge — automation holds none of the eight human keys.", ids:["sv-merge"], tr:"t8" },
+    { k:"STEP 9 · SHIP + WATCH", t:"Deploy, then keep watching", b:"Operator-run CD ships the components; events notify on state changes; a 10-minute deterministic audit reconciles the board with reality.", ids:["sv-deploy","sv-monitor"], tr:"t9" },
+    { k:"STEP 10 · LEARN", t:"The harness gets stricter", b:"Accepted findings become edits to versioned skills, guidance, and tests — validated by CI, enforceable on the very next run.", ids:["sv-memory","sv-skills"], tr:"t10" }
+  ];
+  const hud = $("#traceHud");
+  let step = -1;
+  const svgNodes = $$("svg .node");
+  function renderStep() {
+    const s = STEPS[step];
+    $("#traceK").textContent = s.k;
+    $("#traceTitle").textContent = s.t;
+    $("#traceBody").textContent = s.b;
+    $("#traceCount").textContent = (step+1) + " / " + STEPS.length + " · ← → keys work";
+    $("#tracePrev").disabled = step === 0;
+    $("#traceNext").textContent = step === STEPS.length - 1 ? "Finish" : "Next →";
+    svgNodes.forEach(n => n.classList.toggle("dim", !s.ids.includes(n.id)));
+    $$(".card, .return-bar, .keys-strip").forEach(el => el.classList.toggle("dim", el.dataset.trace !== s.tr));
+    const first = document.getElementById(s.ids[0]);
+    if (first && step < 9) $(".schematic").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+  function startTrace() { step = 0; hud.classList.add("open"); setLens("all"); renderStep(); }
+  function exitTrace() {
+    step = -1; hud.classList.remove("open");
+    svgNodes.forEach(n => n.classList.remove("dim"));
+    $$(".card, .return-bar, .keys-strip").forEach(el => el.classList.remove("dim"));
+  }
+  $("#traceStart").addEventListener("click", startTrace);
+  $("#traceExit").addEventListener("click", exitTrace);
+  $("#tracePrev").addEventListener("click", () => { if (step > 0) { step--; renderStep(); } });
+  $("#traceNext").addEventListener("click", () => { if (step < STEPS.length - 1) { step++; renderStep(); } else exitTrace(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") { closeDrawer(); exitTrace(); }
+    if (step >= 0) {
+      if (e.key === "ArrowRight") { e.preventDefault(); if (step < STEPS.length - 1) { step++; renderStep(); } }
+      if (e.key === "ArrowLeft") { e.preventDefault(); if (step > 0) { step--; renderStep(); } }
+    }
+  });
+})();
+</script>
 </body>
 </html>
