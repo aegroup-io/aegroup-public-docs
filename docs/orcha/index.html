@@ -1,13 +1,245 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="refresh" content="0; url=./harness/">
-  <title>Orcha Documentation</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Orcha — AEGroup's agentic delivery platform. The assessment harness decides how software enters the platform; the delivery harness proves every change to its merge.">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎼</text></svg>">
+<title>Orcha</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #F4F6F5;
+    --surface: #FFFFFF;
+    --surface-2: #ECF0EE;
+    --ink: #1A2422;
+    --muted: #5C6B67;
+    --line: #D3DBD8;
+    --line-strong: #A8B5B1;
+    --accent: #0E8A7B;
+    --accent-soft: #DCEEEA;
+    --human: #8A5F00;
+    --human-soft: #F3E8CE;
+    --cyber: #5F4EB3;
+    --cyber-soft: #E6E1F6;
+    --shadow: 0 10px 30px rgb(26 36 34 / 8%);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #101615;
+      --surface: #17201E;
+      --surface-2: #1D2826;
+      --ink: #E6ECE9;
+      --muted: #97A6A1;
+      --line: #2A3835;
+      --line-strong: #465652;
+      --accent: #46C7B4;
+      --accent-soft: #143430;
+      --human: #E0AC48;
+      --human-soft: #33270E;
+      --cyber: #A79BE8;
+      --cyber-soft: #252039;
+      --shadow: 0 10px 30px rgb(0 0 0 / 35%);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #101615;
+    --surface: #17201E;
+    --surface-2: #1D2826;
+    --ink: #E6ECE9;
+    --muted: #97A6A1;
+    --line: #2A3835;
+    --line-strong: #465652;
+    --accent: #46C7B4;
+    --accent-soft: #143430;
+    --human: #E0AC48;
+    --human-soft: #33270E;
+    --cyber: #A79BE8;
+    --cyber-soft: #252039;
+    --shadow: 0 10px 30px rgb(0 0 0 / 35%);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  h1, h2, p { margin: 0; }
+  h1, h2 { font-family: "Saira", "IBM Plex Sans", sans-serif; text-wrap: balance; }
+  code, .mono { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+
+  header.hero { padding: 52px 0 8px; }
+  .kicker {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .kicker a { color: inherit; text-decoration: none; }
+  .kicker a:hover, .kicker a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+  h1 { font-size: clamp(32px, 5vw, 48px); font-weight: 700; line-height: 1.08; margin-top: 6px; }
+  .deck { max-width: 72ch; margin-top: 12px; color: var(--muted); font-size: 16px; }
+  .deck strong { color: var(--ink); font-weight: 600; }
+  .deck em { color: var(--ink); }
+
+  .stats {
+    display: flex; flex-wrap: wrap; gap: 10px 26px;
+    margin-top: 24px; padding: 14px 0;
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  }
+  .stat { display: flex; align-items: baseline; gap: 8px; }
+  .stat b {
+    font-family: "Saira", sans-serif; font-size: 22px; font-weight: 700;
+    font-variant-numeric: tabular-nums; color: var(--accent);
+  }
+  .stat.human b { color: var(--human); }
+  .stat span { font-size: 12.5px; color: var(--muted); }
+
+  /* lifecycle strip */
+  .flow {
+    display: grid; grid-template-columns: 1fr auto 1.15fr auto 1fr auto 1.15fr auto 1fr;
+    align-items: stretch; gap: 10px;
+    margin-top: 30px;
+  }
+  .flow .cell {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 11px 14px; text-align: center;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .flow .cell b { font-size: 13px; font-weight: 600; }
+  .flow .cell span { display: block; margin-top: 3px; font-size: 11.5px; color: var(--muted); }
+  .flow .cell.assess { border-color: var(--cyber); background: var(--cyber-soft); }
+  .flow .cell.deliver { border-color: var(--accent); background: var(--accent-soft); }
+  .flow .cell.humans { border-color: var(--human); background: var(--human-soft); }
+  .flow .arrow { color: var(--muted); align-self: center; font-size: 16px; }
+
+  /* harness cards */
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  a.hcard {
+    display: block; text-decoration: none; color: inherit;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+    border-top: 3px solid var(--card-tone, var(--accent));
+    padding: 20px 22px 18px;
+    transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+  }
+  a.hcard:hover, a.hcard:focus-visible {
+    border-color: var(--card-tone, var(--accent));
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+    outline: none;
+  }
+  a.hcard.assessor { --card-tone: var(--cyber); }
+  a.hcard.delivery { --card-tone: var(--accent); }
+  .hcard .label {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--card-tone);
+  }
+  .hcard h2 { font-size: 21px; font-weight: 700; margin-top: 6px; line-height: 1.15; }
+  .hcard p { margin-top: 9px; font-size: 13px; color: var(--muted); }
+  .hcard .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 13px; }
+  .hcard .chips span {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px;
+    border: 1px solid var(--line-strong); border-radius: 6px;
+    background: var(--surface-2); padding: 1px 8px; color: var(--ink);
+  }
+  .hcard .cta { margin-top: 14px; font-size: 13px; font-weight: 600; color: var(--card-tone); }
+
+  /* exec row */
+  a.exec-card {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    text-decoration: none; color: inherit;
+    background: var(--surface); border: 1px dashed var(--line-strong); border-radius: 12px;
+    padding: 14px 20px; margin-top: 16px;
+    transition: border-color 160ms ease;
+  }
+  a.exec-card:hover, a.exec-card:focus-visible { border-color: var(--human); outline: none; }
+  .exec-card .label {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--human);
+  }
+  .exec-card b { font-size: 14px; }
+  .exec-card span.desc { font-size: 12.5px; color: var(--muted); }
+  .exec-card .cta { font-size: 13px; font-weight: 600; color: var(--human); white-space: nowrap; }
+
+  footer { margin-top: 40px; padding: 16px 0 48px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+  footer a { color: var(--accent); }
+
+  @media (max-width: 960px) {
+    .flow { grid-template-columns: 1fr; }
+    .flow .arrow { transform: rotate(90deg); justify-self: center; }
+  }
+  @media (max-width: 800px) {
+    .cards { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    a.hcard { transition: none; }
+  }
+</style>
 </head>
 <body>
-  <p><a href="./harness/">Open the Orcha agentic delivery harness</a>.</p>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker"><a href="../">AEGroup</a> · Orcha</div>
+    <h1>Where software earns its way</h1>
+    <p class="deck">Orcha is AEGroup's agentic delivery platform. Agents do the work, <strong>versioned skills</strong> shape it, <strong>evidence</strong> proves it, and <strong>people hold every key that matters</strong>. Two interactive harnesses cover the lifecycle: how an application earns its way <em>into</em> the platform, and how every change earns its way <em>out</em> to production.</p>
+    <div class="stats" aria-label="Orcha at a glance">
+      <div class="stat"><b>2</b><span>interactive harnesses</span></div>
+      <div class="stat"><b>24</b><span>versioned skills between them</span></div>
+      <div class="stat human"><b>8+6</b><span>human keys — nothing merges or publishes itself</span></div>
+    </div>
+  </header>
+
+  <div class="flow" aria-label="Lifecycle: assessment to delivery">
+    <div class="cell"><b>An application arrives</b><span>any codebase, any state</span></div>
+    <span class="arrow">→</span>
+    <div class="cell assess"><b>Assessment harness</b><span>verdict: adopt · reconstruct · wrap</span></div>
+    <span class="arrow">→</span>
+    <div class="cell"><b>Validated backlog</b><span>published with an audit receipt</span></div>
+    <span class="arrow">→</span>
+    <div class="cell deliver"><b>Delivery harness</b><span>every change proven in parallel</span></div>
+    <span class="arrow">→</span>
+    <div class="cell humans"><b>A human merges</b><span>then production, certified</span></div>
+  </div>
+
+  <div class="cards">
+    <a class="hcard assessor" href="./assessor/">
+      <div class="label">01 · Decide — assessment harness</div>
+      <h2>How an application earns its verdict</h2>
+      <p>An arbitrary application goes in; an auditable decision comes out. Six read-only specialists recover what the product <em>is</em> without ever running it, a deterministic rubric scores the path — adopt, reconstruct, or wrap — and a separate production gate rules on promotion. Three outcomes, never collapsed into one.</p>
+      <div class="chips" aria-hidden="true">
+        <span>static-only boundary</span><span>3 evidence modes</span><span>12+5 rubric criteria + gates</span><span>separate production gate</span><span>0 target code executed</span>
+      </div>
+      <div class="cta">Explore the assessment harness →</div>
+    </a>
+    <a class="hcard delivery" href="./harness/">
+      <div class="label">02 · Deliver — agentic delivery harness</div>
+      <h2>How a change earns its merge</h2>
+      <p>A scoped issue becomes an isolated agent lane, and every pull request is proven in parallel — changed-area CI, AI review, visual evidence, security policy — until a single readiness verdict puts the final decision in a human hand. Failures return to their lane; accepted lessons re-arm the skills.</p>
+      <div class="chips" aria-hidden="true">
+        <span>isolated agent lanes</span><span>changed-area CI</span><span>visual evidence · 37 routes</span><span>advisory AI review</span><span>1 human merge gate</span>
+      </div>
+      <div class="cta">Explore the delivery harness →</div>
+    </a>
+  </div>
+
+  <a class="exec-card" href="./exec/">
+    <span><span class="label">For the boardroom</span> &nbsp; <b>AI-Powered Engineering — the executive view</b> &nbsp; <span class="desc">the one-slide story: four stages, 11 agent roles, human control — linked into the deep pages</span></span>
+    <span class="cta">Open →</span>
+  </a>
+
+  <footer>
+    <span>AEGroup public docs · <a href="../">all references</a> · Both harness pages are grounded in their repositories and updated with them. Snapshot: 2026-09-01.</span>
+  </footer>
+</div>
+
 </body>
 </html>
-

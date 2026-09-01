@@ -93,6 +93,8 @@
     color: var(--accent);
   }
   .kicker-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+  .kicker a { color: inherit; text-decoration: none; }
+  .kicker a:hover, .kicker a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
   .exec-link { font-size: 13px; font-weight: 600; text-decoration: none; }
   .exec-link:hover, .exec-link:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
   h1 { font-size: clamp(30px, 4.4vw, 44px); font-weight: 700; line-height: 1.08; margin-top: 6px; }
@@ -355,7 +357,7 @@
 
 <div class="wrap">
   <header class="hero">
-    <div class="kicker-row"><div class="kicker">Orcha · Assessment harness</div><a class="exec-link" href="../harness/">Delivery harness →</a></div>
+    <div class="kicker-row"><div class="kicker"><a href="../">Orcha</a> · Assessment harness</div></div>
     <h1>How an application earns its verdict</h1>
     <p class="deck">An arbitrary application goes in; an auditable product decision comes out. Read-only specialists recover what the product <em>is</em>, a deterministic rubric scores how it should enter the platform — <strong>adopt, reconstruct, or wrap</strong> — and a separate production gate rules on promotion. Three outcomes, never collapsed into one. Click any node for its receipts, or <strong>trace an assessment</strong> end to end.</p>
     <div class="stats" aria-label="Harness at a glance">
