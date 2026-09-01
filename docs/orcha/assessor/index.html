@@ -1,0 +1,977 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Orcha assessment harness — static, evidence-led product recovery; a scored adopt / reconstruct / wrap decision; and a separate production gate. Three outcomes, never collapsed.">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚖️</text></svg>">
+<title>Orcha Assessment Harness</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #F4F6F5;
+    --surface: #FFFFFF;
+    --surface-2: #ECF0EE;
+    --ink: #1A2422;
+    --muted: #5C6B67;
+    --line: #D3DBD8;
+    --line-strong: #A8B5B1;
+    --accent: #0E8A7B;
+    --accent-soft: #DCEEEA;
+    --human: #8A5F00;
+    --human-soft: #F3E8CE;
+    --cyber: #5F4EB3;
+    --cyber-soft: #E6E1F6;
+    --fail: #A8402B;
+    --fail-soft: #F4E0DA;
+    --shadow: 0 10px 30px rgb(26 36 34 / 8%);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #101615;
+      --surface: #17201E;
+      --surface-2: #1D2826;
+      --ink: #E6ECE9;
+      --muted: #97A6A1;
+      --line: #2A3835;
+      --line-strong: #465652;
+      --accent: #46C7B4;
+      --accent-soft: #143430;
+      --human: #E0AC48;
+      --human-soft: #33270E;
+      --cyber: #A79BE8;
+      --cyber-soft: #252039;
+      --fail: #E08A72;
+      --fail-soft: #38190F;
+      --shadow: 0 10px 30px rgb(0 0 0 / 35%);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #101615;
+    --surface: #17201E;
+    --surface-2: #1D2826;
+    --ink: #E6ECE9;
+    --muted: #97A6A1;
+    --line: #2A3835;
+    --line-strong: #465652;
+    --accent: #46C7B4;
+    --accent-soft: #143430;
+    --human: #E0AC48;
+    --human-soft: #33270E;
+    --cyber: #A79BE8;
+    --cyber-soft: #252039;
+    --fail: #E08A72;
+    --fail-soft: #38190F;
+    --shadow: 0 10px 30px rgb(0 0 0 / 35%);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  h1, h2, h3, p { margin: 0; }
+  h1, h2 { font-family: "Saira", "IBM Plex Sans", sans-serif; text-wrap: balance; }
+  code, .mono { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  a { color: var(--accent); }
+
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- header ---------- */
+  header.hero { padding: 44px 0 8px; }
+  .kicker {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .kicker-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+  .exec-link { font-size: 13px; font-weight: 600; text-decoration: none; }
+  .exec-link:hover, .exec-link:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+  h1 { font-size: clamp(30px, 4.4vw, 44px); font-weight: 700; line-height: 1.08; margin-top: 6px; }
+  .deck { max-width: 68ch; margin-top: 12px; color: var(--muted); font-size: 16px; }
+  .deck strong { color: var(--ink); font-weight: 600; }
+
+  .stats {
+    display: flex; flex-wrap: wrap; gap: 10px 26px;
+    margin-top: 22px; padding: 14px 0;
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  }
+  .stat { display: flex; align-items: baseline; gap: 8px; }
+  .stat b {
+    font-family: "Saira", sans-serif; font-size: 22px; font-weight: 700;
+    font-variant-numeric: tabular-nums; color: var(--accent);
+  }
+  .stat.human b { color: var(--human); }
+  .stat.cyber b { color: var(--cyber); }
+  .stat span { font-size: 12.5px; color: var(--muted); }
+
+  /* ---------- schematic ---------- */
+  figure.schematic { margin: 26px 0 0; }
+  .schematic-frame {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 18px 14px 8px;
+    overflow-x: auto;
+  }
+  .schematic svg { display: block; min-width: 980px; width: 100%; height: auto; }
+  figcaption { margin-top: 10px; font-size: 12.5px; color: var(--muted); max-width: 90ch; }
+
+  svg .node rect, svg .node polygon { fill: var(--surface-2); stroke: var(--line-strong); stroke-width: 1.2; }
+  svg .node { cursor: pointer; transition: opacity 160ms ease; }
+  svg .node:hover rect, svg .node:hover polygon, svg .node:focus-visible rect { stroke: var(--accent); stroke-width: 1.6; }
+  svg .node:focus-visible { outline: none; }
+  svg text { font-family: "IBM Plex Sans", sans-serif; fill: var(--ink); }
+  svg .t { font-size: 12.5px; font-weight: 600; }
+  svg .s { font-size: 10.5px; fill: var(--muted); }
+  svg .k { font-family: "IBM Plex Mono", monospace; font-size: 9px; letter-spacing: 0.1em; fill: var(--muted); }
+  svg .edge { stroke: var(--line-strong); stroke-width: 1.3; fill: none; }
+  svg .edge-label { font-size: 10px; fill: var(--muted); }
+  svg .gate rect { stroke: var(--accent); fill: var(--accent-soft); }
+  svg .gate.cyber rect { stroke: var(--cyber); fill: var(--cyber-soft); }
+  svg .human-node polygon { stroke: var(--human); fill: var(--human-soft); stroke-width: 1.6; }
+  svg .human-node .t { fill: var(--human); }
+  svg .memory rect { stroke: var(--cyber); fill: none; stroke-dasharray: 5 4; }
+  svg .cyber-divider { stroke: var(--cyber); stroke-width: 1; opacity: 0.35; }
+  svg .rail rect { fill: var(--accent-soft); stroke: var(--accent); opacity: 0.85; }
+  svg .fail-path { stroke: var(--fail); stroke-width: 1.4; fill: none; stroke-dasharray: 2 3; }
+  svg .fail-label { fill: var(--fail); font-size: 10px; }
+  svg .learn-path { stroke: var(--cyber); stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; }
+  svg .learn-label { fill: var(--cyber); font-size: 10px; }
+  svg .observe { stroke: var(--line-strong); stroke-width: 1; stroke-dasharray: 1 4; fill: none; }
+  svg marker path { fill: var(--line-strong); }
+  svg marker.m-fail path { fill: var(--fail); }
+  svg marker.m-learn path { fill: var(--cyber); }
+  svg .boundary { stroke: var(--cyber); stroke-width: 1.4; fill: none; stroke-dasharray: 7 5; opacity: 0.75; }
+  svg .boundary-k { font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: 0.12em; fill: var(--cyber); font-weight: 500; }
+  svg .boundary-s { font-size: 10px; fill: var(--cyber); opacity: 0.85; }
+  svg a { cursor: pointer; }
+  svg a:focus-visible rect { stroke-width: 1.8; }
+
+  /* ---------- toolbar ---------- */
+  .toolbar {
+    position: sticky; top: 0; z-index: 30;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    margin-top: 30px;
+  }
+  .toolbar-inner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 0; }
+  .toolbar .label {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+    margin-right: 4px;
+  }
+  .chip {
+    border: 1px solid var(--line-strong); border-radius: 999px;
+    background: var(--surface); color: var(--ink);
+    padding: 4px 14px; font-size: 13px;
+  }
+  .chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .chip.human-chip[aria-pressed="true"] { background: var(--human); border-color: var(--human); color: var(--bg); }
+  .chip:focus-visible, .trace-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .trace-btn {
+    margin-left: auto;
+    border: 1px solid var(--accent); border-radius: 999px;
+    background: var(--accent); color: var(--bg);
+    padding: 4px 16px; font-size: 13px; font-weight: 600;
+  }
+  .lens-note { width: 100%; font-size: 12.5px; color: var(--muted); padding-bottom: 8px; display: none; }
+  .lens-note.show { display: block; }
+
+  /* ---------- bands ---------- */
+  section.band { padding: 40px 0 6px; }
+  .band-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; border-bottom: 2px solid var(--ink); padding-bottom: 8px; }
+  .band-head h2 { font-size: 21px; font-weight: 700; }
+  .band-head .note { font-size: 12.5px; color: var(--muted); text-align: right; max-width: 46ch; }
+  .band-grid { display: grid; gap: 12px; margin-top: 16px; }
+  .g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 15px;
+    transition: opacity 160ms ease, border-color 160ms ease;
+  }
+  .card.dim, svg .dim { opacity: 0.16; }
+  .card.lit { border-color: var(--accent); }
+  .card.inspectable { cursor: pointer; }
+  .card.inspectable:hover, .card.inspectable:focus-visible { border-color: var(--accent); outline: none; }
+  .card h3 { font-size: 14px; font-weight: 600; display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .card h3 code { font-size: 11px; color: var(--muted); font-weight: 400; }
+  .card p { margin-top: 6px; font-size: 12.5px; color: var(--muted); }
+  .card .proof { margin-top: 9px; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink); border-top: 1px dashed var(--line); padding-top: 7px; }
+  .card.tone-human { border-left: 3px solid var(--human); }
+  .card.tone-cyber { border-left: 3px solid var(--cyber); }
+  .card.tone-accent { border-left: 3px solid var(--accent); }
+  .card.tone-fail { border-left: 3px solid var(--fail); }
+  .card.dashed { border-style: dashed; }
+
+  .skill-item { border-top: 1px solid var(--line); padding: 7px 0 0; margin-top: 7px; }
+  .skill-item:first-of-type { border-top: 0; margin-top: 9px; padding-top: 0; }
+  .skill-item code { font-size: 12px; font-weight: 500; }
+  .skill-item span { display: block; font-size: 11.5px; color: var(--muted); }
+
+  .router {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 14px;
+    margin-top: 16px;
+  }
+  .router .arrow { color: var(--muted); font-size: 18px; }
+
+  .idchips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 9px; }
+  .idchips span {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px;
+    border: 1px solid var(--line-strong); border-radius: 6px;
+    background: var(--surface-2); padding: 1px 7px; color: var(--ink);
+  }
+
+  .merge-bar {
+    display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: center; gap: 12px;
+    margin-top: 18px;
+  }
+  .merge-bar .card { text-align: center; }
+  .merge-bar .card b { display: block; font-size: 14px; }
+  .merge-bar .card span { display: block; margin-top: 4px; font-size: 11.5px; color: var(--muted); }
+  .merge-bar .plus { color: var(--muted); font-size: 16px; font-weight: 600; }
+
+  .axiom {
+    margin-top: 14px; border: 1px dashed var(--accent); border-radius: 12px;
+    background: var(--accent-soft); padding: 12px 18px; font-size: 13px; text-align: center;
+  }
+  .axiom b { font-family: "Saira", sans-serif; font-size: 14px; }
+
+  .keys-strip { margin-top: 18px; border: 1px solid var(--human); border-radius: 12px; background: var(--human-soft); padding: 13px 16px; }
+  .keys-strip h3 { font-size: 13px; color: var(--human); font-weight: 600; }
+  .keys-strip ol { margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 8px; list-style: none; counter-reset: key; }
+  .keys-strip li {
+    counter-increment: key;
+    font-size: 12px; border: 1px solid var(--human); border-radius: 999px;
+    background: var(--surface); padding: 3px 11px;
+  }
+  .keys-strip li::before { content: counter(key, decimal-leading-zero) " "; font-family: "IBM Plex Mono", monospace; font-size: 10px; color: var(--human); }
+  .keys-strip.strip-cyber { border-color: var(--cyber); background: var(--cyber-soft); }
+  .keys-strip.strip-cyber h3 { color: var(--cyber); }
+  .keys-strip.strip-cyber li { border-color: var(--cyber); }
+  .keys-strip.strip-cyber li::before { color: var(--cyber); }
+  .keys-strip.strip-accent { border-color: var(--accent); background: var(--accent-soft); }
+  .keys-strip.strip-accent h3 { color: var(--accent); }
+  .keys-strip.strip-accent li { border-color: var(--accent); }
+  .keys-strip.strip-accent li::before { color: var(--accent); }
+  .keys-strip.strip-accent li::after { content: " →"; color: var(--accent); font-size: 10px; }
+  .keys-strip.strip-accent li:last-child::after { content: ""; }
+
+  .return-bar {
+    display: grid; grid-template-columns: 1fr auto 1.2fr auto 1fr; align-items: center; gap: 12px;
+    margin-top: 14px; border-radius: 12px; padding: 12px 16px; font-size: 12.5px;
+  }
+  .return-bar.fail { border: 1px solid var(--fail); background: var(--fail-soft); color: var(--ink); }
+  .return-bar.cd { border: 1px solid var(--line-strong); background: var(--surface); }
+  .return-bar b { font-weight: 600; }
+  .return-bar .arrow { color: var(--muted); }
+
+  /* ---------- drawer ---------- */
+  .backdrop { position: fixed; inset: 0; background: rgb(0 0 0 / 30%); z-index: 40; display: none; }
+  .backdrop.open { display: block; }
+  .drawer {
+    position: fixed; top: 0; right: 0; bottom: 0; z-index: 50;
+    width: min(440px, 92vw);
+    background: var(--surface);
+    border-left: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    transform: translateX(102%);
+    transition: transform 220ms ease;
+    display: flex; flex-direction: column;
+  }
+  .drawer.open { transform: none; }
+  .drawer-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 22px 12px; border-bottom: 1px solid var(--line); }
+  .drawer-head h3 { font-family: "Saira", sans-serif; font-size: 18px; font-weight: 600; }
+  .drawer-close { border: 1px solid var(--line-strong); background: var(--surface-2); border-radius: 8px; padding: 2px 10px; font-size: 13px; }
+  .drawer-body { padding: 16px 22px 28px; overflow-y: auto; font-size: 13.5px; }
+  .drawer-body p { margin: 0 0 10px; color: var(--ink); }
+  .drawer-body p.sub { color: var(--muted); }
+  .drawer-body .receipts { margin: 14px 0 0; border-top: 1px dashed var(--line); padding-top: 10px; }
+  .drawer-body .receipts h4 { margin: 0 0 6px; font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .drawer-body .receipts ul { margin: 0; padding-left: 0; list-style: none; }
+  .drawer-body .receipts li { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; padding: 3px 0; overflow-wrap: anywhere; }
+  .drawer-body .receipts li::before { content: "▸ "; color: var(--accent); }
+
+  /* ---------- trace hud ---------- */
+  .trace-hud {
+    position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
+    z-index: 45; width: min(680px, calc(100vw - 32px));
+    background: var(--surface); border: 1px solid var(--accent); border-radius: 14px;
+    box-shadow: var(--shadow); padding: 14px 18px; display: none;
+  }
+  .trace-hud.open { display: block; }
+  .trace-hud .step-k { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.08em; }
+  .trace-hud h3 { font-size: 15px; margin-top: 2px; }
+  .trace-hud p { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .trace-hud .row { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+  .trace-hud .row .spacer { flex: 1; font-size: 11.5px; color: var(--muted); }
+  .trace-hud button { border: 1px solid var(--line-strong); background: var(--surface-2); border-radius: 8px; padding: 3px 12px; font-size: 13px; }
+  .trace-hud button.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 600; }
+
+  /* ---------- legend + footer ---------- */
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 36px; font-size: 12px; color: var(--muted); align-items: center; }
+  .legend .sw { display: inline-block; width: 14px; height: 8px; border-radius: 2px; margin-right: 6px; vertical-align: baseline; }
+  footer { margin-top: 26px; padding: 16px 0 44px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+  footer .mono { font-size: 11px; }
+
+  @media (max-width: 960px) {
+    .g4, .g3 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .merge-bar, .return-bar, .router { grid-template-columns: 1fr; }
+    .merge-bar .plus { justify-self: center; }
+    .return-bar .arrow, .router .arrow { transform: rotate(90deg); justify-self: center; }
+    .band-head { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .band-head .note { text-align: left; }
+  }
+  @media (max-width: 620px) {
+    .g4, .g3 { grid-template-columns: 1fr; }
+    .trace-btn { margin-left: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .drawer, .card, svg .node { transition: none; }
+  }
+  @media print {
+    .toolbar, .trace-hud, .drawer, .backdrop { display: none !important; }
+    .schematic-frame { box-shadow: none; }
+    section.band { break-inside: avoid; }
+    body { background: #fff; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker-row"><div class="kicker">Orcha · Assessment harness</div><a class="exec-link" href="../harness/">Delivery harness →</a></div>
+    <h1>How an application earns its verdict</h1>
+    <p class="deck">An arbitrary application goes in; an auditable product decision comes out. Read-only specialists recover what the product <em>is</em>, a deterministic rubric scores how it should enter the platform — <strong>adopt, reconstruct, or wrap</strong> — and a separate production gate rules on promotion. Three outcomes, never collapsed into one. Click any node for its receipts, or <strong>trace an assessment</strong> end to end.</p>
+    <div class="stats" aria-label="Harness at a glance">
+      <div class="stat"><b>13</b><span>versioned skills</span></div>
+      <div class="stat"><b>16</b><span>contract schemas</span></div>
+      <div class="stat"><b>21</b><span>dependency-free scripts</span></div>
+      <div class="stat"><b>12+5</b><span>criteria + hard gates</span></div>
+      <div class="stat"><b>11</b><span>production control families</span></div>
+      <div class="stat human"><b>6</b><span>owner keys</span></div>
+      <div class="stat cyber"><b>0</b><span>lines of target code executed</span></div>
+    </div>
+  </header>
+
+  <figure class="schematic">
+    <div class="schematic-frame">
+    <svg viewBox="0 0 1180 620" role="img" aria-label="Flow of one assessment inside a static-only boundary: target artifacts are classified, the coordinator slices work to six read-only specialists, their claims reconcile into one product model whose three verdicts — capability confidence, adoption strategy, production gate — reach the owner separately; accepted strategy unlocks specification and planning, an independent integrator validates the package, and the only exit is an approved publication through a separate outbound trust domain into the delivery harness. Needs-evidence findings loop back as safe artifact requests.">
+      <defs>
+        <marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z"/></marker>
+        <marker id="ah-fail" class="m-fail" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z"/></marker>
+        <marker id="ah-learn" class="m-learn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z"/></marker>
+      </defs>
+
+      <!-- static-only boundary -->
+      <rect class="boundary" x="14" y="10" width="1152" height="458" rx="14"/>
+      <g class="node" id="sv-boundary" data-detail="boundary" data-lens="safety" tabindex="0" role="button" aria-label="Static-only boundary">
+        <rect x="770" y="18" width="388" height="30" rx="8" fill="var(--cyber-soft)" stroke="var(--cyber)" stroke-dasharray="5 4"/>
+        <text x="784" y="31" class="boundary-k">STATIC-ONLY BOUNDARY</text>
+        <text x="784" y="43" class="boundary-s">target code never runs · never imported · never called</text>
+      </g>
+
+      <!-- skills rail -->
+      <g class="node rail" id="sv-skills" data-detail="skills-rail" data-lens="skills" tabindex="0" role="button" aria-label="Skill catalog">
+        <rect x="24" y="20" width="704" height="34" rx="8"/>
+        <text x="40" y="41" class="t">13 versioned skills</text>
+        <text x="196" y="41" class="s">recover · judge · plan · govern — routed by AGENTS.md, safety contract machine-verified</text>
+      </g>
+      <line class="observe" x1="90" y1="54" x2="90" y2="118"/>
+      <line class="observe" x1="271" y1="54" x2="271" y2="118"/>
+      <line class="observe" x1="463" y1="54" x2="463" y2="102"/>
+      <line class="observe" x1="666" y1="54" x2="666" y2="118"/>
+
+      <!-- main flow -->
+      <g class="node" id="sv-intake" data-detail="intake" data-lens="evidence safety human" tabindex="0" role="button" aria-label="Target artifacts">
+        <rect x="24" y="118" width="132" height="64" rx="10"/>
+        <text x="36" y="136" class="k">01 · INTAKE</text>
+        <text x="36" y="154" class="t">Target artifacts</text>
+        <text x="36" y="170" class="s">static · render · owner</text>
+      </g>
+      <line class="edge" x1="156" y1="150" x2="194" y2="150" marker-end="url(#ah)"/>
+
+      <g class="node" id="sv-coord" data-detail="coordinator" data-lens="skills evidence" tabindex="0" role="button" aria-label="Assessment coordinator">
+        <rect x="196" y="118" width="150" height="64" rx="10"/>
+        <text x="208" y="136" class="k">02 · SCOPE</text>
+        <text x="208" y="154" class="t">Coordinator</text>
+        <text x="208" y="170" class="s">finite slices · stop conditions</text>
+      </g>
+      <line class="edge" x1="346" y1="150" x2="384" y2="150" marker-end="url(#ah)"/>
+      <text x="365" y="140" class="edge-label" text-anchor="middle">slice</text>
+      <text x="365" y="196" class="edge-label" text-anchor="middle">contracts</text>
+
+      <g class="node" id="sv-spec" data-detail="specialists" data-lens="evidence skills" tabindex="0" role="button" aria-label="Six read-only specialists">
+        <rect x="402" y="102" width="154" height="64" rx="10" opacity="0.45"/>
+        <rect x="394" y="110" width="154" height="64" rx="10" opacity="0.7"/>
+        <rect x="386" y="118" width="154" height="64" rx="10"/>
+        <text x="398" y="136" class="k">03 · RECOVER</text>
+        <text x="398" y="154" class="t">6 read-only specialists</text>
+        <text x="398" y="170" class="s">claims + unknowns only</text>
+      </g>
+      <line class="edge" x1="556" y1="150" x2="594" y2="150" marker-end="url(#ah)"/>
+
+      <g class="node" id="sv-model" data-detail="model" data-lens="evidence decision" tabindex="0" role="button" aria-label="Authoritative product model">
+        <rect x="596" y="118" width="140" height="64" rx="10"/>
+        <text x="608" y="136" class="k">04 · RECONCILE</text>
+        <text x="608" y="154" class="t">Product model</text>
+        <text x="608" y="170" class="s">views derive from it</text>
+      </g>
+
+      <!-- fan out to three verdicts -->
+      <line class="edge" x1="736" y1="150" x2="786" y2="78" marker-end="url(#ah)"/>
+      <line class="edge" x1="736" y1="150" x2="786" y2="138" marker-end="url(#ah)"/>
+      <line class="edge" x1="736" y1="150" x2="786" y2="198" marker-end="url(#ah)"/>
+      <text x="750" y="92" class="edge-label" text-anchor="middle">three</text>
+      <text x="750" y="104" class="edge-label" text-anchor="middle">verdicts</text>
+
+      <g class="node gate" id="sv-cap" data-detail="cap-confidence" data-lens="evidence decision" tabindex="0" role="button" aria-label="Capability confidence">
+        <rect x="788" y="58" width="168" height="40" rx="8"/>
+        <text x="800" y="75" class="t">Capability confidence</text>
+        <text x="800" y="89" class="s">capped by evidence, per subject</text>
+      </g>
+      <g class="node gate" id="sv-strategy" data-detail="strategy" data-lens="decision" tabindex="0" role="button" aria-label="Adoption strategy">
+        <rect x="788" y="118" width="168" height="40" rx="8"/>
+        <text x="800" y="135" class="t">Adoption strategy</text>
+        <text x="800" y="149" class="s">12 criteria · 5 hard gates</text>
+      </g>
+      <g class="node gate cyber" id="sv-gate" data-detail="prod-gate" data-lens="decision" tabindex="0" role="button" aria-label="Production gate">
+        <rect x="788" y="178" width="168" height="40" rx="8"/>
+        <text x="800" y="195" class="t">Production gate</text>
+        <text x="800" y="209" class="s">11 families · separate verdict</text>
+      </g>
+
+      <!-- converge -->
+      <line class="edge" x1="956" y1="78" x2="1008" y2="140" marker-end="url(#ah)"/>
+      <line class="edge" x1="956" y1="138" x2="1008" y2="148" marker-end="url(#ah)"/>
+      <line class="edge" x1="956" y1="198" x2="1008" y2="156" marker-end="url(#ah)"/>
+
+      <g class="node" id="sv-summary" data-detail="summary" data-lens="decision" tabindex="0" role="button" aria-label="Assessment summary — three outcomes">
+        <rect x="1010" y="118" width="146" height="64" rx="10"/>
+        <text x="1022" y="136" class="k">05 · SUMMARIZE</text>
+        <text x="1022" y="154" class="t">Three outcomes</text>
+        <text x="1022" y="170" class="s">never collapsed into one</text>
+      </g>
+
+      <!-- down to owner -->
+      <line class="edge" x1="1083" y1="182" x2="1083" y2="266" marker-end="url(#ah)"/>
+      <text x="1095" y="222" class="edge-label">one summary,</text>
+      <text x="1095" y="235" class="edge-label">three answers</text>
+
+      <g class="node human-node" id="sv-owner" data-detail="owner" data-lens="human decision" tabindex="0" role="button" aria-label="Owner accepts">
+        <polygon points="1083,268 1160,302 1083,336 1006,302"/>
+        <text x="1083" y="298" class="t" text-anchor="middle">Owner accepts</text>
+        <text x="1083" y="314" class="s" text-anchor="middle">boundary · strategy</text>
+      </g>
+      <line class="edge" x1="1006" y1="302" x2="898" y2="302" marker-end="url(#ah)"/>
+      <text x="952" y="292" class="edge-label" text-anchor="middle">accepted scope</text>
+
+      <g class="node" id="sv-plan" data-detail="plan" data-lens="decision skills" tabindex="0" role="button" aria-label="Specify and plan">
+        <rect x="726" y="270" width="170" height="64" rx="10"/>
+        <text x="738" y="288" class="k">06 · SPECIFY + PLAN</text>
+        <text x="738" y="306" class="t">Spec → backlog → waves</text>
+        <text x="738" y="322" class="s">traceable · dependency-safe</text>
+      </g>
+      <line class="edge" x1="726" y1="302" x2="618" y2="302" marker-end="url(#ah)"/>
+
+      <g class="node" id="sv-validate" data-detail="validation" data-lens="validation skills" tabindex="0" role="button" aria-label="Independent validation">
+        <rect x="446" y="270" width="170" height="64" rx="10"/>
+        <text x="458" y="288" class="k">07 · VALIDATE</text>
+        <text x="458" y="306" class="t">Independent integrator</text>
+        <text x="458" y="322" class="s">every artifact contracted</text>
+      </g>
+      <line class="edge" x1="446" y1="302" x2="344" y2="302" marker-end="url(#ah)"/>
+      <text x="395" y="292" class="edge-label" text-anchor="middle">package</text>
+
+      <g class="node human-node" id="sv-handoff" data-detail="handoff" data-lens="human safety" tabindex="0" role="button" aria-label="Approve publication handoff">
+        <polygon points="250,268 342,302 250,336 158,302"/>
+        <text x="250" y="298" class="t" text-anchor="middle">Approve handoff</text>
+        <text x="250" y="314" class="s" text-anchor="middle">publication is opt-in</text>
+      </g>
+
+      <!-- evals (always on) -->
+      <g class="node memory" id="sv-evals" data-detail="evals" data-lens="validation skills" tabindex="0" role="button" aria-label="Evals guard routing">
+        <rect x="24" y="380" width="200" height="64" rx="10"/>
+        <text x="36" y="398" class="k">ALWAYS ON</text>
+        <text x="36" y="416" class="t">Evals guard routing</text>
+        <text x="36" y="432" class="s">28 trigger · 5 end-to-end</text>
+      </g>
+      <path class="learn-path" d="M 108 380 C 106 320, 176 312, 176 252 L 176 60" marker-end="url(#ah-learn)"/>
+      <text x="52" y="226" class="learn-label">cases keep the</text>
+      <text x="52" y="239" class="learn-label">catalog honest</text>
+
+      <!-- safety band -->
+      <g class="node gate cyber" id="sv-safety" data-detail="safety-band" data-lens="safety validation" tabindex="0" role="button" aria-label="Safety, machine-verified: closed safety contract, command allowlist, contract registry">
+        <rect x="520" y="380" width="636" height="64" rx="10"/>
+        <text x="534" y="398" class="k">SAFETY · MACHINE-VERIFIED</text>
+        <line x1="712" y1="406" x2="712" y2="436" class="cyber-divider"/>
+        <line x1="894" y1="406" x2="894" y2="436" class="cyber-divider"/>
+        <text x="534" y="420" class="t">Closed safety contract</text>
+        <text x="534" y="434" class="s">forbidden by schema, not prose</text>
+        <text x="724" y="420" class="t">Command allowlist</text>
+        <text x="724" y="434" class="s">only harness validators run</text>
+        <text x="906" y="420" class="t">Contract registry</text>
+        <text x="906" y="434" class="s">16 schemas · SHA-256 pinned</text>
+      </g>
+      <line class="edge" x1="610" y1="378" x2="610" y2="338" marker-end="url(#ah)"/>
+      <text x="620" y="364" class="edge-label">runs the validators</text>
+
+      <!-- needs-evidence return -->
+      <path class="fail-path" d="M 940 224 C 740 262, 420 250, 162 180" marker-end="url(#ah-fail)"/>
+      <text x="556" y="256" class="fail-label" text-anchor="middle">needs-evidence → safe-artifact requests · owner questions — constraints never relax</text>
+
+      <!-- exit through the boundary -->
+      <line class="edge" x1="250" y1="336" x2="250" y2="498" marker-end="url(#ah)"/>
+      <text x="262" y="462" class="edge-label" style="fill: var(--cyber)">the only door out — approved handoff required</text>
+
+      <g class="node" id="sv-pub" data-detail="publisher" data-lens="safety skills human" tabindex="0" role="button" aria-label="Outbound GitHub publisher — separate trust domain">
+        <rect x="90" y="500" width="320" height="56" rx="10"/>
+        <text x="104" y="516" class="k">OUTBOUND · SEPARATE TRUST DOMAIN</text>
+        <text x="104" y="533" class="t">GitHub publisher</text>
+        <text x="104" y="548" class="s">preview → preflight → approved apply · receipt</text>
+      </g>
+      <line class="edge" x1="410" y1="528" x2="648" y2="528" marker-end="url(#ah)"/>
+      <text x="529" y="518" class="edge-label" text-anchor="middle">audit receipt · exact repo confirmed</text>
+
+      <a href="../harness/" aria-label="Open the Orcha delivery harness">
+        <g class="node rail" id="sv-harness">
+          <rect x="650" y="500" width="330" height="56" rx="10"/>
+          <text x="664" y="522" class="t">Into the delivery harness →</text>
+          <text x="664" y="540" class="s">published backlog = scoped issues, proven to merge</text>
+        </g>
+      </a>
+
+      <!-- legend row inside svg -->
+      <g aria-hidden="true">
+        <rect x="24" y="592" width="14" height="8" rx="2" fill="var(--accent)"/>
+        <text x="44" y="600" class="s">automated evidence</text>
+        <rect x="176" y="592" width="14" height="8" rx="2" fill="var(--human)"/>
+        <text x="196" y="600" class="s">owner control</text>
+        <rect x="300" y="592" width="14" height="8" rx="2" fill="var(--cyber)"/>
+        <text x="320" y="600" class="s">safety / policy</text>
+        <rect x="418" y="592" width="14" height="8" rx="2" fill="var(--fail)"/>
+        <text x="438" y="600" class="s">needs-evidence path</text>
+        <text x="560" y="600" class="s">dashed = the static-only boundary · every node opens its receipts</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>One application, end to end: the coordinator slices the target into finite, read-only evaluations; specialists return claims and unknowns, never opinions; reconciliation produces one authoritative product model whose three verdicts — capability confidence, adoption strategy, production readiness — reach the owner separately. Accepted strategy unlocks specification, backlog, and dependency-safe waves; an independent integrator re-validates the whole package; and the only door out of the static boundary is an approved, audited publication into the delivery harness. A missing fact is never guessed — it becomes a needs-evidence loop that requests safe artifacts.</figcaption>
+  </figure>
+
+  <div class="toolbar" id="toolbar">
+    <div class="wrap toolbar-inner">
+      <span class="label">Lens</span>
+      <button class="chip" data-lens-btn="all" aria-pressed="true">Everything</button>
+      <button class="chip" data-lens-btn="skills" aria-pressed="false">Skills</button>
+      <button class="chip" data-lens-btn="evidence" aria-pressed="false">Evidence</button>
+      <button class="chip" data-lens-btn="decision" aria-pressed="false">Decision</button>
+      <button class="chip" data-lens-btn="safety" aria-pressed="false">Safety</button>
+      <button class="chip" data-lens-btn="validation" aria-pressed="false">Validation</button>
+      <button class="chip human-chip" data-lens-btn="human" aria-pressed="false">Owner control</button>
+      <button class="trace-btn" id="traceStart">▶ Trace an assessment</button>
+      <div class="lens-note" id="lensNote" aria-live="polite"></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <section class="band" id="band-skills">
+    <div class="band-head">
+      <h2>Skill catalog — versioned assessment memory</h2>
+      <span class="note">AGENTS.md routes work into 13 SKILL.md contracts. Each carries the same machine-readable static-safety block — the harness rejects a missing or altered one.</span>
+    </div>
+    <div class="band-grid g4">
+      <article class="card inspectable" tabindex="0" data-lens="skills evidence" data-detail="sk-recover" data-trace="t3">
+        <h3>Recover the product</h3>
+        <div class="skill-item"><code>inventory-application</code><span>Static route, capability, and surface inventory</span></div>
+        <div class="skill-item"><code>understand-product-behavior</code><span>Behavior, invariants, flows, states — evidence-backed</span></div>
+        <div class="skill-item"><code>evaluate-user-experience</code><span>Journeys, states, accessibility signals — statically</span></div>
+        <div class="skill-item"><code>map-architecture-and-data</code><span>Boundaries, state authority, salvage map</span></div>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="skills decision" data-detail="sk-judge" data-trace="t6">
+        <h3>Judge the path</h3>
+        <div class="skill-item"><code>evaluate-platform-fit</code><span>Comparison against the pinned Orcha baseline profile</span></div>
+        <div class="skill-item"><code>evaluate-production-readiness</code><span>11 control families, a deliberately separate gate</span></div>
+        <div class="skill-item"><code>decide-adoption-path</code><span>Scored adopt · reconstruct · wrap · needs-evidence</span></div>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="skills decision" data-detail="sk-plan" data-trace="t9">
+        <h3>Plan the entry</h3>
+        <div class="skill-item"><code>plan-product-reconstruction</code><span>Implementation-neutral spec, vertical slices, cutover</span></div>
+        <div class="skill-item"><code>shape-product-backlog</code><span>Traceable Orcha epics and issues + publication handoff</span></div>
+        <div class="skill-item"><code>summarize-delivery-plan</code><span>Waves, critical path, Mermaid graph + text fallback</span></div>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="skills validation safety" data-detail="sk-govern" data-trace="t10">
+        <h3>Govern &amp; guard</h3>
+        <div class="skill-item"><code>assess-application</code><span>Coordinator: routing, finite slices, package assembly</span></div>
+        <div class="skill-item"><code>validate-assessment</code><span>Independent package, registry, and scorer validation</span></div>
+        <div class="skill-item"><code>publish-orcha-backlog</code><span>Approval-gated outbound mirror — its own trust domain</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="band" id="band-evidence">
+    <div class="band-head">
+      <h2>Evidence discipline — claims someone else can audit</h2>
+      <span class="note">Every fact has a provenance mode, an exact locator, and a stable ID. Interpretation lives in claims; contradictions are preserved until explicitly resolved.</span>
+    </div>
+    <div class="band-grid g3">
+      <article class="card inspectable" tabindex="0" data-lens="evidence safety" data-detail="ev-modes" data-trace="t1">
+        <h3>Three collection modes</h3>
+        <div class="skill-item"><code>static-artifact</code><span>Files read in place — never imported or executed</span></div>
+        <div class="skill-item"><code>supplied-render</code><span>Screenshots and recordings the owner provides</span></div>
+        <div class="skill-item"><code>owner-input</code><span>Recorded answers from the people who know</span></div>
+        <p>Modes identify provenance, never permission — none authorizes executing the target or calling anything it names.</p>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="evidence validation" data-detail="ev-locators" data-trace="t1">
+        <h3>A closed locator grammar</h3>
+        <p>Every evidence row points at an exact place, in a grammar validators can check:</p>
+        <div class="proof">file:src/app.py#L41-L60<br>render:checkout.png#region=cart<br>record:owner-qa.md#L12</div>
+        <p>Cited lines are verified to exist by counting bytes — never by importing code or opening a URL.</p>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="evidence" data-detail="ev-claims" data-trace="t3">
+        <h3>Claims, unknowns, blockers</h3>
+        <p>A specialist claim is <code>observed</code> or <code>inferred</code>, cites supporting <em>and contradicting</em> evidence, and names what it affects. What can't be supported becomes an <code>UNK-*</code> unknown with the evidence needed to resolve it — never a guess with a hedge.</p>
+        <div class="proof">claims: observed | inferred · unknowns: UNK-* · blockers: BLOCK-*</div>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="evidence decision" data-detail="ev-confidence" data-trace="t6">
+        <h3>Confidence is derived, not asserted</h3>
+        <p>An inferred claim caps its subject at <em>medium</em>; a lower-confidence claim caps at its own level; a retained contradiction forces <em>low</em> plus a critical evidence gap — and the whole decision becomes <code>needs-evidence</code> until it's resolved and recorded.</p>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="evidence decision human" data-detail="ev-registry" data-trace="t5">
+        <h3>One disposition registry</h3>
+        <p>Every surfaced capability, baseline requirement, decision, and risk lands in <code>accepted-references.json</code> as <em>accepted</em>, <em>deferred</em>, or <em>rejected</em> — each with nonempty evidence support and a substantive rationale. Markdown views render from it; prose cannot override it.</p>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="evidence validation" data-detail="ev-ids" data-trace="t5">
+        <h3>Stable IDs everywhere</h3>
+        <p>Cross-references resolve exactly or the package is invalid — no orphans, no duplicates, no cross-wiring.</p>
+        <div class="idchips" aria-label="ID prefixes">
+          <span>EV</span><span>CL</span><span>CAP</span><span>UX</span><span>ARC</span><span>DATA</span><span>BASE</span><span>FIT</span><span>RISK</span><span>DEC</span><span>PR</span><span>UNK</span><span>BLOCK</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="band" id="band-decision">
+    <div class="band-head">
+      <h2>The decision — scored, gated, kept separate</h2>
+      <span class="note">Hard eligibility gates run before any weighted preference; evidence caps confidence; and no strategy makes the production gate pass automatically.</span>
+    </div>
+    <div class="router">
+      <div class="card inspectable" tabindex="0" data-lens="decision" data-detail="criteria" data-trace="t6">
+        <h3>12 criteria · 0–4 scale</h3>
+        <p>architecture alignment, reproducibility, behavioral legibility, platform replacement ratio, replacement risk, interface boundary quality… — each score bound to a typed criterion claim in the evidence ledger</p>
+      </div>
+      <span class="arrow">→</span>
+      <div class="card tone-accent inspectable" tabindex="0" data-lens="decision validation" data-detail="scorer" data-trace="t6">
+        <h3>Deterministic scorer</h3>
+        <p><code>score_adoption.py</code> emits option scores, eligibility, blockers, the winning strategy, evidence-capped confidence, and the rubric version — same result for the same input, every time</p>
+      </div>
+    </div>
+    <div class="band-grid g4">
+      <article class="card tone-accent" data-lens="decision"><h3>Adopt</h3><p>Keep a meaningful portion of the implementation and adapt it. Right when the architecture already fits, the build reproduces, and platform-owned replacement is low.</p><div class="proof">gate: build must be reproducible</div></article>
+      <article class="card tone-accent" data-lens="decision"><h3>Reconstruct</h3><p>Treat the source as evidence and rebuild accepted behavior on the platform baseline. Right when behavior is recoverable but most of the shell would be replaced.</p><div class="proof">the common verdict for vibe-coded apps</div></article>
+      <article class="card tone-accent" data-lens="decision"><h3>Wrap</h3><p>Preserve the runtime temporarily behind an explicit boundary and replace it incrementally. Requires an isolatable interface and a written exit plan — never permanence by accident.</p><div class="proof">boundary quality ≥ 2 + retirement condition</div></article>
+      <article class="card tone-fail dashed" data-lens="decision evidence"><h3>needs-evidence</h3><p>When a mandatory fact is unknown, no strategy is forced. The assessment asks for safe artifacts or owner answers instead of relaxing its constraints.</p><div class="proof">critical gap ⇒ the whole decision waits</div></article>
+    </div>
+
+    <div class="keys-strip strip-cyber" data-lens="decision" data-trace="t7">
+      <h3>One production gate, 11 evidence-backed control families — a separate verdict: ready · conditional · not-ready · unknown</h3>
+      <ol>
+        <li>Identity &amp; authorization</li>
+        <li>Secrets &amp; configuration</li>
+        <li>Dependency &amp; reproducibility</li>
+        <li>Data protection &amp; retention</li>
+        <li>Failure handling &amp; reliability</li>
+        <li>Observability &amp; alerting</li>
+        <li>Delivery &amp; change control</li>
+        <li>Deployment &amp; environments</li>
+        <li>Recovery, backup &amp; rollback</li>
+        <li>Ownership &amp; runbooks</li>
+        <li>Test &amp; contract evidence</li>
+      </ol>
+    </div>
+
+    <div class="merge-bar" data-lens="decision" data-trace="t8">
+      <div class="card">
+        <b>Capability confidence</b>
+        <span>how well the product is understood — derived per subject from typed claims</span>
+      </div>
+      <span class="plus">+</span>
+      <div class="card tone-accent">
+        <b>Adoption strategy</b>
+        <span>adopt · reconstruct · wrap · needs-evidence, with confidence and blockers</span>
+      </div>
+      <span class="plus">+</span>
+      <div class="card tone-cyber">
+        <b>Production readiness</b>
+        <span>ready · conditional · not-ready · unknown, across all 11 families</span>
+      </div>
+    </div>
+    <div class="axiom" data-lens="decision" data-trace="t8"><b>“Reconstruct + not-ready” is a normal, useful answer</b> — preserve the product, not its accidental architecture. Three outcomes stay separate in <code>assessment-summary.json</code>; a high-confidence strategy never implies a passed gate.</div>
+  </section>
+
+  <section class="band" id="band-package">
+    <div class="band-head">
+      <h2>The package — a decision delivery can consume</h2>
+      <span class="note">Up to 30 contracted artifacts per assessment. JSON authorities carry the decision; Markdown views are exact deterministic renders of them.</span>
+    </div>
+    <div class="band-grid g4">
+      <article class="card inspectable" tabindex="0" data-lens="evidence decision" data-detail="pk-authorities" data-trace="t4">
+        <h3>Machine authorities</h3>
+        <div class="skill-item"><code>product-model.json</code><span>Capabilities, journeys, state, contracts, mappings</span></div>
+        <div class="skill-item"><code>accepted-references.json</code><span>Every CAP/BASE/DEC/RISK disposition</span></div>
+        <div class="skill-item"><code>decision-input.json → decision-result.json</code><span>Scored strategy with eligibility and blockers</span></div>
+        <div class="skill-item"><code>production-gate.json · assessment-summary.json</code><span>Separate verdicts, kept separate</span></div>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="evidence validation" data-detail="pk-views" data-trace="t4">
+        <h3>Human views, derived</h3>
+        <div class="skill-item"><code>capability-catalog.md · baseline-conflicts.md</code><span>What the product does; where it fights the baseline</span></div>
+        <div class="skill-item"><code>reconstruction-spec.md · target-vertical-slice.md</code><span>When rebuild is accepted</span></div>
+        <div class="skill-item"><code>delivery-plan.md · report.md</code><span>Waves + critical path; the final readable record</span></div>
+        <p>Each must exactly equal its render from the JSON authority — prose cannot silently override the model.</p>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="validation safety" data-detail="pk-validation" data-trace="t10">
+        <h3>Independent validation</h3>
+        <p>The integrator re-checks contracts, references, scorer output, reconstruction, and publication readiness with 21 dependency-free scripts. Evidence roots must stay strictly disjoint from the output root — a report can never become its own evidence.</p>
+        <div class="proof">validate_assessment.py · 8 MiB per-artifact bound</div>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="safety human" data-detail="pk-handoff" data-trace="t11">
+        <h3>Publication handoff</h3>
+        <p><code>ready_to_publish</code> means the validated blocker state is clear — it is technical readiness, never permission. Denied authorization blocks; a non-ready production gate blocks; explicit approval is recorded separately and clears nothing else.</p>
+        <div class="proof">preview (offline) → preflight (read-only) → apply (approved)</div>
+      </article>
+    </div>
+
+    <div class="keys-strip strip-accent" data-lens="decision" data-trace="t11">
+      <h3>Lifecycle into the platform — assessment skips none of delivery's controls</h3>
+      <ol>
+        <li>discovered</li>
+        <li>assessed</li>
+        <li>strategy-accepted</li>
+        <li>backlog-validated</li>
+        <li>in-delivery</li>
+        <li>promotion-candidate</li>
+        <li>production</li>
+      </ol>
+    </div>
+
+    <div class="return-bar fail" data-lens="evidence decision" data-trace="t6">
+      <b>Critical evidence gap · retained contradiction · unresolved unknown</b>
+      <span class="arrow">→</span>
+      <b>The decision returns needs-evidence: safe-artifact requests or owner questions — constraints never relax</b>
+      <span class="arrow">→</span>
+      <b>New evidence lands, claims update, the scorer runs again ↺</b>
+    </div>
+
+    <div class="return-bar cd" data-lens="human safety" data-trace="t11">
+      <b>After approved publication</b>
+      <span class="arrow">→</span>
+      <b>Epics, issues, and the delivery plan mirror into GitHub with an audit receipt</b>
+      <span class="arrow">→</span>
+      <b><a href="../harness/">The delivery harness takes over</a> — every issue proven to its merge</b>
+    </div>
+
+    <div class="keys-strip" data-lens="human" data-trace="t8">
+      <h3>The six owner keys — assessment cannot turn any of them</h3>
+      <ol>
+        <li>Choose the stopping point</li>
+        <li>Supply &amp; classify evidence</li>
+        <li>Accept capability dispositions</li>
+        <li>Accept or override the strategy</li>
+        <li>Approve the publication handoff</li>
+        <li>Confirm the exact repository at apply</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="legend" aria-label="Legend">
+    <span><span class="sw" style="background: var(--accent)"></span>automated evidence</span>
+    <span><span class="sw" style="background: var(--human)"></span>owner control</span>
+    <span><span class="sw" style="background: var(--cyber)"></span>safety / policy</span>
+    <span><span class="sw" style="background: var(--fail)"></span>needs-evidence path</span>
+    <span>dashed = the static-only boundary</span>
+  </div>
+
+  <footer>
+    <span>Grounded in the orcha-assessor repository: README and AGENTS.md, the 13 cataloged skills, 10 role contracts under <span class="mono">agents/roles/</span>, 16 schemas under <span class="mono">contracts/</span>, <span class="mono">adoption-decision.toml</span> v2.0.0, the 21 dependency-free scripts, and docs/ (architecture, decision model, output contract, Orcha integration). Pre-publication snapshot: 2026-09-01.</span>
+  </footer>
+</div>
+
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+  <div class="drawer-head">
+    <h3 id="drawerTitle"></h3>
+    <button class="drawer-close" id="drawerClose">Esc ✕</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
+
+<div class="trace-hud" id="traceHud" role="dialog" aria-label="Trace an assessment">
+  <div class="step-k" id="traceK"></div>
+  <h3 id="traceTitle"></h3>
+  <p id="traceBody"></p>
+  <div class="row">
+    <button id="tracePrev">← Back</button>
+    <button id="traceNext" class="primary">Next →</button>
+    <span class="spacer" id="traceCount"></span>
+    <button id="traceExit">Exit</button>
+  </div>
+</div>
+
+<script>
+(() => {
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+
+  /* ---------- drawer ---------- */
+  const DETAILS = {
+    "skills-rail": { t: "Skill catalog", b: "<p>Thirteen versioned skills externalize the assessment method — recovery, judgment, planning, and governance. AGENTS.md routes any agent into the right SKILL.md; every skill carries the exact machine-readable static-safety contract, and the harness validator rejects a package whose skills are missing it or have altered it. Improving the method is a reviewed change, not tribal knowledge.</p>", r: ["skills/<name>/SKILL.md — with static-safety-contract block", "skills/README.md — catalog index", "scripts/validate_harness.py — structure + contract check"] },
+    "boundary": { t: "The static-only boundary", b: "<p>Everything inside the dashed line treats the assessed application as untrusted cargo: its code is never executed or imported, its tests and installers never run, its URLs, APIs, and datastores are never called, and its source tree is never modified. Discovered credentials are never loaded or echoed.</p><p class='sub'>The boundary is enforced by machine-checkable fields — <code>target_execution</code>, <code>target_import</code>, <code>live_network_access</code>, <code>target_mutation</code>, all <code>forbidden</code> — carried by every role and skill. Affirmative or contrastive prose cannot override them. If evidence can't be obtained statically, the answer is an unknown and a request for a safe artifact — never a relaxed constraint.</p>", r: ["static-safety contract in every role TOML + SKILL.md", "AGENTS.md — static-only safety boundary", "scripts/validate_harness.py — rejects a missing/altered block"] },
+    "intake": { t: "Target artifacts", b: "<p>Work enters as evidence with declared provenance: <code>static-artifact</code> file trees, <code>supplied-render</code> screenshots and recordings, or <code>owner-input</code> answers on record. The manifest binds the target, the product profile (immutable built-in Orcha, or a hash-bound supplied profile), and the desired stopping point — recommendation, reconstruction specification, or validated backlog.</p><p class='sub'>Modes identify where evidence came from, not what may be done with it: none authorizes running the target or calling anything it names.</p>", r: ["assessment.json — evidence_mode + profile binding", "safety.constraints — exactly [\"Static inspection only\"]", "$assess-application intake arguments"] },
+    "coordinator": { t: "Assessment coordinator", b: "<p>The coordinator owns intake, slice selection, profile choice, reconciliation, strategy, and final acceptance. It hands each specialist a finite slice — named inputs, a required output contract, an acceptance check, and a stop condition. Specialists cannot expand their own scope and cannot delegate further.</p><p class='sub'>A role stops on exhausted scope, insufficient evidence, or a boundary violation — never by improvising.</p>", r: ["skills/assess-application/SKILL.md", "agents/roles/assessment_coordinator.toml", "recursive delegation: forbidden in role metadata"] },
+    "specialists": { t: "Six read-only specialists", b: "<p>Inventory, product behavior, user experience, architecture &amp; data, production risk, and platform fit run as independent evaluations. Each returns the same envelope: status, scope, evidence-backed claims, unknowns, blockers, artifacts.</p><p class='sub'>A specialist claim is <code>observed</code> or <code>inferred</code> — an unsupported proposition goes to the unknowns register with the evidence needed to resolve it. Contradictory evidence is preserved until the coordinator resolves it explicitly.</p>", r: ["agents/roles/ — 10 provider-neutral role contracts", "contracts/specialist-result.schema.json", "specialists/*.json — six envelopes per package"] },
+    "model": { t: "Authoritative product model", b: "<p><code>product-model.json</code> is the single machine authority for recovered capabilities, UX journeys, state, source contracts, baseline mappings, risks, and decisions. Its references are closed: every concern maps to exactly one baseline row; cross-wired or duplicate mappings are invalid even when ID unions happen to match.</p><p class='sub'>The capability catalog, state/source boundaries, baseline conflicts, and risk/decision log are deterministic renders of this model — prose cannot silently override it.</p>", r: ["contracts/product-model.schema.json", "scripts/render_product_views.py — deterministic views", "scripts/validate_product_model.py"] },
+    "cap-confidence": { t: "Capability confidence", b: "<p>How well is the product understood? Every modeled capability and journey must be named by typed capability claims, and its confidence is <em>derived</em>: an inferred claim caps it at medium, an explicit lower confidence is preserved, and a retained contradiction caps it at low. The summary's headline value is the minimum across all subjects.</p><p class='sub'>Production-control facts live in their own authority and can neither inflate nor deflate capability confidence.</p>", r: ["evidence.json — typed capability claims", "assessment-summary.json.capability_confidence", "derived caps: inferred ⇒ medium · contradiction ⇒ low"] },
+    "strategy": { t: "Adoption strategy", b: "<p>Five hard gates run first — reproducible build, critical safety blocker, platform baseline conflict, critical evidence gap, wrap retirement condition. Only then does the weighted 0–4 rubric score adopt, reconstruct, and wrap. Every score is bound to a typed criterion claim whose value must match exactly.</p><p class='sub'>The scorer's output is never edited: a human may reject the computed winner, but the override is a separately logged DEC-* decision with its own evidence and rationale.</p>", r: ["rubrics/adoption-decision.toml v2.0.0", "eligibility.required_gates — 5 gates", "scripts/score_adoption.py — deterministic"] },
+    "prod-gate": { t: "Production gate", b: "<p>Promotion safety is its own question, answered after strategy: <em>ready</em>, <em>conditional</em>, <em>not-ready</em>, or <em>unknown</em> across exactly 11 control families. Every control consumes one family-specific typed claim — a generic claim spanning the scorecard is invalid — and each needs a substantive owner, observation, rationale, and a distinct validation action.</p><p class='sub'>A concrete verdict requires observed, high-confidence, uncontradicted support; otherwise the gate stays <em>unknown</em>. No strategy makes it pass.</p>", r: ["contracts/production-gate.schema.json", "11 families: identity → test &amp; contract evidence", "verdict: ready · conditional · not-ready · unknown"] },
+    "summary": { t: "Three outcomes, kept separate", b: "<p><code>assessment-summary.json</code> preserves capability confidence, adoption strategy, and production readiness as three independent answers. Collapsing them is exactly the failure mode this harness exists to prevent: a well-understood product can deserve reconstruction and still be nowhere near production-ready.</p><p class='sub'>“Reconstruct + not-ready” is a normal, useful result — preserve the product, not its accidental architecture.</p>", r: ["contracts/assessment-summary.schema.json", "three outcomes: capability · strategy · production", "checked by the assessment integrator"] },
+    "owner": { t: "Owner accepts", b: "<p>The harness recommends; the owner decides. Capability dispositions (preserve, redesign, replace, defer, reject), the accepted behavior boundary, and the strategy itself all require the owner's acceptance before planning begins. Overriding the scorer's winner is allowed — as a logged DEC-* policy disposition that leaves the scorer output untouched.</p>", r: ["accepted-references.json — owner-accepted dispositions", "DEC-* decision log — overrides with rationale", "backlog generation only after acceptance"] },
+    "plan": { t: "Specify and plan", b: "<p>When reconstruction or staged replacement is accepted, the harness writes an implementation-neutral specification: the accepted capability set, a production-shaped first vertical slice, salvage decisions with admission gates, and a transition manifest when data or runtime moves. Then the backlog: thorough, traced Orcha epics and issues, projected into dependency-safe waves with a critical path and a deterministic Mermaid graph plus text fallback.</p>", r: ["reconstruction-plan.json → reconstruction-spec.md", "backlog.json — every issue anchored to the registry", "delivery-plan.json — waves · critical path · graph"] },
+    "validation": { t: "Independent validation", b: "<p>Before a package is accepted, the assessment integrator — a role that produced none of the artifacts — re-validates all of it: schema conformance, reference resolution, scorer reproduction, reconstruction traceability, publication readiness. Every generated artifact must be contracted and in scope; the only self-record exception is <code>validation.json</code> itself.</p><p class='sub'>The final <code>report.md</code> must be an exact deterministic rendering of the machine authorities.</p>", r: ["agents/roles/assessment_integrator.toml", "scripts/validate_assessment.py + 20 sibling scripts", "contracts/validation-record.schema.json"] },
+    "handoff": { t: "Approve the handoff", b: "<p>Publication is opt-in, always. <code>ready_to_publish</code> asserts only that the validated blocker state is clear — technical readiness, not permission. Denied authorization blocks it; any non-ready production gate blocks it; pending authorization does not. Explicit approval is recorded separately and cannot clear another blocker.</p>", r: ["contracts/publication-handoff.schema.json", "scripts/validate_publication_handoff.py", "approval ≠ readiness ≠ permission — three distinct facts"] },
+    "publisher": { t: "Outbound publisher — separate trust domain", b: "<p>The GitHub publisher lives outside the assessment: a hash-bound skill in its own trust domain, run only on a separately approved request. Its preview is offline, its preflight is read-only, and apply requires the recorded handoff approval plus exact-repository confirmation. It owns issue numbering, publication order, relationship rewriting, partial-failure handling, and a collision-safe audit receipt.</p><p class='sub'>Assessment skills never call GitHub to fill an evidence gap.</p>", r: ["skills/publish-orcha-backlog/SKILL.md", "scripts/publish_github.py", "contracts/publication-audit.schema.json — the receipt"] },
+    "evals": { t: "Evals guard routing", b: "<p>Twenty-eight trigger cases prove the right skills activate — and unrelated prompts don't. Five end-to-end cases pin the harness's judgment on representative shapes: adopt-aligned, reconstruct-replacement-heavy, wrap-continuity-critical, needs-evidence-critical-gap, and a sanitized static reconstruct.</p><p class='sub'>Stable evals are also the promotion bar: this harness becomes an Orcha intake capability only after its decisions hold on representative cases.</p>", r: ["evals/trigger-cases.json — 28 routing cases", "evals/*.json — 5 end-to-end decision cases", "docs/orcha-integration.md — promotion criteria"] },
+    "safety-band": { t: "Safety, machine-verified", b: "<p>Three enforcement stations make the boundary real. The <strong>closed safety contract</strong>: every role and skill carries versioned fields setting execution, import, network access, and mutation of the target to <code>forbidden</code> — prose cannot override schema. The <strong>command allowlist</strong>: shipped skill examples may invoke only the repository's dependency-free validators and scorer; target commands, shell operators, wrapper forms, and commands hidden in non-shell fences are rejected. The <strong>contract registry</strong>: all 16 schemas are pinned by exact path and SHA-256 digest, verified before any structural validation, with an 8 MiB per-artifact read bound.</p>", r: ["scripts/validate_harness.py — contract + structure", "scripts/safety_policy.py — ALLOWED_HARNESS_SCRIPTS", "scripts/contract_versions.py — SHA-256 registry"] },
+    "sk-recover": { t: "Recover the product", b: "<p>Four skills rebuild understanding from artifacts alone: a static inventory of routes, surfaces, and capabilities; behavior recovery with invariants, flows, and states; a UX evaluation of journeys and accessibility signals from renders and markup; and an architecture-and-data map that separates valuable domain logic from accidental implementation.</p>", r: ["inventory-application", "understand-product-behavior", "evaluate-user-experience", "map-architecture-and-data"] },
+    "sk-judge": { t: "Judge the path", b: "<p>Three skills turn recovered understanding into judgment: platform-fit comparison against the pinned baseline profile, the deliberately separate production-readiness evaluation across 11 control families, and the scored adoption decision itself.</p>", r: ["evaluate-platform-fit", "evaluate-production-readiness", "decide-adoption-path"] },
+    "sk-plan": { t: "Plan the entry", b: "<p>Three skills convert an accepted strategy into buildable work: an implementation-neutral reconstruction specification with vertical slices and cutover conditions, a traced Orcha backlog with its publication handoff, and a concise delivery plan with dependency-safe waves and a critical path.</p>", r: ["plan-product-reconstruction", "shape-product-backlog", "summarize-delivery-plan"] },
+    "sk-govern": { t: "Govern &amp; guard", b: "<p>The coordinator sequences everything and owns the package; independent validation re-checks it artifact by artifact; and the outbound publisher — deliberately its own trust domain — mirrors the result into GitHub only on separate approval.</p>", r: ["assess-application", "validate-assessment", "publish-orcha-backlog"] },
+    "ev-modes": { t: "Three collection modes", b: "<p>Every evidence row declares how its fact was obtained: read from a static artifact, seen in a supplied render, or stated by the owner on record. The mode governs the locator grammar and what the row may claim — and no mode ever authorizes executing target material or calling a live URL, integration, or datastore.</p>", r: ["static-artifact · supplied-render · owner-input", "assessment.json.evidence_mode + per-artifact kind", "modes = provenance, never permission"] },
+    "ev-locators": { t: "A closed locator grammar", b: "<p>Locators are checkable, not free-form: <code>file:</code> paths with line anchors for static artifacts, <code>render:</code> regions or timestamps for supplied media, <code>record:</code> lines for owner input. Aggregate validation resolves symlinks, rejects containment escapes, and verifies every cited line exists by counting bytes — without emitting content, importing code, or touching a URL.</p>", r: ["file:<path>#L<start>-L<end>", "render:<path>#region=<name> · record:<path>#L<n>", "scripts/validate_evidence.py"] },
+    "ev-claims": { t: "Claims, unknowns, blockers", b: "<p>Interpretation is separated from observation. A claim states one thing, cites supporting and contradicting evidence, and declares its impact — capability, platform fit, production gate, publication, or strategy — through a closed type mapping that stops unselected claims from asserting decision authority.</p><p class='sub'>Unknowns and blockers are first-class records with stable IDs and substantive text, not hedged prose.</p>", r: ["claim: statement · status · evidence · impact", "closed claim-type → authority mapping", "UNK-* / BLOCK-* registers"] },
+    "ev-confidence": { t: "Confidence is derived", b: "<p>Nobody types “high confidence” into a result. Confidence is computed from the evidence ledger: all-observed, high-confidence, uncontradicted claims are required for a high; one inferred claim caps at medium; a retained contradiction caps at low, sets a critical evidence gap, and turns the decision into needs-evidence until it is resolved and recorded.</p>", r: ["scripts/score_adoption.py — canonical confidence caps", "contradiction ⇒ low + critical_evidence_gap", "needs-evidence until resolved"] },
+    "ev-registry": { t: "One disposition registry", b: "<p><code>accepted-references.json</code> is the authoritative answer to “what did we decide about each thing we found?” Every capability, baseline requirement, decision, and risk carries exactly one disposition with nonempty evidence support. Capability dispositions reconcile exactly — preserve, redesign, and replace map to accepted; defer to deferred; reject to rejected.</p>", r: ["contracts/accepted-references.schema.json", "scripts/validate_references.py --evidence-ledger", "views render from the registry, never around it"] },
+    "ev-ids": { t: "Stable IDs everywhere", b: "<p>Evidence rows, claims, capabilities, journeys, architecture and data concerns, baseline requirements, fit mappings, risks, decisions, production controls, unknowns, and blockers all carry stable prefixed IDs. Validation requires exact resolution in both directions — an orphan reference or an unmodeled subject invalidates the package.</p>", r: ["EV · CL · CAP · UX · ARC · DATA · BASE · FIT · RISK · DEC · PR · UNK · BLOCK", "cross-references resolve exactly or fail"] },
+    "criteria": { t: "12 criteria, 0–4", b: "<p>Architecture alignment, reproducibility, production readiness, test evidence, platform replacement ratio, behavioral legibility, domain separability, source contract value, target architecture clarity, operational dependency, replacement risk, and interface boundary quality. Each option weights them differently — high replacement ratio argues <em>for</em> reconstruction and <em>against</em> adoption.</p><p class='sub'>Every score requires claim references and a rationale; the referenced criterion claim's score must equal the decision input exactly.</p>", r: ["docs/decision-model.md — criteria table", "rubrics/adoption-decision.toml — per-option weights", "scores bound to CL-* criterion claims"] },
+    "scorer": { t: "Deterministic scorer", b: "<p><code>score_adoption.py</code> is executable policy: normalized weights, hard-gate eligibility, option scores, blockers, winner, confidence, rubric version. Package scoring reads the adjacent evidence ledger and applies the canonical confidence caps. Same input, same answer — the rubric argues in TOML, not in the moment.</p>", r: ["scripts/score_adoption.py --input decision-input.json", "emits: scores · eligibility · winner · confidence · version", "human override = separate DEC-* entry, output untouched"] },
+    "pk-authorities": { t: "Machine authorities", b: "<p>The package's decisions live in JSON that machines can re-check: the product model, the disposition registry, decision input and result, the production gate, the three-outcome summary — plus, when planning is unlocked, the reconstruction plan, backlog, delivery plan, and publication handoff. Up to 30 artifacts, every one contracted.</p>", r: ["docs/output-contract.md — package shape", "contracts/*.schema.json — 16 schemas", "assessment.json — the binding manifest"] },
+    "pk-views": { t: "Human views, derived", b: "<p>People review Markdown: the capability catalog, baseline conflicts, state and source boundaries, the salvage map, the risk and decision log, the reconstruction spec, the delivery plan, the final report. Every one must exactly equal its deterministic render from the JSON authority — reviewable prose, with no authority of its own.</p>", r: ["scripts/render_product_views.py", "scripts/render_reconstruction_views.py · render_delivery_plan.py", "scripts/render_assessment_report.py — report.md"] },
+    "pk-validation": { t: "Independent validation", b: "<p>Validation is somebody else's job by design: the integrator role produced none of the artifacts it checks. Twenty-one dependency-free scripts re-verify schemas, digests, references, scorer output, reconstruction traceability, and publication readiness — with bounded reads, so even a hostile artifact can't cause an unbounded allocation.</p>", r: ["scripts/validate_assessment.py — package entry point", "scripts/validate_validation_record.py — the self-record", "8 MiB per-artifact bound · disjoint evidence/output roots"] },
+    "pk-handoff": { t: "Publication handoff", b: "<p>The handoff separates three facts that are usually blurred: <em>readiness</em> (validated blockers clear), <em>authorization</em> (the owner said yes, recorded separately), and <em>permission at apply</em> (exact repository confirmed at the moment of publication). Each is checked independently; none implies another.</p>", r: ["publication-handoff.json — typed publication claims", "denied auth blocks · pending auth does not", "non-Orcha profiles stop at draft / needs-evidence"] }
+  };
+
+  const drawer = $("#drawer"), backdrop = $("#backdrop"), dBody = $("#drawerBody"), dTitle = $("#drawerTitle");
+  let lastFocus = null;
+  function openDrawer(key) {
+    const d = DETAILS[key]; if (!d) return;
+    lastFocus = document.activeElement;
+    dTitle.textContent = d.t;
+    dBody.innerHTML = d.b + (d.r ? `<div class="receipts"><h4>Receipts</h4><ul>${d.r.map(x => `<li>${x}</li>`).join("")}</ul></div>` : "");
+    drawer.classList.add("open"); backdrop.classList.add("open");
+    $("#drawerClose").focus();
+  }
+  function closeDrawer() {
+    drawer.classList.remove("open"); backdrop.classList.remove("open");
+    if (lastFocus) lastFocus.focus();
+  }
+  $("#drawerClose").addEventListener("click", closeDrawer);
+  backdrop.addEventListener("click", closeDrawer);
+  $$("[data-detail]").forEach(el => {
+    el.addEventListener("click", () => openDrawer(el.dataset.detail));
+    el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openDrawer(el.dataset.detail); } });
+  });
+
+  /* ---------- lenses ---------- */
+  const SUMMARIES = {
+    all: "",
+    skills: "Skills lens: thirteen SKILL.md contracts cover recover → judge → plan → govern; AGENTS.md routes them, and 28 trigger cases prove the routing.",
+    evidence: "Evidence lens: three collection modes, one closed locator grammar, observed-vs-inferred claims with contradictions preserved — confidence is derived, never asserted.",
+    decision: "Decision lens: five hard gates, then twelve weighted criteria on a 0–4 scale; capability, strategy, and production readiness stay three separate answers.",
+    safety: "Safety lens: the whole assessment runs inside a static-only boundary enforced by schema fields, a command allowlist, and a SHA-256-pinned contract registry — not by prose.",
+    validation: "Validation lens: an independent integrator re-checks every contracted artifact with 21 dependency-free scripts; evals keep routing honest; report.md must equal its render.",
+    human: "Owner lens: the harness recommends; the owner holds all six keys — from the stopping point to the exact repository confirmed at publication."
+  };
+  const lensBtns = $$("[data-lens-btn]");
+  const lensTargets = $$("[data-lens]");
+  const lensNote = $("#lensNote");
+  function setLens(v, updateHash=true) {
+    lensBtns.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lensBtn === v)));
+    lensTargets.forEach(el => {
+      const tags = (el.dataset.lens || "").split(/\s+/);
+      const on = v === "all" || tags.includes(v);
+      el.classList.toggle("dim", !on);
+      el.classList.toggle("lit", v !== "all" && on && el.classList.contains("card"));
+    });
+    lensNote.textContent = SUMMARIES[v] || "";
+    lensNote.classList.toggle("show", v !== "all");
+    if (updateHash) history.replaceState(null, "", v === "all" ? location.pathname : "#lens=" + v);
+  }
+  lensBtns.forEach(b => b.addEventListener("click", () => setLens(b.dataset.lensBtn)));
+  const m = location.hash.match(/lens=(\w+)/);
+  if (m && SUMMARIES[m[1]] !== undefined) setLens(m[1], false);
+
+  /* ---------- trace ---------- */
+  const STEPS = [
+    { k:"STEP 1 · INTAKE", t:"Evidence gets a provenance, not a permission", b:"Target artifacts arrive as static files, supplied renders, or owner answers — and the safety constraints are recorded before anything is read. No mode authorizes running the target.", ids:["sv-intake","sv-skills"], tr:"t1" },
+    { k:"STEP 2 · SCOPE", t:"The coordinator cuts finite slices", b:"Each specialist gets named inputs, a required output contract, an acceptance check, and a stop condition. Nobody expands their own scope; nobody delegates further.", ids:["sv-coord"], tr:"t2" },
+    { k:"STEP 3 · RECOVER", t:"Six specialists read in parallel", b:"Inventory, behavior, UX, architecture & data, production risk, and platform fit return claims tied to exact evidence — plus unknowns and blockers, never a guess.", ids:["sv-spec"], tr:"t3" },
+    { k:"STEP 4 · RECONCILE", t:"One model becomes the authority", b:"Specialist results reconcile into product-model.json. Every human-readable surface — catalog, conflicts, boundaries, log — is an exact deterministic render of it.", ids:["sv-model"], tr:"t4" },
+    { k:"STEP 5 · REGISTER", t:"Every finding gets a disposition", b:"Each capability, baseline requirement, decision, and risk is accepted, deferred, or rejected in accepted-references.json, with evidence support and a substantive rationale.", ids:["sv-model","sv-cap"], tr:"t5" },
+    { k:"STEP 6 · SCORE", t:"Five gates, then twelve criteria", b:"Hard eligibility runs first; then the weighted 0–4 rubric scores adopt, reconstruct, and wrap. Evidence caps confidence — an inferred claim can't produce a high-confidence verdict.", ids:["sv-strategy"], tr:"t6" },
+    { k:"STEP 7 · GATE", t:"Production is its own question", b:"Eleven control families produce a separate verdict: ready, conditional, not-ready, or unknown. No strategy makes it pass — and 'reconstruct + not-ready' is a normal answer.", ids:["sv-gate"], tr:"t7" },
+    { k:"STEP 8 · ACCEPT", t:"Three verdicts reach the owner", b:"Capability confidence, strategy, and production readiness arrive separately. The owner accepts the boundary and the path — or overrides the scorer in a logged DEC-* decision.", ids:["sv-summary","sv-owner"], tr:"t8" },
+    { k:"STEP 9 · SPECIFY + PLAN", t:"Strategy becomes buildable work", b:"An implementation-neutral spec with vertical slices, then traced Orcha epics and issues, projected into dependency-safe waves with a critical path.", ids:["sv-plan"], tr:"t9" },
+    { k:"STEP 10 · VALIDATE", t:"Someone else checks the package", b:"The independent integrator re-validates every contracted artifact with the dependency-free scripts. report.md must equal its deterministic render — reviewable, but with no authority of its own.", ids:["sv-validate","sv-evals"], tr:"t10" },
+    { k:"STEP 11 · PUBLISH", t:"The one door out", b:"On separate approval only: offline preview, read-only preflight, then an exact-repository apply with an audit receipt — into the delivery harness, where every issue is proven to its merge.", ids:["sv-handoff","sv-pub","sv-harness"], tr:"t11" }
+  ];
+  const hud = $("#traceHud");
+  let step = -1;
+  const svgNodes = $$("svg .node");
+  function renderStep() {
+    const s = STEPS[step];
+    $("#traceK").textContent = s.k;
+    $("#traceTitle").textContent = s.t;
+    $("#traceBody").textContent = s.b;
+    $("#traceCount").textContent = (step+1) + " / " + STEPS.length + " · ← → keys work";
+    $("#tracePrev").disabled = step === 0;
+    $("#traceNext").textContent = step === STEPS.length - 1 ? "Finish" : "Next →";
+    svgNodes.forEach(n => n.classList.toggle("dim", !s.ids.includes(n.id)));
+    $$(".card, .return-bar, .keys-strip, .merge-bar, .axiom").forEach(el => el.classList.toggle("dim", el.dataset.trace !== s.tr));
+    if (step < STEPS.length) $(".schematic").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+  function startTrace() { step = 0; hud.classList.add("open"); setLens("all"); renderStep(); }
+  function exitTrace() {
+    step = -1; hud.classList.remove("open");
+    svgNodes.forEach(n => n.classList.remove("dim"));
+    $$(".card, .return-bar, .keys-strip, .merge-bar, .axiom").forEach(el => el.classList.remove("dim"));
+  }
+  $("#traceStart").addEventListener("click", startTrace);
+  $("#traceExit").addEventListener("click", exitTrace);
+  $("#tracePrev").addEventListener("click", () => { if (step > 0) { step--; renderStep(); } });
+  $("#traceNext").addEventListener("click", () => { if (step < STEPS.length - 1) { step++; renderStep(); } else exitTrace(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") { closeDrawer(); exitTrace(); }
+    if (step >= 0) {
+      if (e.key === "ArrowRight") { e.preventDefault(); if (step < STEPS.length - 1) { step++; renderStep(); } }
+      if (e.key === "ArrowLeft") { e.preventDefault(); if (step > 0) { step--; renderStep(); } }
+    }
+  });
+})();
+</script>
+</body>
+</html>
