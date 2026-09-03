@@ -226,21 +226,23 @@
   }
   .more-link:hover, .more-link:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
 
-  .catalog { margin-top: 14px; }
-  .catalog summary {
-    list-style: none; cursor: pointer;
-    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
-    border: 1px dashed var(--line-strong); border-radius: 12px;
-    padding: 11px 16px;
+  .catalog {
+    position: relative;
+    margin-top: 14px;
+    border: 1px solid var(--accent); border-radius: 12px;
+    background: var(--surface);
+    padding: 8px 18px 16px;
   }
-  .catalog summary::-webkit-details-marker { display: none; }
-  .catalog summary:hover, .catalog summary:focus-visible { border-color: var(--accent); outline: none; }
-  .catalog summary h3 { font-size: 13.5px; font-weight: 600; margin: 0; }
-  .catalog summary .cnt { font-size: 11px; color: var(--muted); }
-  .catalog[open] summary { border-style: solid; border-color: var(--accent); }
-  .chev { display: inline-block; margin-left: 8px; transition: transform 160ms ease; }
-  .catalog[open] .chev { transform: rotate(90deg); }
-  .cat-group { margin-top: 18px; }
+  .catalog[hidden] { display: none; }
+  .catalog-close {
+    position: absolute; top: 12px; right: 14px;
+    border: 1px solid var(--line-strong); background: var(--surface-2);
+    border-radius: 8px; padding: 1px 9px; font-size: 12px; color: var(--muted);
+  }
+  .catalog-close:hover, .catalog-close:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
+  .more-link[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+  .cat-group { margin-top: 12px; }
+  .cat-group[hidden] { display: none; }
   .cat-group h4 {
     margin: 0 0 10px; font-family: "IBM Plex Mono", monospace; font-size: 10.5px;
     letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
@@ -554,13 +556,10 @@
       </article>
     </div>
 
-    <details class="catalog" id="catalog" data-lens="skills">
-      <summary>
-        <h3>The full catalog — all 67 skills</h3>
-        <span class="cnt mono">10 + 24 + 14 + 19 <span class="chev">▸</span></span>
-      </summary>
+    <div class="catalog" id="catalog" data-lens="skills" hidden>
+      <button class="catalog-close" id="catalogClose" aria-label="Close family list">✕</button>
 
-      <div class="cat-group" id="cat-coord">
+      <div class="cat-group" id="cat-coord" hidden>
         <h4>Coordination, evidence + evolution · 10</h4>
         <div class="cat-grid">
           <div class="cat-item"><code>operate-datavein</code><span>Coordinate a complete operation to verified outcome</span></div>
@@ -576,7 +575,7 @@
         </div>
       </div>
 
-      <div class="cat-group" id="cat-sourcing">
+      <div class="cat-group" id="cat-sourcing" hidden>
         <h4>Sourcing + extraction · 24</h4>
         <div class="cat-grid">
           <div class="cat-item"><code>triage-sourcing-failure</code><span>Classify and route failed or stalled source work</span></div>
@@ -606,7 +605,7 @@
         </div>
       </div>
 
-      <div class="cat-group" id="cat-dbt">
+      <div class="cat-group" id="cat-dbt" hidden>
         <h4>Transformation operations · 14</h4>
         <div class="cat-grid">
           <div class="cat-item"><code>triage-dbt-failure</code><span>Classify a run and choose the narrowest investigation</span></div>
@@ -626,7 +625,7 @@
         </div>
       </div>
 
-      <div class="cat-group" id="cat-platform">
+      <div class="cat-group" id="cat-platform" hidden>
         <h4>Platform, performance + release · 19</h4>
         <div class="cat-grid">
           <div class="cat-item"><code>diagnose-datavein-api</code><span>Trace API, gateway, auth, database, contract behavior</span></div>
@@ -650,7 +649,7 @@
           <div class="cat-item"><code>remediate-datavein-code</code><span>Carry defects through dev PR, release, production proof</span></div>
         </div>
       </div>
-    </details>
+    </div>
   </section>
 
   <section class="band" id="band-contracts">
@@ -854,14 +853,29 @@
     el.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && !e.target.closest("a, button")) { e.preventDefault(); openDrawer(el.dataset.detail); } });
   });
 
-  /* ---------- full catalog ---------- */
+  /* ---------- per-family catalog panel ---------- */
   const catalog = $("#catalog");
-  $$(".more-link").forEach(b => b.addEventListener("click", e => {
-    e.stopPropagation();
-    catalog.open = true;
-    document.getElementById(b.dataset.cat).scrollIntoView({ behavior: "smooth", block: "start" });
-  }));
-  window.addEventListener("beforeprint", () => { if (catalog) catalog.open = true; });
+  const catGroups = $$(".cat-group", catalog);
+  let activeCat = null;
+  function hideCat() {
+    activeCat = null;
+    catalog.hidden = true;
+    $$(".more-link").forEach(b => b.setAttribute("aria-expanded", "false"));
+  }
+  function showCat(id) {
+    if (activeCat === id) { hideCat(); return; }
+    activeCat = id;
+    catalog.hidden = false;
+    catGroups.forEach(g => { g.hidden = g.id !== id; });
+    $$(".more-link").forEach(b => b.setAttribute("aria-expanded", String(b.dataset.cat === id)));
+    catalog.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+  $$(".more-link").forEach(b => {
+    b.setAttribute("aria-expanded", "false");
+    b.addEventListener("click", e => { e.stopPropagation(); showCat(b.dataset.cat); });
+  });
+  $("#catalogClose").addEventListener("click", hideCat);
+  window.addEventListener("beforeprint", () => { catalog.hidden = false; catGroups.forEach(g => { g.hidden = false; }); });
 
   /* ---------- lenses ---------- */
   const SUMMARIES = {
@@ -930,7 +944,7 @@
   $("#tracePrev").addEventListener("click", () => { if (step > 0) { step--; renderStep(); } });
   $("#traceNext").addEventListener("click", () => { if (step < STEPS.length - 1) { step++; renderStep(); } else exitTrace(); });
   document.addEventListener("keydown", e => {
-    if (e.key === "Escape") { closeDrawer(); exitTrace(); }
+    if (e.key === "Escape") { closeDrawer(); exitTrace(); hideCat(); }
     if (step >= 0) {
       if (e.key === "ArrowRight") { e.preventDefault(); if (step < STEPS.length - 1) { step++; renderStep(); } }
       if (e.key === "ArrowLeft") { e.preventDefault(); if (step > 0) { step--; renderStep(); } }
