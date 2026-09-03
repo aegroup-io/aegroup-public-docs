@@ -218,6 +218,38 @@
   .skill-item code { font-size: 12px; font-weight: 500; }
   .skill-item span { display: block; font-size: 11.5px; color: var(--muted); }
 
+  .more-link {
+    margin-top: 10px;
+    border: 1px solid var(--line-strong); border-radius: 999px;
+    background: var(--surface-2); color: var(--muted);
+    padding: 2px 11px; font-size: 11.5px; font-weight: 600;
+  }
+  .more-link:hover, .more-link:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
+
+  .catalog { margin-top: 14px; }
+  .catalog summary {
+    list-style: none; cursor: pointer;
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    border: 1px dashed var(--line-strong); border-radius: 12px;
+    padding: 11px 16px;
+  }
+  .catalog summary::-webkit-details-marker { display: none; }
+  .catalog summary:hover, .catalog summary:focus-visible { border-color: var(--accent); outline: none; }
+  .catalog summary h3 { font-size: 13.5px; font-weight: 600; margin: 0; }
+  .catalog summary .cnt { font-size: 11px; color: var(--muted); }
+  .catalog[open] summary { border-style: solid; border-color: var(--accent); }
+  .chev { display: inline-block; margin-left: 8px; transition: transform 160ms ease; }
+  .catalog[open] .chev { transform: rotate(90deg); }
+  .cat-group { margin-top: 18px; }
+  .cat-group h4 {
+    margin: 0 0 10px; font-family: "IBM Plex Mono", monospace; font-size: 10.5px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+    border-bottom: 1px solid var(--line); padding-bottom: 6px;
+  }
+  .cat-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 20px; }
+  .cat-item code { font-size: 11.5px; font-weight: 500; display: block; overflow-wrap: anywhere; }
+  .cat-item span { display: block; font-size: 11px; color: var(--muted); }
+
   .chips-inline { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 9px; }
   .chips-inline span {
     font-family: "IBM Plex Mono", monospace; font-size: 10.5px;
@@ -284,15 +316,16 @@
 
   @media (max-width: 960px) {
     .g4, .g3 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .cat-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
     .band-head { flex-direction: column; align-items: flex-start; gap: 4px; }
     .band-head .note { text-align: left; }
   }
   @media (max-width: 620px) {
-    .g4, .g3 { grid-template-columns: 1fr; }
+    .g4, .g3, .cat-grid { grid-template-columns: 1fr; }
     .trace-btn { margin-left: 0; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .drawer, .card, svg .node { transition: none; }
+    .drawer, .card, svg .node, .chev { transition: none; }
   }
   @media print {
     .toolbar, .trace-hud, .drawer, .backdrop { display: none !important; }
@@ -307,8 +340,8 @@
 <div class="wrap">
   <header class="hero">
     <div class="kicker-row"><div class="kicker"><a href="../">DataVein</a> · Operations harness</div><a class="exec-link" href="../../orcha/harness/">Delivery harness →</a></div>
-    <h1>How an operation earns its close</h1>
-    <p class="deck"><strong>Data must flow.</strong> A retry, a green status, a restarted pod, or an opened ticket is an intermediate event — 67 manual skills drive each operation to <strong>independently verified data flow</strong>, or to a precisely owned blocker, under typed grants with a human hand on every consequential call.</p>
+    <h1>When the data doesn't flow</h1>
+    <p class="deck"><strong>Data must flow</strong> — and this harness is DataVein's operations owner for the moments it doesn't. Why didn't the extract finish? Why zero rows — a defect, or a passing network fault? What did we do last time? Is the system still fast? Sixty-seven manual skills interrogate every anomaly to <strong>independently verified data flow</strong>, or to a precisely owned blocker — under typed grants, with a human hand on every consequential call.</p>
     <div class="stats" aria-label="Harness at a glance">
       <div class="stat"><b>67</b><span>manual skills</span></div>
       <div class="stat"><b>21</b><span>specialist role contracts</span></div>
@@ -398,9 +431,17 @@
         <text x="906" y="170" class="s">data must flow</text>
       </g>
 
+      <!-- read-only bypass -->
+      <path class="edge" style="stroke-dasharray: 5 4" d="M 674 172 C 745 208, 820 208, 892 166" marker-end="url(#ah)"/>
+      <text x="783" y="220" class="edge-label" text-anchor="middle">read-only modes skip the mutation</text>
+
       <!-- stop conditions return -->
-      <path class="fail-path" d="M 780 186 C 740 226, 660 226, 620 190" marker-end="url(#ah-fail)"/>
-      <text x="700" y="232" class="fail-label" text-anchor="middle">stop: scope drift · authority conflict · stale evidence · blast radius → back to investigation</text>
+      <path class="fail-path" d="M 780 186 C 740 252, 660 252, 620 190" marker-end="url(#ah-fail)"/>
+      <text x="700" y="258" class="fail-label" text-anchor="middle">stop conditions → back to investigation, state preserved</text>
+
+      <!-- handoff reentry -->
+      <path class="edge" style="stroke-dasharray: 5 4" d="M 470 300 C 370 246, 200 228, 102 186" marker-end="url(#ah)"/>
+      <text x="288" y="240" class="edge-label" text-anchor="middle">owner acts → a new operation verifies the unblock</text>
 
       <!-- terminal fan -->
       <line class="edge" x1="990" y1="182" x2="1022" y2="296" marker-end="url(#ah)"/>
@@ -435,7 +476,7 @@
         <text x="96" y="352" class="s">regression + held-out evals · vN+1</text>
       </g>
       <path class="learn-path" d="M 924 380 C 800 416, 350 416, 240 368" marker-end="url(#ah-learn)"/>
-      <text x="580" y="410" class="learn-label" text-anchor="middle">accepted, generalizable lessons only</text>
+      <text x="580" y="397" class="learn-label" text-anchor="middle">accepted, generalizable lessons only</text>
       <path class="learn-path" d="M 190 300 C 170 200, 130 110, 96 54" marker-end="url(#ah-learn)"/>
       <text x="108" y="210" class="learn-label">lessons re-arm</text>
       <text x="108" y="223" class="learn-label">the skills</text>
@@ -454,7 +495,7 @@
       </g>
     </svg>
     </div>
-    <figcaption>One operation, end to end: a human starts the harness (no scheduler or timer can); scope and authority become typed grants; specialists investigate from an immutable before-state; the smallest reversible mutation runs under explicit stop conditions — code defects detour through the delivery harness and the operation resumes; independent validation proves data actually flows. Every terminal state emits a sanitized, typed receipt; blocked work ends as an owner decision or a precisely owned external handoff, and only accepted lessons flow back into T-Base and the versioned pack.</figcaption>
+    <figcaption>One operation, end to end: a human starts the harness (no scheduler or timer can); scope and authority become typed grants; specialists investigate from an immutable before-state; the smallest reversible mutation runs under explicit stop conditions — code defects detour through the delivery harness and the operation resumes; independent validation proves data actually flows. Every terminal state emits a sanitized, typed receipt; blocked work ends as an owner decision or a precisely owned external handoff, and only accepted lessons flow back into T-Base and the versioned pack. All six modes ride this one flow: read-only work (plan, dry-run, audit, owner briefs) skips the mutation and closes as evidence-complete or decision-ready; performance evaluations measure inside investigation and, when a change is granted, hold the close until a post-change window proves the effect; a handoff re-enters as a new operation once the owner acts.</figcaption>
   </figure>
 
   <div class="toolbar" id="toolbar">
@@ -485,6 +526,7 @@
         <div class="skill-item"><code>capture-datavein-state</code><span>Sanitized, hash-bound before-state</span></div>
         <div class="skill-item"><code>validate-datavein-recovery</code><span>Independently prove the original outcome</span></div>
         <div class="skill-item"><code>brief-datavein-owner</code><span>Owner-level decisions, tradeoffs, and asks</span></div>
+        <button class="more-link" data-cat="cat-coord">all 10 →</button>
       </article>
       <article class="card inspectable" tabindex="0" data-lens="skills" data-detail="sk-sourcing" data-trace="t4">
         <h3>Sourcing + extraction <span class="n">24</span></h3>
@@ -492,6 +534,7 @@
         <div class="skill-item"><code>reconcile-extractor-completion</code><span>Prove signed completion and downstream state</span></div>
         <div class="skill-item"><code>validate-sourcing-data</code><span>Prove schema, counts, keys, watermarks, target effects</span></div>
         <div class="skill-item"><code>diagnose-table/file/api-extraction</code><span>Modality-specific extraction semantics</span></div>
+        <button class="more-link" data-cat="cat-sourcing">all 24 →</button>
       </article>
       <article class="card inspectable" tabindex="0" data-lens="skills" data-detail="sk-dbt" data-trace="t4">
         <h3>Transformation operations <span class="n">14</span></h3>
@@ -499,6 +542,7 @@
         <div class="skill-item"><code>run-dbt-backfill</code><span>Lineage-aware historical rebuild, planned and verified</span></div>
         <div class="skill-item"><code>recover-dbt-protected-target</code><span>Fenced, target-specific recovery</span></div>
         <div class="skill-item"><code>verify-dbt-remediation</code><span>Prove a fix through deployed runtime and target effects</span></div>
+        <button class="more-link" data-cat="cat-dbt">all 14 →</button>
       </article>
       <article class="card inspectable" tabindex="0" data-lens="skills" data-detail="sk-platform" data-trace="t4">
         <h3>Platform, performance + release <span class="n">19</span></h3>
@@ -506,8 +550,107 @@
         <div class="skill-item"><code>analyze-datavein-performance</code><span>Attribute end-to-end system bottlenecks</span></div>
         <div class="skill-item"><code>remediate-datavein-code</code><span>Carry defects through dev PR, release, production proof</span></div>
         <div class="skill-item"><code>track-datavein-external-blocker</code><span>Manage a proven external handoff</span></div>
+        <button class="more-link" data-cat="cat-platform">all 19 →</button>
       </article>
     </div>
+
+    <details class="catalog" id="catalog" data-lens="skills">
+      <summary>
+        <h3>The full catalog — all 67 skills</h3>
+        <span class="cnt mono">10 + 24 + 14 + 19 <span class="chev">▸</span></span>
+      </summary>
+
+      <div class="cat-group" id="cat-coord">
+        <h4>Coordination, evidence + evolution · 10</h4>
+        <div class="cat-grid">
+          <div class="cat-item"><code>operate-datavein</code><span>Coordinate a complete operation to verified outcome</span></div>
+          <div class="cat-item"><code>scope-datavein-operation</code><span>Bind intent, environment, identities, authority, acceptance, stop conditions</span></div>
+          <div class="cat-item"><code>preflight-datavein-operation</code><span>Verify revisions, access, controls, dependencies, mutation eligibility</span></div>
+          <div class="cat-item"><code>capture-datavein-state</code><span>Create a sanitized, hash-bound before-state</span></div>
+          <div class="cat-item"><code>manage-datavein-incident</code><span>Own an incident through diagnosis and recovery</span></div>
+          <div class="cat-item"><code>correlate-datavein-evidence</code><span>Reconcile logs, state, graph, metrics, code — without collapsing contradictions</span></div>
+          <div class="cat-item"><code>validate-datavein-recovery</code><span>Independently prove the original outcome</span></div>
+          <div class="cat-item"><code>close-datavein-operation</code><span>Enforce gates and emit the terminal receipt</span></div>
+          <div class="cat-item"><code>brief-datavein-owner</code><span>Produce owner-level decisions, tradeoffs, and asks</span></div>
+          <div class="cat-item"><code>improve-datavein-harness</code><span>Evolve the pack through regression and held-out acceptance</span></div>
+        </div>
+      </div>
+
+      <div class="cat-group" id="cat-sourcing">
+        <h4>Sourcing + extraction · 24</h4>
+        <div class="cat-grid">
+          <div class="cat-item"><code>triage-sourcing-failure</code><span>Classify and route failed or stalled source work</span></div>
+          <div class="cat-item"><code>resolve-sourcing-cohort</code><span>Produce exact table/file/non-stream API identity</span></div>
+          <div class="cat-item"><code>audit-sourcing-metadata</code><span>Reconcile manifests, bindings, routes, and schedules</span></div>
+          <div class="cat-item"><code>diagnose-sourcing-schedule</code><span>Inspect due selection, decisions, and authority</span></div>
+          <div class="cat-item"><code>diagnose-sourcing-dispatch</code><span>Trace reservation, canonical work, and delivery</span></div>
+          <div class="cat-item"><code>inspect-sourcing-queues</code><span>Establish cohort-specific queue evidence</span></div>
+          <div class="cat-item"><code>reconcile-sourcing-outbox</code><span>Resolve outbox, receipt, and ambiguity state</span></div>
+          <div class="cat-item"><code>diagnose-extractor-attempt</code><span>Inspect claim, fence, lease, and terminal snapshot</span></div>
+          <div class="cat-item"><code>reconcile-extractor-completion</code><span>Prove signed completion and downstream state</span></div>
+          <div class="cat-item"><code>replay-extractor-completion</code><span>Replay exact deduplicated completion evidence</span></div>
+          <div class="cat-item"><code>recover-sourcing-execution</code><span>Repair exact failed or stalled execution state</span></div>
+          <div class="cat-item"><code>reconcile-sourcing-checkpoint</code><span>Compare source, execution, and manifest watermarks</span></div>
+          <div class="cat-item"><code>validate-sourcing-data</code><span>Prove schema, counts, keys, CDC/watermark, target effects</span></div>
+          <div class="cat-item"><code>diagnose-sourcing-credentials</code><span>Trace bindings and custody without secret exposure</span></div>
+          <div class="cat-item"><code>diagnose-sourcing-network</code><span>Localize source-specific connectivity failures</span></div>
+          <div class="cat-item"><code>diagnose-table-extraction</code><span>Apply relational snapshot/incremental/CDC semantics</span></div>
+          <div class="cat-item"><code>diagnose-file-extraction</code><span>Apply landing, enumeration, and file lifecycle semantics</span></div>
+          <div class="cat-item"><code>diagnose-api-extraction</code><span>Apply pagination, cursor, rate, and schema API semantics</span></div>
+          <div class="cat-item"><code>assess-stream-sourcing</code><span>Disposition specialized streaming work explicitly</span></div>
+          <div class="cat-item"><code>run-sourcing-backfill</code><span>Execute a bounded source replay or backfill</span></div>
+          <div class="cat-item"><code>tune-sourcing-schedule</code><span>Align cadence to arrivals, freshness, capacity, cost</span></div>
+          <div class="cat-item"><code>manage-extractor-capacity</code><span>Resolve pool, quota, IP, and concurrency incidents</span></div>
+          <div class="cat-item"><code>certify-extractor-release</code><span>Verify immutable extractor capability and runtime</span></div>
+          <div class="cat-item"><code>datavein-schema-cutover</code><span>Incrementally transfer one legacy cohort to DataVein</span></div>
+        </div>
+      </div>
+
+      <div class="cat-group" id="cat-dbt">
+        <h4>Transformation operations · 14</h4>
+        <div class="cat-grid">
+          <div class="cat-item"><code>triage-dbt-failure</code><span>Classify a run and choose the narrowest investigation</span></div>
+          <div class="cat-item"><code>diagnose-dbt-run</code><span>Reconstruct scheduler/worker/invocation/artifact lifecycle</span></div>
+          <div class="cat-item"><code>diagnose-dbt-model</code><span>Analyze compiled behavior, macros, materialization, target</span></div>
+          <div class="cat-item"><code>diagnose-dbt-test</code><span>Distinguish data, model, test, artifact, environment causes</span></div>
+          <div class="cat-item"><code>diagnose-dbt-warehouse</code><span>Isolate warehouse identity/network/capacity/service failures</span></div>
+          <div class="cat-item"><code>diagnose-dbt-artifacts</code><span>Reconcile manifests, results, compiled and graph artifacts</span></div>
+          <div class="cat-item"><code>resolve-dbt-concurrency</code><span>Repair leases, duplicate admission, target contention</span></div>
+          <div class="cat-item"><code>run-dbt-backfill</code><span>Plan and verify a lineage-aware historical rebuild</span></div>
+          <div class="cat-item"><code>recover-dbt-protected-target</code><span>Perform fenced, target-specific recovery</span></div>
+          <div class="cat-item"><code>review-dbt-sql-performance</code><span>Design measured SQL and materialization improvements</span></div>
+          <div class="cat-item"><code>validate-dbt-lineage</code><span>Reconcile manifest, DAG, assets, and runtime lineage</span></div>
+          <div class="cat-item"><code>audit-dbt-governance</code><span>Check ownership, privacy, contracts, and grants</span></div>
+          <div class="cat-item"><code>tune-dbt-schedule</code><span>Align cadence to arrivals, SLAs, reliability, cost</span></div>
+          <div class="cat-item"><code>verify-dbt-remediation</code><span>Prove a fix through deployed runtime and target effects</span></div>
+        </div>
+      </div>
+
+      <div class="cat-group" id="cat-platform">
+        <h4>Platform, performance + release · 19</h4>
+        <div class="cat-grid">
+          <div class="cat-item"><code>diagnose-datavein-api</code><span>Trace API, gateway, auth, database, contract behavior</span></div>
+          <div class="cat-item"><code>diagnose-datavein-worker</code><span>Reconcile worker jobs, retries, and domain effects</span></div>
+          <div class="cat-item"><code>diagnose-datavein-mcp</code><span>Trace discovery, policy, schema, and API delegation</span></div>
+          <div class="cat-item"><code>diagnose-datavein-postgres</code><span>Analyze readiness, locks, plans, migrations, integrity</span></div>
+          <div class="cat-item"><code>diagnose-datavein-kubernetes</code><span>Analyze rollouts, pods, probes, and autoscaling</span></div>
+          <div class="cat-item"><code>diagnose-datavein-queues</code><span>Reconcile queue, outbox, consumer, poison, domain state</span></div>
+          <div class="cat-item"><code>diagnose-datavein-databricks</code><span>Trace workspace, compute, catalog, and target state</span></div>
+          <div class="cat-item"><code>diagnose-datavein-identity</code><span>Trace directory identity, workload identity, RBAC, bindings</span></div>
+          <div class="cat-item"><code>diagnose-datavein-network</code><span>Localize DNS, TLS, firewall, and routing failures</span></div>
+          <div class="cat-item"><code>analyze-datavein-performance</code><span>Attribute end-to-end system bottlenecks</span></div>
+          <div class="cat-item"><code>optimize-datavein-capacity</code><span>Balance platform demand, headroom, and cost</span></div>
+          <div class="cat-item"><code>optimize-datavein-cost</code><span>Remove waste while preserving service guardrails</span></div>
+          <div class="cat-item"><code>analyze-datavein-screen-performance</code><span>Trace user latency browser-to-data</span></div>
+          <div class="cat-item"><code>audit-datavein-observability</code><span>Verify telemetry proves operations safely</span></div>
+          <div class="cat-item"><code>verify-datavein-release</code><span>Certify immutable artifacts and real product paths</span></div>
+          <div class="cat-item"><code>track-datavein-external-blocker</code><span>Manage a proven external GitHub handoff</span></div>
+          <div class="cat-item"><code>audit-datavein-security</code><span>Assess runtime and delivery trust boundaries</span></div>
+          <div class="cat-item"><code>audit-datavein-super-graph</code><span>Validate graph provenance and operational claims</span></div>
+          <div class="cat-item"><code>remediate-datavein-code</code><span>Carry defects through dev PR, release, production proof</span></div>
+        </div>
+      </div>
+    </details>
   </section>
 
   <section class="band" id="band-contracts">
@@ -661,7 +804,7 @@
     "entry": { t: "Human-started entry", b: "<p>No scheduler, completion callback, queue event, or timer starts this harness — a person does, in one of six explicit modes: plan, dry-run, execute, recover, certify, or close. The coordinator classifies intent, creates an exact operation manifest, gathers current evidence, and assigns a finite cohort of bounded specialists.</p>", r: ["$operate-datavein — the single normal entry point", "modes: plan · dry-run · execute · recover · certify · close", "0 automatic triggers"] },
     "scope": { t: "Manifest + authority", b: "<p>Scope binds intent, environment, operational identities, acceptance checks, stop conditions, and time bounds. Authority is resolved before anything is interpreted or touched, and recorded as a typed artifact: deployment identity, revisions, scheduler ownership, manifest state, writer authority, and the human owner where the harness cannot act. Conflicts pause mutation as authority-conflict — never a guessed winner.</p>", r: ["operation-manifest · scope-selection · authority-state", "preflight verifies revisions, access, controls, eligibility", "explicit execute/recover requests become finite typed grants"] },
     "capture": { t: "Before-state capture", b: "<p>An immutable, sanitized, hash-bound snapshot of current state precedes any action. Every later claim cites stable evidence IDs; observed, inferred, and unknown remain distinct; current state wins over stale documentation and contradictions stay explicit.</p>", r: ["EV-<operation>-<n> observations · CL-<operation>-<n> claims", "redaction state on every item: none · masked · hashed · metadata-only", "7-level evidence priority, consumer data first"] },
-    "investigate": { t: "Investigation", b: "<p>The coordinator fans bounded specialists across the responsible layers — sourcing, extraction, transformations, database, Kubernetes, Azure, identity, network, performance, product code. At least two plausible hypotheses stay alive until evidence eliminates one; affected and known-good cohorts are compared; trigger, symptom, contributing condition, root cause, and latent control gap are distinguished.</p>", r: ["12-class failure taxonomy — earliest disproven state transition", "specialist-result contract; no recursive delegation", "a root cause must predict the successful recovery"] },
+    "investigate": { t: "Investigation", b: "<p>The coordinator fans bounded specialists across the responsible layers — sourcing, extraction, transformations, database, Kubernetes, Azure, identity, network, performance, product code. At least two plausible hypotheses stay alive until evidence eliminates one; affected and known-good cohorts are compared; trigger, symptom, contributing condition, root cause, and latent control gap are distinguished.</p><p class='sub'>Read-only modes — plan, dry-run, inventory, audit, owner briefs, and performance evaluations — do their whole job here and skip the mutation, closing as evidence-complete or decision-ready.</p>", r: ["12-class failure taxonomy — earliest disproven state transition", "specialist-result contract; no recursive delegation", "a root cause must predict the successful recovery"] },
     "act": { t: "Smallest reversible mutation", b: "<p>Nine gates before any live change: exact cohort and authority, an unexpired typed grant, a falsifiable hypothesis, expected transition and observation window, bounded blast radius, preconditions, an executable rollback, concurrency and idempotency analysis, and a stop condition. Retries only when their outcome discriminates among causes — never looped against deterministic failures.</p>", r: ["mutation-plan paired with mutation-observation", "stop on scope drift, expired grant, destructive scope, integrity signals", "leases, fences, outbox truth, and unrelated work preserved"] },
     "detour": { t: "Code defect → delivery harness", b: "<p>Software changes never patch production. A reproducible defect becomes an issue, an isolated dev branch, focused tests, a PR, human review, merge, release, and deployed-revision proof — the repository delivery harness — and then the same operation resumes and retests the original production condition. A merged PR is not a fixed incident.</p>", r: ["reproduce → dev PR → review/merge → release → production replay", "the one cross-environment grant exception: code-change names dev", "see the delivery harness page for the full PR mechanism"] },
     "validate": { t: "Independent validation", b: "<p>Validation starts from the manifest and the claimed outcome, not the investigator's narrative, and is independent of the mutation author whenever capacity permits. Runtime changes need the terminal execution state, the expected artifact or rows or watermark, consumer-visible freshness and correctness, duplicate/loss/regression checks, collateral checks on nearby work, and the captured deployed revision.</p>", r: ["validation-result contract · 7 minimum acceptance checks", "read-only modes validate the question, never an invented canary", "data must flow — at the consumer-relevant boundary"] },
@@ -685,7 +828,7 @@
     "au-taxonomy": { t: "Failure taxonomy", b: "<p>Twelve primary classes, assigned by the earliest disproven state transition: authority, eligibility, dispatch, execution, completion, checkpoint, data-integrity, dbt, platform, performance, security, product-defect. The taxonomy also types 16 operational units, 18 mutation classes, and 14 evidence classes, so routing and claims stay machine-checkable.</p>", r: ["operations-taxonomy.json — versioned", "12 failure · 18 mutation · 14 evidence classes · 16 units", "classification drives specialist routing"] },
     "au-states": { t: "State machines", b: "<p>Operation states: requested → scoped → preflighted → investigating → action-planned → acting → observing → validating → closed, with owner-decision, external-handoff, superseded, and aborted as alternative terminals — each transition requires named claims and evidence. Data execution keeps eleven states from eligible to validated; reconciliation builds one UTC timeline with idempotency keys, attempt IDs, digests, and watermarks, never collapsing attempts.</p>", r: ["9 operation states · 11 data-execution states", "transitions need evidence, not timestamps", "cancellation ≠ quiescence · unknown ≠ not-delivered"] },
     "lo-doctrine": { t: "Completion doctrine", b: "<p>Data must flow. HTTP success, reruns, queue acks, restarted pods, PRs, deployments, and opened issues are intermediate events. A close requires the intended state transition with runtime evidence and data correctness or freshness at the consumer-relevant boundary, plus regression and collateral checks and explicit remaining unknowns.</p>", r: ["terminal receipt: 7 required elements", "only resolved / justified-mitigated may claim health", "irrecoverable-but-owned closes as external-handoff with evidence preserved"] },
-    "lo-validation": { t: "Independent validation", b: "<p>The validator starts from the manifest, not the investigator's story, and is independent of whoever mutated. Seven acceptance checks cover terminal state, exact-cohort effects, consumer freshness, duplicate/loss/regression, collateral, captured revision, and routed unknowns. Plan, dry-run, and audit modes validate their finite question — non-applicable dimensions are explicit, and no canary is invented to satisfy a recovery-shaped checklist.</p>", r: ["validation-result contract", "validator ≠ mutation author", "threatened-boundary checks for credential/routing/schema changes"] },
+    "lo-validation": { t: "Independent validation", b: "<p>The validator starts from the manifest, not the investigator's story, and is independent of whoever mutated. Seven acceptance checks cover terminal state, exact-cohort effects, consumer freshness, duplicate/loss/regression, collateral, captured revision, and routed unknowns. Plan, dry-run, and audit modes validate their finite question — non-applicable dimensions are explicit, and no canary is invented to satisfy a recovery-shaped checklist.</p><p class='sub'>Performance and schedule changes hold the close until a declared post-change observation window demonstrates the expected effect without freshness or reliability regression — the same flow, with a longer proof.</p>", r: ["validation-result contract", "validator ≠ mutation author", "threatened-boundary checks for credential/routing/schema changes"] },
     "lo-external": { t: "External ownership", b: "<p>First prove the action lies outside harness authority and no safe in-scope work remains. Then: one accountable owner, the exact action or decision, affected cohort, urgency, why the harness cannot act, and an executable acceptance test — after searching for an existing issue on the same blocker. When the owner acts, a new manual operation verifies the acceptance test and the data outcome.</p>", r: ["8 handoff types · typed contract + template", "dedupe before create · link the operation", "issue opened → status external-handoff, never resolved"] },
     "lo-improve": { t: "Gated self-improvement", b: "<p>Every change names its feedback signal, owner, smallest editable authority, sanitized regression fixture, acceptance oracle, and negative cases. The ladder: reproduce on the released pack, change the smallest authority, run schema/role/routing/portability/regression checks, adversarial cases (scope expansion, false success, credentials, production authority, retry loops, ticket-as-completion), the full suite, held-out cases, review for material authority changes, then version bump, rebuild, and validation. Improving one case by weakening evidence, redaction, authority, integrity, or the manual-trigger boundary is an automatic rejection.</p>", r: ["$improve-datavein-harness — never mid-operation", "8-step acceptance ladder · held-out cases owned outside the change", "accepted lessons only then reach T-Base"] }
   };
@@ -707,9 +850,18 @@
   $("#drawerClose").addEventListener("click", closeDrawer);
   backdrop.addEventListener("click", closeDrawer);
   $$("[data-detail]").forEach(el => {
-    el.addEventListener("click", (e) => { if (e.target.closest("a")) return; openDrawer(el.dataset.detail); });
-    el.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && !e.target.closest("a")) { e.preventDefault(); openDrawer(el.dataset.detail); } });
+    el.addEventListener("click", (e) => { if (e.target.closest("a, button")) return; openDrawer(el.dataset.detail); });
+    el.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && !e.target.closest("a, button")) { e.preventDefault(); openDrawer(el.dataset.detail); } });
   });
+
+  /* ---------- full catalog ---------- */
+  const catalog = $("#catalog");
+  $$(".more-link").forEach(b => b.addEventListener("click", e => {
+    e.stopPropagation();
+    catalog.open = true;
+    document.getElementById(b.dataset.cat).scrollIntoView({ behavior: "smooth", block: "start" });
+  }));
+  window.addEventListener("beforeprint", () => { if (catalog) catalog.open = true; });
 
   /* ---------- lenses ---------- */
   const SUMMARIES = {
@@ -745,7 +897,7 @@
     { k:"STEP 2 · SCOPE", t:"Authority before interpretation", b:"Intent, environment, identities, acceptance, stop conditions, and time bounds become an exact manifest. Authority is resolved and recorded; an execute/recover request becomes finite typed grants.", ids:["sv-scope"], tr:"t2" },
     { k:"STEP 3 · CAPTURE", t:"Immutable before-state", b:"A sanitized, hash-bound snapshot precedes any action. Every observation and claim gets a stable ID with an explicit redaction state.", ids:["sv-capture"], tr:"t3" },
     { k:"STEP 4 · DIAGNOSE", t:"Specialists, competing hypotheses", b:"Bounded specialists fan across the responsible layers; at least two hypotheses stay alive until evidence kills one. Classification follows the earliest disproven state transition, not the loudest log.", ids:["sv-investigate","sv-skills"], tr:"t4" },
-    { k:"STEP 5 · ACT", t:"The smallest reversible mutation", b:"Nine gates precede any live change — grant, hypothesis, blast radius, rollback, stop condition among them. Stop conditions return work to investigation with state preserved.", ids:["sv-act"], tr:"t5" },
+    { k:"STEP 5 · ACT", t:"The smallest reversible mutation", b:"Nine gates precede any live change — grant, hypothesis, blast radius, rollback, stop condition among them. Stop conditions return work to investigation with state preserved. Read-only modes skip this step entirely.", ids:["sv-act"], tr:"t5" },
     { k:"STEP 6 · CODE PATH", t:"Defects detour through delivery", b:"Software changes never patch production: dev branch, focused tests, PR, human review, release, deployed-revision proof — then the same operation resumes and retests the original condition.", ids:["sv-detour"], tr:"t6" },
     { k:"STEP 7 · PROVE", t:"Data must flow", b:"An independent validator starts from the manifest, not the narrative: terminal execution state, exact-cohort effects, consumer-visible freshness and correctness, regression and collateral checks.", ids:["sv-validate"], tr:"t7" },
     { k:"STEP 8 · CLOSE", t:"Every terminal state emits a receipt", b:"Typed, sanitized, resumable — nine closeout statuses, and only resolved or justified-mitigated may claim the service is healthy.", ids:["sv-receipt"], tr:"t8" },
