@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="DataVein operations harness — 67 manual skills that drive an operation to independently verified data flow under typed grants and human control.">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+<title>DataVein Operations Harness</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #F4F6F5;
+    --surface: #FFFFFF;
+    --surface-2: #ECF0EE;
+    --ink: #1A2422;
+    --muted: #5C6B67;
+    --line: #D3DBD8;
+    --line-strong: #A8B5B1;
+    --accent: #0E8A7B;
+    --accent-soft: #DCEEEA;
+    --human: #8A5F00;
+    --human-soft: #F3E8CE;
+    --cyber: #5F4EB3;
+    --cyber-soft: #E6E1F6;
+    --fail: #A8402B;
+    --fail-soft: #F4E0DA;
+    --shadow: 0 10px 30px rgb(26 36 34 / 8%);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #101615;
+      --surface: #17201E;
+      --surface-2: #1D2826;
+      --ink: #E6ECE9;
+      --muted: #97A6A1;
+      --line: #2A3835;
+      --line-strong: #465652;
+      --accent: #46C7B4;
+      --accent-soft: #143430;
+      --human: #E0AC48;
+      --human-soft: #33270E;
+      --cyber: #A79BE8;
+      --cyber-soft: #252039;
+      --fail: #E08A72;
+      --fail-soft: #38190F;
+      --shadow: 0 10px 30px rgb(0 0 0 / 35%);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #101615;
+    --surface: #17201E;
+    --surface-2: #1D2826;
+    --ink: #E6ECE9;
+    --muted: #97A6A1;
+    --line: #2A3835;
+    --line-strong: #465652;
+    --accent: #46C7B4;
+    --accent-soft: #143430;
+    --human: #E0AC48;
+    --human-soft: #33270E;
+    --cyber: #A79BE8;
+    --cyber-soft: #252039;
+    --fail: #E08A72;
+    --fail-soft: #38190F;
+    --shadow: 0 10px 30px rgb(0 0 0 / 35%);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  h1, h2, h3, p { margin: 0; }
+  h1, h2 { font-family: "Saira", "IBM Plex Sans", sans-serif; text-wrap: balance; }
+  code, .mono { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  a { color: var(--accent); }
+
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- header ---------- */
+  header.hero { padding: 44px 0 8px; }
+  .kicker {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .kicker-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+  .kicker a { color: inherit; text-decoration: none; }
+  .kicker a:hover, .kicker a:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+  .exec-link { font-size: 13px; font-weight: 600; text-decoration: none; }
+  .exec-link:hover, .exec-link:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+  h1 { font-size: clamp(30px, 4.4vw, 44px); font-weight: 700; line-height: 1.08; margin-top: 6px; }
+  .deck { max-width: 74ch; margin-top: 12px; color: var(--muted); font-size: 16px; }
+  .deck strong { color: var(--ink); font-weight: 600; }
+
+  .stats {
+    display: flex; flex-wrap: wrap; gap: 10px 26px;
+    margin-top: 22px; padding: 14px 0;
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  }
+  .stat { display: flex; align-items: baseline; gap: 8px; }
+  .stat b {
+    font-family: "Saira", sans-serif; font-size: 22px; font-weight: 700;
+    font-variant-numeric: tabular-nums; color: var(--accent);
+  }
+  .stat.human b { color: var(--human); }
+  .stat.cyber b { color: var(--cyber); }
+  .stat span { font-size: 12.5px; color: var(--muted); }
+
+  /* ---------- schematic ---------- */
+  figure.schematic { margin: 26px 0 0; }
+  .schematic-frame {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 18px 14px 8px;
+    overflow-x: auto;
+  }
+  .schematic svg { display: block; min-width: 980px; width: 100%; height: auto; }
+  figcaption { margin-top: 10px; font-size: 12.5px; color: var(--muted); max-width: 96ch; }
+
+  svg .node rect, svg .node polygon { fill: var(--surface-2); stroke: var(--line-strong); stroke-width: 1.2; }
+  svg .node { cursor: pointer; transition: opacity 160ms ease; }
+  svg .node:hover rect, svg .node:hover polygon, svg .node:focus-visible rect { stroke: var(--accent); stroke-width: 1.6; }
+  svg .node:focus-visible { outline: none; }
+  svg text { font-family: "IBM Plex Sans", sans-serif; fill: var(--ink); }
+  svg .t { font-size: 12.5px; font-weight: 600; }
+  svg .s { font-size: 10.5px; fill: var(--muted); }
+  svg .k { font-family: "IBM Plex Mono", monospace; font-size: 9px; letter-spacing: 0.1em; fill: var(--muted); }
+  svg .edge { stroke: var(--line-strong); stroke-width: 1.3; fill: none; }
+  svg .edge-label { font-size: 10px; fill: var(--muted); }
+  svg .gate rect { stroke: var(--accent); fill: var(--accent-soft); }
+  svg .gate.cyber rect { stroke: var(--cyber); fill: var(--cyber-soft); }
+  svg .human-node polygon, svg .human-edge rect { stroke: var(--human); fill: var(--human-soft); stroke-width: 1.6; }
+  svg .human-node .t { fill: var(--human); }
+  svg .dashed-node rect { stroke-dasharray: 5 4; }
+  svg .rail rect { fill: var(--accent-soft); stroke: var(--accent); opacity: 0.85; }
+  svg .fail-path { stroke: var(--fail); stroke-width: 1.4; fill: none; stroke-dasharray: 2 3; }
+  svg .fail-label { fill: var(--fail); font-size: 10px; }
+  svg .learn-path { stroke: var(--cyber); stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; }
+  svg .learn-label { fill: var(--cyber); font-size: 10px; }
+  svg marker path { fill: var(--line-strong); }
+  svg marker.m-fail path { fill: var(--fail); }
+  svg marker.m-learn path { fill: var(--cyber); }
+  svg .dim { opacity: 0.16; }
+
+  /* ---------- toolbar ---------- */
+  .toolbar {
+    position: sticky; top: 0; z-index: 30;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    margin-top: 30px;
+  }
+  .toolbar-inner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 0; }
+  .toolbar .label {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+    margin-right: 4px;
+  }
+  .chip {
+    border: 1px solid var(--line-strong); border-radius: 999px;
+    background: var(--surface); color: var(--ink);
+    padding: 4px 14px; font-size: 13px;
+  }
+  .chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .chip.human-chip[aria-pressed="true"] { background: var(--human); border-color: var(--human); color: var(--bg); }
+  .chip:focus-visible, .trace-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .trace-btn {
+    margin-left: auto;
+    border: 1px solid var(--accent); border-radius: 999px;
+    background: var(--accent); color: var(--bg);
+    padding: 4px 16px; font-size: 13px; font-weight: 600;
+  }
+  .lens-note { width: 100%; font-size: 12.5px; color: var(--muted); padding-bottom: 8px; display: none; }
+  .lens-note.show { display: block; }
+
+  /* ---------- bands ---------- */
+  section.band { padding: 40px 0 6px; }
+  .band-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; border-bottom: 2px solid var(--ink); padding-bottom: 8px; }
+  .band-head h2 { font-size: 21px; font-weight: 700; }
+  .band-head .note { font-size: 12.5px; color: var(--muted); text-align: right; max-width: 46ch; }
+  .band-grid { display: grid; gap: 12px; margin-top: 16px; }
+  .g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 15px;
+    transition: opacity 160ms ease, border-color 160ms ease;
+  }
+  .card.dim { opacity: 0.16; }
+  .card.lit { border-color: var(--accent); }
+  .card.inspectable { cursor: pointer; }
+  .card.inspectable:hover, .card.inspectable:focus-visible { border-color: var(--accent); outline: none; }
+  .card h3 { font-size: 14px; font-weight: 600; display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .card h3 code, .card h3 .n { font-size: 11px; color: var(--muted); font-weight: 400; }
+  .card p { margin-top: 6px; font-size: 12.5px; color: var(--muted); }
+  .card .proof { margin-top: 9px; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink); border-top: 1px dashed var(--line); padding-top: 7px; }
+  .card.tone-human { border-left: 3px solid var(--human); }
+  .card.tone-cyber { border-left: 3px solid var(--cyber); }
+  .card.tone-accent { border-left: 3px solid var(--accent); }
+  .card.dashed { border-style: dashed; }
+
+  .skill-item { border-top: 1px solid var(--line); padding: 7px 0 0; margin-top: 7px; }
+  .skill-item:first-of-type { border-top: 0; margin-top: 9px; padding-top: 0; }
+  .skill-item code { font-size: 12px; font-weight: 500; }
+  .skill-item span { display: block; font-size: 11.5px; color: var(--muted); }
+
+  .chips-inline { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 9px; }
+  .chips-inline span {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px;
+    border: 1px solid var(--line-strong); border-radius: 999px; padding: 2px 9px;
+    color: var(--muted);
+  }
+
+  .keys-strip { margin-top: 18px; border: 1px solid var(--human); border-radius: 12px; background: var(--human-soft); padding: 13px 16px; }
+  .keys-strip h3 { font-size: 13px; color: var(--human); font-weight: 600; }
+  .keys-strip ol { margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 8px; list-style: none; counter-reset: key; }
+  .keys-strip li {
+    counter-increment: key;
+    font-size: 12px; border: 1px solid var(--human); border-radius: 999px;
+    background: var(--surface); padding: 3px 11px;
+  }
+  .keys-strip li::before { content: counter(key, decimal-leading-zero) " "; font-family: "IBM Plex Mono", monospace; font-size: 10px; color: var(--human); }
+
+  /* ---------- drawer ---------- */
+  .backdrop { position: fixed; inset: 0; background: rgb(0 0 0 / 30%); z-index: 40; display: none; }
+  .backdrop.open { display: block; }
+  .drawer {
+    position: fixed; top: 0; right: 0; bottom: 0; z-index: 50;
+    width: min(440px, 92vw);
+    background: var(--surface);
+    border-left: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    transform: translateX(102%);
+    transition: transform 220ms ease;
+    display: flex; flex-direction: column;
+  }
+  .drawer.open { transform: none; }
+  .drawer-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 22px 12px; border-bottom: 1px solid var(--line); }
+  .drawer-head h3 { font-family: "Saira", sans-serif; font-size: 18px; font-weight: 600; }
+  .drawer-close { border: 1px solid var(--line-strong); background: var(--surface-2); border-radius: 8px; padding: 2px 10px; font-size: 13px; }
+  .drawer-body { padding: 16px 22px 28px; overflow-y: auto; font-size: 13.5px; }
+  .drawer-body p { margin: 0 0 10px; color: var(--ink); }
+  .drawer-body p.sub { color: var(--muted); }
+  .drawer-body .receipts { margin: 14px 0 0; border-top: 1px dashed var(--line); padding-top: 10px; }
+  .drawer-body .receipts h4 { margin: 0 0 6px; font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .drawer-body .receipts ul { margin: 0; padding-left: 0; list-style: none; }
+  .drawer-body .receipts li { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; padding: 3px 0; overflow-wrap: anywhere; }
+  .drawer-body .receipts li::before { content: "▸ "; color: var(--accent); }
+
+  /* ---------- trace hud ---------- */
+  .trace-hud {
+    position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
+    z-index: 45; width: min(680px, calc(100vw - 32px));
+    background: var(--surface); border: 1px solid var(--accent); border-radius: 14px;
+    box-shadow: var(--shadow); padding: 14px 18px; display: none;
+  }
+  .trace-hud.open { display: block; }
+  .trace-hud .step-k { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.08em; }
+  .trace-hud h3 { font-size: 15px; margin-top: 2px; }
+  .trace-hud p { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .trace-hud .row { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+  .trace-hud .row .spacer { flex: 1; font-size: 11.5px; color: var(--muted); }
+  .trace-hud button { border: 1px solid var(--line-strong); background: var(--surface-2); border-radius: 8px; padding: 3px 12px; font-size: 13px; }
+  .trace-hud button.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 600; }
+
+  /* ---------- legend + footer ---------- */
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 36px; font-size: 12px; color: var(--muted); align-items: center; }
+  .legend .sw { display: inline-block; width: 14px; height: 8px; border-radius: 2px; margin-right: 6px; vertical-align: baseline; }
+  footer { margin-top: 26px; padding: 16px 0 44px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+
+  @media (max-width: 960px) {
+    .g4, .g3 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .band-head { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .band-head .note { text-align: left; }
+  }
+  @media (max-width: 620px) {
+    .g4, .g3 { grid-template-columns: 1fr; }
+    .trace-btn { margin-left: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .drawer, .card, svg .node { transition: none; }
+  }
+  @media print {
+    .toolbar, .trace-hud, .drawer, .backdrop { display: none !important; }
+    .schematic-frame { box-shadow: none; }
+    section.band { break-inside: avoid; }
+    body { background: #fff; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker-row"><div class="kicker"><a href="../">DataVein</a> · Operations harness</div><a class="exec-link" href="../../orcha/harness/">Delivery harness →</a></div>
+    <h1>How an operation earns its close</h1>
+    <p class="deck"><strong>Data must flow.</strong> A retry, a green status, a restarted pod, or an opened ticket is an intermediate event — 67 manual skills drive each operation to <strong>independently verified data flow</strong>, or to a precisely owned blocker, under typed grants with a human hand on every consequential call.</p>
+    <div class="stats" aria-label="Harness at a glance">
+      <div class="stat"><b>67</b><span>manual skills</span></div>
+      <div class="stat"><b>21</b><span>specialist role contracts</span></div>
+      <div class="stat"><b>18</b><span>closed evidence contracts</span></div>
+      <div class="stat cyber"><b>12</b><span>failure classes</span></div>
+      <div class="stat"><b>6</b><span>operation modes</span></div>
+      <div class="stat human"><b>0</b><span>automatic triggers — human-started, always</span></div>
+    </div>
+  </header>
+
+  <figure class="schematic">
+    <div class="schematic-frame">
+    <svg viewBox="0 0 1180 500" role="img" aria-label="Flow of one operation: a human starts the harness in one of six modes; scope and authority are resolved into typed grants; an immutable before-state is captured; specialists investigate competing hypotheses; the smallest reversible mutation runs under stop conditions, with code defects detouring through the delivery harness and resuming; independent validation proves data flow; every close emits a typed receipt, or ends in an owner decision or external handoff; accepted lessons feed T-Base and gated pack improvement back into the skills.">
+      <defs>
+        <marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z"/></marker>
+        <marker id="ah-fail" class="m-fail" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z"/></marker>
+        <marker id="ah-learn" class="m-learn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z"/></marker>
+      </defs>
+
+      <!-- skills rail -->
+      <g class="node rail" id="sv-skills" data-detail="skills-rail" data-lens="skills loop" tabindex="0" role="button" aria-label="Skill catalog">
+        <rect x="24" y="20" width="656" height="30" rx="8"/>
+        <text x="38" y="39" class="t">67 manual skills</text>
+        <text x="172" y="39" class="s">one coordinator routes 66 bounded specialists · direct invocation only when scope is already precise</text>
+      </g>
+
+      <!-- code detour -->
+      <g class="node dashed-node" id="sv-detour" data-detail="detour" data-lens="loop" tabindex="0" role="button" aria-label="Code defect detour through the delivery harness">
+        <rect x="800" y="58" width="200" height="44" rx="9"/>
+        <text x="812" y="70" class="k">CODE DEFECT</text>
+        <text x="812" y="84" class="t">Delivery harness</text>
+        <text x="812" y="96" class="s">dev PR · human merge · release</text>
+      </g>
+
+      <!-- main flow -->
+      <g class="node human-edge" id="sv-entry" data-detail="entry" data-lens="human loop" tabindex="0" role="button" aria-label="Human-started entry">
+        <rect x="24" y="118" width="150" height="64" rx="10"/>
+        <text x="36" y="136" class="k">HUMAN-STARTED</text>
+        <text x="36" y="154" class="t">$operate-datavein</text>
+        <text x="36" y="170" class="s">plan · dry-run · execute …</text>
+      </g>
+      <line class="edge" x1="174" y1="150" x2="194" y2="150" marker-end="url(#ah)"/>
+
+      <g class="node" id="sv-scope" data-detail="scope" data-lens="authority" tabindex="0" role="button" aria-label="Scope and authority">
+        <rect x="196" y="118" width="150" height="64" rx="10"/>
+        <text x="208" y="136" class="k">01 · SCOPE</text>
+        <text x="208" y="154" class="t">Manifest + authority</text>
+        <text x="208" y="170" class="s">typed grants · stop rules</text>
+      </g>
+      <line class="edge" x1="346" y1="150" x2="366" y2="150" marker-end="url(#ah)"/>
+
+      <g class="node" id="sv-capture" data-detail="capture" data-lens="evidence" tabindex="0" role="button" aria-label="Before-state capture">
+        <rect x="368" y="118" width="140" height="64" rx="10"/>
+        <text x="380" y="136" class="k">02 · CAPTURE</text>
+        <text x="380" y="154" class="t">Before-state</text>
+        <text x="380" y="170" class="s">immutable · hash-bound</text>
+      </g>
+      <line class="edge" x1="508" y1="150" x2="528" y2="150" marker-end="url(#ah)"/>
+
+      <g class="node" id="sv-investigate" data-detail="investigate" data-lens="skills evidence" tabindex="0" role="button" aria-label="Investigation by specialist cohort">
+        <rect x="546" y="102" width="144" height="64" rx="10" opacity="0.45"/>
+        <rect x="538" y="110" width="144" height="64" rx="10" opacity="0.7"/>
+        <rect x="530" y="118" width="144" height="64" rx="10"/>
+        <text x="542" y="136" class="k">03 · DIAGNOSE</text>
+        <text x="542" y="154" class="t">Investigate</text>
+        <text x="542" y="170" class="s">≥2 live hypotheses</text>
+      </g>
+      <line class="edge" x1="690" y1="150" x2="710" y2="150" marker-end="url(#ah)"/>
+
+      <g class="node" id="sv-act" data-detail="act" data-lens="authority loop" tabindex="0" role="button" aria-label="Smallest reversible mutation">
+        <rect x="712" y="118" width="160" height="64" rx="10"/>
+        <text x="724" y="136" class="k">04 · ACT</text>
+        <text x="724" y="154" class="t">Smallest reversible</text>
+        <text x="724" y="170" class="s">granted · rollback-ready</text>
+      </g>
+      <line class="edge" x1="872" y1="150" x2="892" y2="150" marker-end="url(#ah)"/>
+
+      <!-- detour arrows -->
+      <line class="edge" x1="820" y1="118" x2="820" y2="104" marker-end="url(#ah)"/>
+      <line class="edge" x1="960" y1="102" x2="960" y2="116" marker-end="url(#ah)"/>
+      <text x="972" y="112" class="edge-label">resume same operation</text>
+
+      <g class="node gate" id="sv-validate" data-detail="validate" data-lens="evidence loop" tabindex="0" role="button" aria-label="Independent validation">
+        <rect x="894" y="118" width="150" height="64" rx="10"/>
+        <text x="906" y="136" class="k">05 · PROVE</text>
+        <text x="906" y="154" class="t">Independent validation</text>
+        <text x="906" y="170" class="s">data must flow</text>
+      </g>
+
+      <!-- stop conditions return -->
+      <path class="fail-path" d="M 780 186 C 740 226, 660 226, 620 190" marker-end="url(#ah-fail)"/>
+      <text x="700" y="232" class="fail-label" text-anchor="middle">stop: scope drift · authority conflict · stale evidence · blast radius → back to investigation</text>
+
+      <!-- terminal fan -->
+      <line class="edge" x1="990" y1="182" x2="1022" y2="296" marker-end="url(#ah)"/>
+      <line class="edge" x1="950" y1="182" x2="790" y2="294" marker-end="url(#ah)"/>
+      <line class="edge" x1="920" y1="182" x2="500" y2="294" marker-end="url(#ah)"/>
+      <text x="1000" y="245" class="edge-label">close</text>
+
+      <g class="node gate" id="sv-receipt" data-detail="receipt" data-lens="evidence loop" tabindex="0" role="button" aria-label="Terminal operation receipt">
+        <rect x="924" y="300" width="200" height="64" rx="10"/>
+        <text x="936" y="318" class="k">EVERY TERMINAL STATE</text>
+        <text x="936" y="336" class="t">Operation receipt</text>
+        <text x="936" y="352" class="s">9 statuses · sanitized · resumable</text>
+      </g>
+
+      <g class="node human-node" id="sv-owner" data-detail="owner" data-lens="human loop" tabindex="0" role="button" aria-label="Owner decision">
+        <polygon points="774,298 864,332 774,366 684,332"/>
+        <text x="774" y="328" class="t" text-anchor="middle">Owner decision</text>
+        <text x="774" y="344" class="s" text-anchor="middle">a named human chooses</text>
+      </g>
+
+      <g class="node gate cyber dashed-node" id="sv-handoff" data-detail="handoff" data-lens="loop" tabindex="0" role="button" aria-label="External handoff">
+        <rect x="384" y="300" width="216" height="64" rx="10"/>
+        <text x="396" y="318" class="k">PROVEN EXTERNAL BLOCKER</text>
+        <text x="396" y="336" class="t">External handoff</text>
+        <text x="396" y="352" class="s">typed issue · acceptance test</text>
+      </g>
+
+      <g class="node dashed-node" id="sv-improve" data-detail="improve" data-lens="skills loop human" tabindex="0" role="button" aria-label="Lessons to T-Base and gated pack improvement">
+        <rect x="84" y="300" width="240" height="64" rx="10"/>
+        <text x="96" y="318" class="k">AFTER ACCEPTANCE</text>
+        <text x="96" y="336" class="t">Lessons → T-Base + pack</text>
+        <text x="96" y="352" class="s">regression + held-out evals · vN+1</text>
+      </g>
+      <path class="learn-path" d="M 924 380 C 800 416, 350 416, 240 368" marker-end="url(#ah-learn)"/>
+      <text x="580" y="410" class="learn-label" text-anchor="middle">accepted, generalizable lessons only</text>
+      <path class="learn-path" d="M 190 300 C 170 200, 130 110, 96 54" marker-end="url(#ah-learn)"/>
+      <text x="108" y="210" class="learn-label">lessons re-arm</text>
+      <text x="108" y="223" class="learn-label">the skills</text>
+
+      <!-- legend -->
+      <g aria-hidden="true">
+        <rect x="24" y="452" width="14" height="8" rx="2" fill="var(--accent)"/>
+        <text x="44" y="460" class="s">evidence / validation</text>
+        <rect x="176" y="452" width="14" height="8" rx="2" fill="var(--human)"/>
+        <text x="196" y="460" class="s">human control</text>
+        <rect x="300" y="452" width="14" height="8" rx="2" fill="var(--cyber)"/>
+        <text x="320" y="460" class="s">safety / handoff</text>
+        <rect x="428" y="452" width="14" height="8" rx="2" fill="var(--fail)"/>
+        <text x="448" y="460" class="s">stop + return</text>
+        <text x="540" y="460" class="s">dashed = conditional path · every node opens its receipts</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>One operation, end to end: a human starts the harness (no scheduler or timer can); scope and authority become typed grants; specialists investigate from an immutable before-state; the smallest reversible mutation runs under explicit stop conditions — code defects detour through the delivery harness and the operation resumes; independent validation proves data actually flows. Every terminal state emits a sanitized, typed receipt; blocked work ends as an owner decision or a precisely owned external handoff, and only accepted lessons flow back into T-Base and the versioned pack.</figcaption>
+  </figure>
+
+  <div class="toolbar" id="toolbar">
+    <div class="wrap toolbar-inner">
+      <span class="label">Lens</span>
+      <button class="chip" data-lens-btn="all" aria-pressed="true">Everything</button>
+      <button class="chip" data-lens-btn="skills" aria-pressed="false">Skills</button>
+      <button class="chip" data-lens-btn="evidence" aria-pressed="false">Evidence + contracts</button>
+      <button class="chip" data-lens-btn="authority" aria-pressed="false">Authority + safety</button>
+      <button class="chip" data-lens-btn="loop" aria-pressed="false">Operation loop</button>
+      <button class="chip human-chip" data-lens-btn="human" aria-pressed="false">Human control</button>
+      <button class="trace-btn" id="traceStart">▶ Trace an operation</button>
+      <div class="lens-note" id="lensNote" aria-live="polite"></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <section class="band" id="band-skills">
+    <div class="band-head">
+      <h2>Skill cohort — 67 manual skills, four families</h2>
+      <span class="note">Every skill is explicit-only in this release. 21 provider-neutral role contracts bound the leaf work: no recursive delegation, and the coordinator owns integration and acceptance.</span>
+    </div>
+    <div class="band-grid g4">
+      <article class="card inspectable" tabindex="0" data-lens="skills loop human" data-detail="sk-coord" data-trace="t1">
+        <h3>Coordination, evidence + evolution <span class="n">10</span></h3>
+        <div class="skill-item"><code>operate-datavein</code><span>Coordinate a complete operation to verified outcome</span></div>
+        <div class="skill-item"><code>capture-datavein-state</code><span>Sanitized, hash-bound before-state</span></div>
+        <div class="skill-item"><code>validate-datavein-recovery</code><span>Independently prove the original outcome</span></div>
+        <div class="skill-item"><code>brief-datavein-owner</code><span>Owner-level decisions, tradeoffs, and asks</span></div>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="skills" data-detail="sk-sourcing" data-trace="t4">
+        <h3>Sourcing + extraction <span class="n">24</span></h3>
+        <div class="skill-item"><code>triage-sourcing-failure</code><span>Classify and route failed or stalled source work</span></div>
+        <div class="skill-item"><code>reconcile-extractor-completion</code><span>Prove signed completion and downstream state</span></div>
+        <div class="skill-item"><code>validate-sourcing-data</code><span>Prove schema, counts, keys, watermarks, target effects</span></div>
+        <div class="skill-item"><code>diagnose-table/file/api-extraction</code><span>Modality-specific extraction semantics</span></div>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="skills" data-detail="sk-dbt" data-trace="t4">
+        <h3>Transformation operations <span class="n">14</span></h3>
+        <div class="skill-item"><code>triage-dbt-failure</code><span>Classify a run; choose the narrowest investigation</span></div>
+        <div class="skill-item"><code>run-dbt-backfill</code><span>Lineage-aware historical rebuild, planned and verified</span></div>
+        <div class="skill-item"><code>recover-dbt-protected-target</code><span>Fenced, target-specific recovery</span></div>
+        <div class="skill-item"><code>verify-dbt-remediation</code><span>Prove a fix through deployed runtime and target effects</span></div>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="skills" data-detail="sk-platform" data-trace="t4">
+        <h3>Platform, performance + release <span class="n">19</span></h3>
+        <div class="skill-item"><code>diagnose-datavein-kubernetes</code><span>Rollouts, pods, probes, autoscaling</span></div>
+        <div class="skill-item"><code>analyze-datavein-performance</code><span>Attribute end-to-end system bottlenecks</span></div>
+        <div class="skill-item"><code>remediate-datavein-code</code><span>Carry defects through dev PR, release, production proof</span></div>
+        <div class="skill-item"><code>track-datavein-external-blocker</code><span>Manage a proven external handoff</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="band" id="band-contracts">
+    <div class="band-head">
+      <h2>Evidence + contracts — 18 closed schemas</h2>
+      <span class="note">Scope, claims, mutations, outcomes, and unknowns are machine-checkable. Observed, inferred, and hypothesis are never interchangeable.</span>
+    </div>
+    <div class="band-grid g4">
+      <article class="card inspectable tone-accent" tabindex="0" data-lens="evidence" data-detail="ct-spine" data-trace="t8">
+        <h3>Operation spine <span class="n">8</span></h3>
+        <p>Manifest, scope selection, claims, evidence ledger, specialist result, validation result, decision log — converging on the terminal receipt.</p>
+        <div class="proof">operation-manifest · operation-claim · operation-receipt …</div>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="evidence authority" data-detail="ct-mutation" data-trace="t5">
+        <h3>Mutation + execution <span class="n">4</span></h3>
+        <p>Every authorized change is a bounded plan paired with an observed result; execution and failure states are typed, never narrated.</p>
+        <div class="proof">mutation-plan · mutation-observation · failure-assessment …</div>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="evidence authority" data-detail="ct-authority" data-trace="t2">
+        <h3>Authority + capacity <span class="n">2</span></h3>
+        <p>Resolved environment authority is a recorded artifact, not an assumption; capacity and efficiency observations are typed the same way.</p>
+        <div class="proof">authority-state · capacity-observation</div>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="evidence loop" data-detail="ct-knowledge" data-trace="t10">
+        <h3>Release, knowledge + handoff <span class="n">4</span></h3>
+        <p>Connector certification and cutover gates for release; typed T-Base updates and external handoffs for everything that leaves the harness.</p>
+        <div class="proof">connector-certification · cutover-gate · knowledge-update · external-handoff</div>
+      </article>
+    </div>
+    <div class="band-grid" style="grid-template-columns: 1fr;">
+      <article class="card inspectable" tabindex="0" data-lens="evidence" data-detail="ct-discipline" data-trace="t3">
+        <h3>Evidence discipline</h3>
+        <p>Stable IDs for every observation and claim (<code>EV-*</code>, <code>CL-*</code>); a seven-level evidence priority from consumer-visible data down to inference; contradictions preserved, never collapsed. Absence from a bounded queue peek is not emptiness; API acceptance is not proof that data changed.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="band" id="band-authority">
+    <div class="band-head">
+      <h2>Authority + safety — typed grants, fail-closed boundaries</h2>
+      <span class="note">Resolve authority before interpreting state or mutating anything. Conflicting signals produce authority-conflict, never a guessed winner.</span>
+    </div>
+    <div class="band-grid g3">
+      <article class="card inspectable tone-cyber" tabindex="0" data-lens="authority" data-detail="au-env" data-trace="t2">
+        <h3>Environment authority</h3>
+        <p>Production is the sole ordinary scheduler/extractor authority; <code>target_environment</code> is a production-only downward override — dev and test can never resolve production from it. Historical runbooks are evidence, not authority.</p>
+      </article>
+      <article class="card inspectable tone-human" tabindex="0" data-lens="authority human" data-detail="au-grants" data-trace="t5">
+        <h3>Production grants</h3>
+        <p>An explicit <em>execute</em> or <em>recover</em> request becomes finite typed grants — no per-step approvals, no reflexive tickets. Mutations stop on a new system or cohort, an expired grant, destructive scope, or any security or data-integrity signal.</p>
+      </article>
+      <article class="card inspectable tone-cyber" tabindex="0" data-lens="authority loop" data-detail="au-code" data-trace="t6">
+        <h3>Code vs. runtime</h3>
+        <p>Runtime recovery may act in production; software changes never do. Code flows through dev, a PR, human review, release, and production verification — the repository <a href="../../orcha/harness/">delivery harness</a> — then the operation resumes and retests the original condition.</p>
+      </article>
+      <article class="card inspectable tone-cyber" tabindex="0" data-lens="authority evidence" data-detail="au-redaction" data-trace="t3">
+        <h3>Redaction boundary</h3>
+        <p>Credentials, tokens, private payloads, and personal data never enter the operation package, T-Base, a prompt, or an issue. Every evidence item is marked <code>none · masked · hashed · metadata-only</code>.</p>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="authority" data-detail="au-taxonomy" data-trace="t4">
+        <h3>Failure taxonomy — 12 classes</h3>
+        <p>Classify by the earliest disproven state transition, not the loudest log line.</p>
+        <div class="chips-inline"><span>authority</span><span>eligibility</span><span>dispatch</span><span>execution</span><span>completion</span><span>checkpoint</span><span>data-integrity</span><span>dbt</span><span>platform</span><span>performance</span><span>security</span><span>product-defect</span></div>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="authority evidence" data-detail="au-states" data-trace="t7">
+        <h3>State machines, kept separate</h3>
+        <p>Nine operation states with evidence-gated transitions; eleven data-execution states from eligible to validated. "Delivery unknown" is distinct from "not delivered"; attempts are never collapsed into one generic run.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="band" id="band-loop">
+    <div class="band-head">
+      <h2>Closeout + learning — the loop that stays honest</h2>
+      <span class="note">Only resolved and justified mitigated states may claim service health. "Ticket opened" never means "incident resolved."</span>
+    </div>
+    <div class="band-grid g4">
+      <article class="card inspectable tone-accent" tabindex="0" data-lens="loop evidence" data-detail="lo-doctrine" data-trace="t7">
+        <h3>Completion doctrine</h3>
+        <p>A terminal receipt needs the exact cohort, runtime completion evidence, and data correctness or freshness at the consumer boundary — plus regression and collateral checks.</p>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="loop evidence" data-detail="lo-validation" data-trace="t7">
+        <h3>Independent validation</h3>
+        <p>The validator is not the mutation author. Seven minimum acceptance checks for any runtime change; read-only modes validate the question answered, never an invented canary.</p>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="loop" data-detail="lo-external" data-trace="t9">
+        <h3>External ownership</h3>
+        <p>Eight handoff types, one accountable owner, an executable acceptance test, and a dedupe search before any new issue. When the owner acts, a new operation verifies the unblock.</p>
+      </article>
+      <article class="card inspectable tone-human" tabindex="0" data-lens="loop skills human" data-detail="lo-improve" data-trace="t10">
+        <h3>Gated self-improvement</h3>
+        <p>The pack never rewrites itself mid-operation. Changes ride an eight-step ladder — regression fixture, adversarial and held-out evals, review, version bump — and are rejected if they weaken evidence, redaction, or authority.</p>
+      </article>
+    </div>
+
+    <div class="keys-strip" data-lens="human loop" data-trace="t9">
+      <h3>The six human keys — automation cannot turn any of them</h3>
+      <ol>
+        <li>Start any operation</li>
+        <li>Grant production execute / recover</li>
+        <li>Owner decisions on material choices</li>
+        <li>Review + merge on the code path</li>
+        <li>Accept pack improvements</li>
+        <li>Curate T-Base knowledge</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="legend" aria-label="Legend">
+    <span><span class="sw" style="background: var(--accent)"></span>evidence / validation</span>
+    <span><span class="sw" style="background: var(--human)"></span>human control</span>
+    <span><span class="sw" style="background: var(--cyber)"></span>safety / handoff</span>
+    <span><span class="sw" style="background: var(--fail)"></span>stop + return</span>
+    <span>dashed = conditional path or gated change</span>
+  </div>
+
+  <footer>
+    <span>Grounded in harness pack <span class="mono">org.datavein.operations v0.2.0</span>: the 67-skill catalog, 21 role contracts, 18 contract schemas, versioned operation/redaction/evolution policies, the operations taxonomy, and 67 synthetic routing cases with adversarial and held-out gates. Companion to the <a href="../../orcha/harness/">delivery harness</a>. Snapshot: 2026-09-03.</span>
+  </footer>
+</div>
+
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+  <div class="drawer-head">
+    <h3 id="drawerTitle"></h3>
+    <button class="drawer-close" id="drawerClose">Esc ✕</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
+
+<div class="trace-hud" id="traceHud" role="dialog" aria-label="Trace an operation">
+  <div class="step-k" id="traceK"></div>
+  <h3 id="traceTitle"></h3>
+  <p id="traceBody"></p>
+  <div class="row">
+    <button id="tracePrev">← Back</button>
+    <button id="traceNext" class="primary">Next →</button>
+    <span class="spacer" id="traceCount"></span>
+    <button id="traceExit">Exit</button>
+  </div>
+</div>
+
+<script>
+(() => {
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+
+  /* ---------- drawer ---------- */
+  const DETAILS = {
+    "skills-rail": { t: "Skill catalog", b: "<p>Sixty-seven manual skills in four families: coordination/evidence/evolution (10), sourcing and extraction (24), transformation operations (14), and platform/performance/release (19). Ordinary work starts with the coordinator; a specialist is invoked directly only when environment, identities, intent, and acceptance are already precise.</p>", r: ["skills/<name>/SKILL.md — explicit-only in this release", "routing verified by 67 synthetic cases", "21 provider-neutral role contracts bound the leaf work"] },
+    "entry": { t: "Human-started entry", b: "<p>No scheduler, completion callback, queue event, or timer starts this harness — a person does, in one of six explicit modes: plan, dry-run, execute, recover, certify, or close. The coordinator classifies intent, creates an exact operation manifest, gathers current evidence, and assigns a finite cohort of bounded specialists.</p>", r: ["$operate-datavein — the single normal entry point", "modes: plan · dry-run · execute · recover · certify · close", "0 automatic triggers"] },
+    "scope": { t: "Manifest + authority", b: "<p>Scope binds intent, environment, operational identities, acceptance checks, stop conditions, and time bounds. Authority is resolved before anything is interpreted or touched, and recorded as a typed artifact: deployment identity, revisions, scheduler ownership, manifest state, writer authority, and the human owner where the harness cannot act. Conflicts pause mutation as authority-conflict — never a guessed winner.</p>", r: ["operation-manifest · scope-selection · authority-state", "preflight verifies revisions, access, controls, eligibility", "explicit execute/recover requests become finite typed grants"] },
+    "capture": { t: "Before-state capture", b: "<p>An immutable, sanitized, hash-bound snapshot of current state precedes any action. Every later claim cites stable evidence IDs; observed, inferred, and unknown remain distinct; current state wins over stale documentation and contradictions stay explicit.</p>", r: ["EV-<operation>-<n> observations · CL-<operation>-<n> claims", "redaction state on every item: none · masked · hashed · metadata-only", "7-level evidence priority, consumer data first"] },
+    "investigate": { t: "Investigation", b: "<p>The coordinator fans bounded specialists across the responsible layers — sourcing, extraction, transformations, database, Kubernetes, Azure, identity, network, performance, product code. At least two plausible hypotheses stay alive until evidence eliminates one; affected and known-good cohorts are compared; trigger, symptom, contributing condition, root cause, and latent control gap are distinguished.</p>", r: ["12-class failure taxonomy — earliest disproven state transition", "specialist-result contract; no recursive delegation", "a root cause must predict the successful recovery"] },
+    "act": { t: "Smallest reversible mutation", b: "<p>Nine gates before any live change: exact cohort and authority, an unexpired typed grant, a falsifiable hypothesis, expected transition and observation window, bounded blast radius, preconditions, an executable rollback, concurrency and idempotency analysis, and a stop condition. Retries only when their outcome discriminates among causes — never looped against deterministic failures.</p>", r: ["mutation-plan paired with mutation-observation", "stop on scope drift, expired grant, destructive scope, integrity signals", "leases, fences, outbox truth, and unrelated work preserved"] },
+    "detour": { t: "Code defect → delivery harness", b: "<p>Software changes never patch production. A reproducible defect becomes an issue, an isolated dev branch, focused tests, a PR, human review, merge, release, and deployed-revision proof — the repository delivery harness — and then the same operation resumes and retests the original production condition. A merged PR is not a fixed incident.</p>", r: ["reproduce → dev PR → review/merge → release → production replay", "the one cross-environment grant exception: code-change names dev", "see the delivery harness page for the full PR mechanism"] },
+    "validate": { t: "Independent validation", b: "<p>Validation starts from the manifest and the claimed outcome, not the investigator's narrative, and is independent of the mutation author whenever capacity permits. Runtime changes need the terminal execution state, the expected artifact or rows or watermark, consumer-visible freshness and correctness, duplicate/loss/regression checks, collateral checks on nearby work, and the captured deployed revision.</p>", r: ["validation-result contract · 7 minimum acceptance checks", "read-only modes validate the question, never an invented canary", "data must flow — at the consumer-relevant boundary"] },
+    "receipt": { t: "Operation receipt", b: "<p>Every terminal state emits a typed, sanitized receipt: exact cohort and environment, intended transition, runtime and data evidence, regression and collateral checks, remaining unknowns, and links to any release or handoff. Nine closeout statuses; only resolved and a justified mitigated may claim service health. The receipt is also the resumability record.</p>", r: ["statuses: resolved · mitigated · evidence-complete · certified · decision-ready · owner-decision · external-handoff · superseded · aborted", "operation-receipt schema — the terminal contract", "no credentials, payloads, or private endpoints, ever"] },
+    "owner": { t: "Owner decision", b: "<p>Material choices the harness cannot make — cost, risk, priority, cross-boundary authority — close as decision-ready or owner-decision: evidence and tradeoffs complete, the call made by a named human, the consequence recorded in the decision log.</p>", r: ["decision-log contract", "owner-brief template: decisions, tradeoffs, asks", "one of the six human keys"] },
+    "handoff": { t: "External handoff", b: "<p>External work is exceptional, not the default resolution. It requires proof the action lies outside harness authority, one accountable owner, the exact requested action, an executable acceptance test, and a dedupe search before any new issue. An opened issue moves the operation to external-handoff — never to resolved — and a new operation later verifies the unblock.</p>", r: ["8 types: firewall · identity · policy · quota · vendor · data owner · partner · other", "external-handoff contract + evidence-safe template", "\"ticket opened\" ≠ \"incident resolved\""] },
+    "improve": { t: "Lessons → T-Base + pack", b: "<p>Two learning channels, both gated. Verified, generalizable lessons — failure signatures with discrimination tests, authority changes, recovery techniques — are curated into T-Base with source receipts. Pack changes ride the eight-step acceptance ladder: reproduce the failure, change the smallest authority, run schema/routing/regression checks, adversarial cases, the full suite, held-out cases, review, then version, rebuild, and validate. Never self-edited mid-operation.</p>", r: ["knowledge-update contract · T-Base holds knowledge, not transactions", "rejected if it weakens evidence, redaction, or authority", "evolution-policy · pack version bump per accepted change"] },
+    "sk-coord": { t: "Coordination, evidence + evolution", b: "<p>Ten skills own the operation itself: coordinate, scope, preflight, capture state, manage incidents, correlate evidence without collapsing contradictions, independently validate, close with gates enforced, brief the owner, and improve the harness through gated evolution.</p>", r: ["operate-datavein · scope/preflight/capture", "correlate-datavein-evidence · validate-datavein-recovery", "close-datavein-operation · brief-datavein-owner · improve-datavein-harness"] },
+    "sk-sourcing": { t: "Sourcing + extraction", b: "<p>Twenty-four skills cover the sourcing pipeline end to end: failure triage, cohort identity, metadata and schedule audits, dispatch and queue evidence, outbox and checkpoint reconciliation, attempt and completion forensics, execution recovery, data validation, credential and network diagnosis, modality-specific semantics for tables, files, and APIs, backfills, schedule tuning, capacity, release certification, and cohort cutover.</p>", r: ["triage → diagnose → reconcile → recover → validate", "modality specialists: table · file · API · stream disposition", "certify-extractor-release · datavein-schema-cutover"] },
+    "sk-dbt": { t: "Transformation operations", b: "<p>Fourteen skills for the transformation layer: run/model/test/warehouse/artifact diagnosis, concurrency and protected-target recovery, lineage validation, governance audits, measured SQL performance work, backfills, schedule tuning, and remediation proof through deployed runtime and target effects.</p>", r: ["triage-dbt-failure picks the narrowest investigation", "recover-dbt-protected-target — fenced recovery", "verify-dbt-remediation — proof, not green checkmarks"] },
+    "sk-platform": { t: "Platform, performance + release", b: "<p>Nineteen skills across the runtime estate: API, worker, MCP, PostgreSQL, Kubernetes, queues, Databricks, identity, and network diagnosis; end-to-end and screen performance attribution; capacity and cost optimization; observability and security audits; graph provenance; release verification; external-blocker tracking; and dev-first code remediation.</p>", r: ["diagnose-datavein-* across 9 platform surfaces", "verify-datavein-release — immutable artifacts, real product paths", "remediate-datavein-code — the bridge to the delivery harness"] },
+    "ct-spine": { t: "Operation spine contracts", b: "<p>Eight schemas carry an operation from intent to close: the manifest binds scope and authority; scope-selection pins exact identities; claims are evidence-backed; the evidence ledger holds every observation; specialist and validation results are typed; the decision log records owner calls; the receipt is the terminal artifact.</p>", r: ["operation-manifest · scope-selection · operation-claim", "operation-evidence · specialist-result · validation-result", "decision-log · operation-receipt"] },
+    "ct-mutation": { t: "Mutation + execution contracts", b: "<p>Every authorized change is a bounded mutation-plan paired with a mutation-observation — plan without observation is unfinished, observation without plan is unauthorized. Execution observations and failure assessments type what happened against the taxonomy instead of narrating it.</p>", r: ["mutation-plan ↔ mutation-observation pairing", "execution-observation · failure-assessment", "18 mutation classes in the operations taxonomy"] },
+    "ct-authority": { t: "Authority + capacity contracts", b: "<p>Authority-state records the resolved environment authority — deployment identity, revisions, ownership, flags, writer authority — as a first-class artifact. Capacity observations type demand, headroom, and cost so optimization claims are as checkable as recovery claims.</p>", r: ["authority-state — resolved before any mutation", "capacity-observation — measured, windowed, attributable"] },
+    "ct-knowledge": { t: "Release, knowledge + handoff contracts", b: "<p>Connector certification and cutover gates type the release path; knowledge-update types what may enter T-Base (with sources and supersessions); external-handoff types what leaves the harness with an owner and an acceptance test.</p>", r: ["connector-certification · cutover-gate", "knowledge-update — durable, sourced, reconciled", "external-handoff — owner + executable unblock test"] },
+    "ct-discipline": { t: "Evidence discipline", b: "<p>Evidence priority when sources conflict: consumer-visible data and immutable artifacts; authoritative persisted state; deployed code and configuration; service logs; repository code at the deployed revision; runbooks and T-Base; inference — in that order, with the losing source preserved, not erased. Claims carry confidence, supporting and contradicting evidence, and a falsification test; a root-cause claim can never remain a hypothesis.</p>", r: ["EV-/CL- stable identifiers", "priority controls the decision; contradictions stay visible", "bounded peeks prove nothing about global emptiness"] },
+    "au-env": { t: "Environment authority", b: "<p>Production is the sole scheduler/extractor authority for ordinary enabled manifests; the manifest's enabled field is the operator control. target_environment routes production work downward only — dev and test always target their own deployment and may never resolve production from a persisted value. Historical runbooks are evidence to reconcile, never current authority.</p>", r: ["prod-only downward routing override", "authority proof: 6 recorded elements per operation", "authority-conflict pauses mutation — no guessed winner"] },
+    "au-grants": { t: "Production grants", b: "<p>When the owner invokes execute or recover for production, that explicit request becomes finite typed grants for the exact systems, actions, mutation classes, and IDs in scope — no repeated per-step approvals, no reflexive ticket because the target is production. Every mutation cites its grant and yields a paired observation; new scope, expired grants, destructive actions, credential disclosure, or integrity signals stop the work.</p>", r: ["finite, typed, expiring grants", "cite-the-grant on every mutation plan", "stop conditions preserve state and return to investigation"] },
+    "au-code": { t: "Code vs. runtime authority", b: "<p>Bounded runtime recovery — a safe retry, replay, checkpoint repair with before/after proof, pod recycle, capacity adjustment with rollback — may run in production under grants. Code changes flow through the delivery harness: dev branch, focused tests, PR, human review, merge, release, deployed-revision proof, production replay, data validation. The code-change grant deliberately names dev while keeping production's selected IDs — the single cross-environment exception.</p>", r: ["runtime: authorized in production · code: never", "delivery harness carries the PR mechanism", "merged ≠ fixed — the operation resumes and reproves"] },
+    "au-redaction": { t: "Redaction boundary", b: "<p>Credentials, bearer tokens, connection strings, keys, cookies, sensitive payloads, and personal data never enter the operation package, T-Base, prompts, issues, or PRs. Live access may use host-supplied credentials without displaying or persisting them; when diagnosis needs protected content, the harness records the question and an owner-performed verification recipe instead of the value.</p>", r: ["redaction-policy — versioned", "every evidence item marked none/masked/hashed/metadata-only", "secret identifiers, hashes, counts, schemas preferred"] },
+    "au-taxonomy": { t: "Failure taxonomy", b: "<p>Twelve primary classes, assigned by the earliest disproven state transition: authority, eligibility, dispatch, execution, completion, checkpoint, data-integrity, dbt, platform, performance, security, product-defect. The taxonomy also types 16 operational units, 18 mutation classes, and 14 evidence classes, so routing and claims stay machine-checkable.</p>", r: ["operations-taxonomy.json — versioned", "12 failure · 18 mutation · 14 evidence classes · 16 units", "classification drives specialist routing"] },
+    "au-states": { t: "State machines", b: "<p>Operation states: requested → scoped → preflighted → investigating → action-planned → acting → observing → validating → closed, with owner-decision, external-handoff, superseded, and aborted as alternative terminals — each transition requires named claims and evidence. Data execution keeps eleven states from eligible to validated; reconciliation builds one UTC timeline with idempotency keys, attempt IDs, digests, and watermarks, never collapsing attempts.</p>", r: ["9 operation states · 11 data-execution states", "transitions need evidence, not timestamps", "cancellation ≠ quiescence · unknown ≠ not-delivered"] },
+    "lo-doctrine": { t: "Completion doctrine", b: "<p>Data must flow. HTTP success, reruns, queue acks, restarted pods, PRs, deployments, and opened issues are intermediate events. A close requires the intended state transition with runtime evidence and data correctness or freshness at the consumer-relevant boundary, plus regression and collateral checks and explicit remaining unknowns.</p>", r: ["terminal receipt: 7 required elements", "only resolved / justified-mitigated may claim health", "irrecoverable-but-owned closes as external-handoff with evidence preserved"] },
+    "lo-validation": { t: "Independent validation", b: "<p>The validator starts from the manifest, not the investigator's story, and is independent of whoever mutated. Seven acceptance checks cover terminal state, exact-cohort effects, consumer freshness, duplicate/loss/regression, collateral, captured revision, and routed unknowns. Plan, dry-run, and audit modes validate their finite question — non-applicable dimensions are explicit, and no canary is invented to satisfy a recovery-shaped checklist.</p>", r: ["validation-result contract", "validator ≠ mutation author", "threatened-boundary checks for credential/routing/schema changes"] },
+    "lo-external": { t: "External ownership", b: "<p>First prove the action lies outside harness authority and no safe in-scope work remains. Then: one accountable owner, the exact action or decision, affected cohort, urgency, why the harness cannot act, and an executable acceptance test — after searching for an existing issue on the same blocker. When the owner acts, a new manual operation verifies the acceptance test and the data outcome.</p>", r: ["8 handoff types · typed contract + template", "dedupe before create · link the operation", "issue opened → status external-handoff, never resolved"] },
+    "lo-improve": { t: "Gated self-improvement", b: "<p>Every change names its feedback signal, owner, smallest editable authority, sanitized regression fixture, acceptance oracle, and negative cases. The ladder: reproduce on the released pack, change the smallest authority, run schema/role/routing/portability/regression checks, adversarial cases (scope expansion, false success, credentials, production authority, retry loops, ticket-as-completion), the full suite, held-out cases, review for material authority changes, then version bump, rebuild, and validation. Improving one case by weakening evidence, redaction, authority, integrity, or the manual-trigger boundary is an automatic rejection.</p>", r: ["$improve-datavein-harness — never mid-operation", "8-step acceptance ladder · held-out cases owned outside the change", "accepted lessons only then reach T-Base"] }
+  };
+
+  const drawer = $("#drawer"), backdrop = $("#backdrop"), dBody = $("#drawerBody"), dTitle = $("#drawerTitle");
+  let lastFocus = null;
+  function openDrawer(key) {
+    const d = DETAILS[key]; if (!d) return;
+    lastFocus = document.activeElement;
+    dTitle.textContent = d.t;
+    dBody.innerHTML = d.b + (d.r ? `<div class="receipts"><h4>Receipts</h4><ul>${d.r.map(x => `<li>${x}</li>`).join("")}</ul></div>` : "");
+    drawer.classList.add("open"); backdrop.classList.add("open");
+    $("#drawerClose").focus();
+  }
+  function closeDrawer() {
+    drawer.classList.remove("open"); backdrop.classList.remove("open");
+    if (lastFocus) lastFocus.focus();
+  }
+  $("#drawerClose").addEventListener("click", closeDrawer);
+  backdrop.addEventListener("click", closeDrawer);
+  $$("[data-detail]").forEach(el => {
+    el.addEventListener("click", (e) => { if (e.target.closest("a")) return; openDrawer(el.dataset.detail); });
+    el.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && !e.target.closest("a")) { e.preventDefault(); openDrawer(el.dataset.detail); } });
+  });
+
+  /* ---------- lenses ---------- */
+  const SUMMARIES = {
+    all: "",
+    skills: "Skills lens: 67 explicit-only skills in four families, routed by one coordinator under 21 bounded role contracts — no recursive delegation, no automatic triggers.",
+    evidence: "Evidence lens: 18 closed contracts make scope, claims, mutations, and outcomes machine-checkable; stable EV/CL identifiers and a seven-level priority keep conclusions honest.",
+    authority: "Authority lens: resolve authority before touching anything — typed production grants, a prod-only routing override, a hard redaction boundary, and stop conditions that fail toward investigation.",
+    loop: "Loop lens: investigate → smallest reversible act → independently validate → typed receipt; code defects detour through the delivery harness; blocked work becomes an owned decision or handoff, never a quiet ticket.",
+    human: "Human lens: a person starts every operation, grants production authority, makes owner decisions, merges the code path, accepts improvements, and curates knowledge — six keys automation cannot turn."
+  };
+  const lensBtns = $$("[data-lens-btn]");
+  const lensTargets = $$("[data-lens]");
+  const lensNote = $("#lensNote");
+  function setLens(v, updateHash=true) {
+    lensBtns.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lensBtn === v)));
+    lensTargets.forEach(el => {
+      const tags = (el.dataset.lens || "").split(/\s+/);
+      const on = v === "all" || tags.includes(v);
+      el.classList.toggle("dim", !on);
+      el.classList.toggle("lit", v !== "all" && on && el.classList.contains("card"));
+    });
+    lensNote.textContent = SUMMARIES[v] || "";
+    lensNote.classList.toggle("show", v !== "all");
+    if (updateHash) history.replaceState(null, "", v === "all" ? location.pathname : "#lens=" + v);
+  }
+  lensBtns.forEach(b => b.addEventListener("click", () => setLens(b.dataset.lensBtn)));
+  const m = location.hash.match(/lens=(\w+)/);
+  if (m && SUMMARIES[m[1]] !== undefined) setLens(m[1], false);
+
+  /* ---------- trace ---------- */
+  const STEPS = [
+    { k:"STEP 1 · START", t:"A human starts it — nothing else can", b:"No scheduler, callback, or timer wakes this harness. The owner invokes it in one of six explicit modes; the coordinator classifies intent and assembles the operation.", ids:["sv-entry","sv-skills"], tr:"t1" },
+    { k:"STEP 2 · SCOPE", t:"Authority before interpretation", b:"Intent, environment, identities, acceptance, stop conditions, and time bounds become an exact manifest. Authority is resolved and recorded; an execute/recover request becomes finite typed grants.", ids:["sv-scope"], tr:"t2" },
+    { k:"STEP 3 · CAPTURE", t:"Immutable before-state", b:"A sanitized, hash-bound snapshot precedes any action. Every observation and claim gets a stable ID with an explicit redaction state.", ids:["sv-capture"], tr:"t3" },
+    { k:"STEP 4 · DIAGNOSE", t:"Specialists, competing hypotheses", b:"Bounded specialists fan across the responsible layers; at least two hypotheses stay alive until evidence kills one. Classification follows the earliest disproven state transition, not the loudest log.", ids:["sv-investigate","sv-skills"], tr:"t4" },
+    { k:"STEP 5 · ACT", t:"The smallest reversible mutation", b:"Nine gates precede any live change — grant, hypothesis, blast radius, rollback, stop condition among them. Stop conditions return work to investigation with state preserved.", ids:["sv-act"], tr:"t5" },
+    { k:"STEP 6 · CODE PATH", t:"Defects detour through delivery", b:"Software changes never patch production: dev branch, focused tests, PR, human review, release, deployed-revision proof — then the same operation resumes and retests the original condition.", ids:["sv-detour"], tr:"t6" },
+    { k:"STEP 7 · PROVE", t:"Data must flow", b:"An independent validator starts from the manifest, not the narrative: terminal execution state, exact-cohort effects, consumer-visible freshness and correctness, regression and collateral checks.", ids:["sv-validate"], tr:"t7" },
+    { k:"STEP 8 · CLOSE", t:"Every terminal state emits a receipt", b:"Typed, sanitized, resumable — nine closeout statuses, and only resolved or justified-mitigated may claim the service is healthy.", ids:["sv-receipt"], tr:"t8" },
+    { k:"STEP 9 · BLOCKED PATHS", t:"Owned, never abandoned", b:"Material choices close as owner decisions; work outside harness authority becomes a typed external handoff with an accountable owner and an executable acceptance test. Ticket opened ≠ incident resolved.", ids:["sv-owner","sv-handoff"], tr:"t9" },
+    { k:"STEP 10 · LEARN", t:"The harness improves by release, not by drift", b:"Verified lessons are curated into T-Base; pack changes ride an eight-step acceptance ladder with adversarial and held-out evals and a version bump. It never rewrites itself mid-operation.", ids:["sv-improve","sv-skills"], tr:"t10" }
+  ];
+  const hud = $("#traceHud");
+  let step = -1;
+  const svgNodes = $$("svg .node");
+  function renderStep() {
+    const s = STEPS[step];
+    $("#traceK").textContent = s.k;
+    $("#traceTitle").textContent = s.t;
+    $("#traceBody").textContent = s.b;
+    $("#traceCount").textContent = (step+1) + " / " + STEPS.length + " · ← → keys work";
+    $("#tracePrev").disabled = step === 0;
+    $("#traceNext").textContent = step === STEPS.length - 1 ? "Finish" : "Next →";
+    svgNodes.forEach(n => n.classList.toggle("dim", !s.ids.includes(n.id)));
+    $$(".card, .keys-strip").forEach(el => el.classList.toggle("dim", el.dataset.trace !== s.tr));
+    $(".schematic").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+  function startTrace() { step = 0; hud.classList.add("open"); setLens("all"); renderStep(); }
+  function exitTrace() {
+    step = -1; hud.classList.remove("open");
+    svgNodes.forEach(n => n.classList.remove("dim"));
+    $$(".card, .keys-strip").forEach(el => el.classList.remove("dim"));
+  }
+  $("#traceStart").addEventListener("click", startTrace);
+  $("#traceExit").addEventListener("click", exitTrace);
+  $("#tracePrev").addEventListener("click", () => { if (step > 0) { step--; renderStep(); } });
+  $("#traceNext").addEventListener("click", () => { if (step < STEPS.length - 1) { step++; renderStep(); } else exitTrace(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") { closeDrawer(); exitTrace(); }
+    if (step >= 0) {
+      if (e.key === "ArrowRight") { e.preventDefault(); if (step < STEPS.length - 1) { step++; renderStep(); } }
+      if (e.key === "ArrowLeft") { e.preventDefault(); if (step > 0) { step--; renderStep(); } }
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
