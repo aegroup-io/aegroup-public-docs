@@ -337,14 +337,14 @@
 
 <div class="wrap">
   <header class="hero">
-    <div class="kicker-row"><div class="kicker"><a href="../">Orcha</a> · Agentic delivery harness</div><a class="exec-link" href="../exec/">Executive view →</a></div>
+    <div class="kicker-row"><div class="kicker"><a href="../">Orcha</a> · Software delivery harness</div><a class="exec-link" href="../exec/">Executive view →</a></div>
     <h1>How a change earns its merge</h1>
-    <p class="deck">Versioned skills arm isolated agent lanes. Every pull request is proven by <strong>changed-area CI, AI review, visual evidence, and security policy in parallel</strong> — and a single readiness verdict puts the final decision in a human hand. Click any node for its receipts, or <strong>trace a change</strong> end to end.</p>
+    <p class="deck">A shared delivery loop — <strong>deliver-work</strong> — arms isolated agent lanes under the repository's own policy. Every pull request is proven by <strong>changed-area CI, AI review, visual evidence, and security policy in parallel</strong>, a single readiness verdict puts the final decision in a human hand, and release belongs to operations. Click any node for its receipts, or <strong>trace a change</strong> end to end.</p>
     <div class="stats" aria-label="Harness at a glance">
-      <div class="stat"><b>11</b><span>versioned skills</span></div>
-      <div class="stat"><b>9</b><span>GitHub workflows</span></div>
-      <div class="stat"><b>37</b><span>UI routes under visual gate</span></div>
-      <div class="stat"><b>10&#8202;min</b><span>drift-monitor cadence</span></div>
+      <div class="stat"><b>1</b><span>shared delivery skill</span></div>
+      <div class="stat"><b>3</b><span>bounded roles</span></div>
+      <div class="stat"><b>11</b><span>policy skills · reference repository</span></div>
+      <div class="stat"><b>9</b><span>policy workflows</span></div>
       <div class="stat human"><b>8</b><span>human control keys</span></div>
       <div class="stat human"><b>1</b><span>merge gate</span></div>
     </div>
@@ -352,7 +352,7 @@
 
   <figure class="schematic">
     <div class="schematic-frame">
-    <svg viewBox="0 0 1180 530" role="img" aria-label="Flow of one change through the harness: a scoped issue passes through the orchestrator into isolated agent lanes, becomes an evidence-bound pull request, fans out to four parallel gates, converges on a readiness verdict, and is merged by a human before deploy and monitoring; a standing cyber layer — security policy at the PR, nightly release certification, and credential custody — feeds only certified runtime images into deploy; failures return to the owning lane and lessons return to the skill library.">
+    <svg viewBox="0 0 1180 530" role="img" aria-label="Flow of one change through the harness: a scoped issue enters the shared deliver-work loop, which chooses single-issue, epic, or issue-set topology and runs isolated agent lanes under the repository's policy; the evidence-bound pull request fans out to four parallel gates, converges on a readiness verdict checked against the delivery checkpoint, and is merged by a human; release and verification belong to the operations harness; a standing cyber layer feeds only certified runtime images into release; failures return to the owning lane and lessons return to the skills.">
       <defs>
         <marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z"/></marker>
         <marker id="ah-fail" class="m-fail" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z"/></marker>
@@ -362,8 +362,8 @@
       <!-- skills rail -->
       <g class="node rail" id="sv-skills" data-detail="skills-rail" data-lens="skills loop" tabindex="0" role="button" aria-label="Skill library">
         <rect x="24" y="20" width="704" height="34" rx="8"/>
-        <text x="40" y="41" class="t">11 versioned skills</text>
-        <text x="196" y="41" class="s">shape · isolate · validate · demo · review · package · audit — routed by AGENTS.md, structure enforced in CI</text>
+        <text x="40" y="41" class="t">deliver-work + 3 roles</text>
+        <text x="200" y="41" class="s">one loop, every stage — under the repository's own policy: 11 policy skills in the reference repo</text>
       </g>
       <line class="observe" x1="90" y1="54" x2="90" y2="118"/>
       <line class="observe" x1="271" y1="54" x2="271" y2="118"/>
@@ -379,11 +379,11 @@
       </g>
       <line class="edge" x1="156" y1="150" x2="194" y2="150" marker-end="url(#ah)"/>
 
-      <g class="node" id="sv-orch" data-detail="orchestrator" data-lens="loop skills" tabindex="0" role="button" aria-label="Orchestrator">
+      <g class="node" id="sv-orch" data-detail="orchestrator" data-lens="loop skills" tabindex="0" role="button" aria-label="deliver-work coordinator">
         <rect x="196" y="118" width="150" height="64" rx="10"/>
         <text x="208" y="136" class="k">02 · CLASSIFY</text>
-        <text x="208" y="154" class="t">Orchestrator</text>
-        <text x="208" y="170" class="s">single issue or epic</text>
+        <text x="208" y="154" class="t">deliver-work</text>
+        <text x="208" y="170" class="s">issue · epic · issue set</text>
       </g>
       <line class="edge" x1="346" y1="150" x2="384" y2="150" marker-end="url(#ah)"/>
       <text x="365" y="140" class="edge-label" text-anchor="middle">lane</text>
@@ -395,7 +395,7 @@
         <rect x="386" y="118" width="154" height="64" rx="10"/>
         <text x="398" y="136" class="k">03 · ISOLATE + BUILD</text>
         <text x="398" y="154" class="t">Agent lanes</text>
-        <text x="398" y="170" class="s">one issue = one worktree</text>
+        <text x="398" y="170" class="s">bounded roles per lane</text>
       </g>
       <line class="edge" x1="556" y1="150" x2="594" y2="150" marker-end="url(#ah)"/>
 
@@ -416,7 +416,7 @@
       <g class="node gate" id="sv-gate-ci" data-detail="gate-ci" data-lens="quality components" tabindex="0" role="button" aria-label="Changed-area CI">
         <rect x="788" y="46" width="168" height="40" rx="8"/>
         <text x="800" y="63" class="t">Changed-area CI</text>
-        <text x="800" y="77" class="s">area jobs, only what the diff touches</text>
+        <text x="800" y="77" class="s">only what the diff touches</text>
       </g>
       <g class="node gate" id="sv-gate-adv" data-detail="gate-advisory" data-lens="quality" tabindex="0" role="button" aria-label="Advisory AI review">
         <rect x="788" y="98" width="168" height="40" rx="8"/>
@@ -444,7 +444,7 @@
         <rect x="1010" y="118" width="146" height="64" rx="10"/>
         <text x="1022" y="136" class="k">05 · PROVE</text>
         <text x="1022" y="154" class="t">Readiness verdict</text>
-        <text x="1022" y="170" class="s">ready · with-risks · not</text>
+        <text x="1022" y="170" class="s">audit + checkpoint</text>
       </g>
 
       <!-- down to human merge -->
@@ -458,13 +458,13 @@
         <text x="1083" y="344" class="s" text-anchor="middle">the one key</text>
       </g>
       <line class="edge" x1="1006" y1="332" x2="898" y2="332" marker-end="url(#ah)"/>
-      <text x="952" y="322" class="edge-label" text-anchor="middle">operator CD</text>
+      <text x="952" y="322" class="edge-label" text-anchor="middle">checkpoint + evidence</text>
 
-      <g class="node" id="sv-deploy" data-detail="deploy" data-lens="loop components" tabindex="0" role="button" aria-label="Deploy and operate">
+      <g class="node dashed-node" id="sv-ops" data-detail="ops" data-lens="loop human" tabindex="0" role="button" aria-label="Operations harness owns release and verification">
         <rect x="726" y="300" width="170" height="64" rx="10"/>
-        <text x="738" y="318" class="k">06 · SHIP</text>
-        <text x="738" y="336" class="t">Deploy + operate</text>
-        <text x="738" y="352" class="s">AKS · App Service · APIM</text>
+        <text x="738" y="318" class="k">06 · RELEASE</text>
+        <text x="738" y="336" class="t">Operations harness</text>
+        <text x="738" y="352" class="s">release grant · verify</text>
       </g>
       <line class="edge" x1="726" y1="332" x2="618" y2="332" marker-end="url(#ah)"/>
 
@@ -518,11 +518,11 @@
         <text x="320" y="496" class="s">cyber / policy</text>
         <rect x="412" y="488" width="14" height="8" rx="2" fill="var(--fail)"/>
         <text x="432" y="496" class="s">return path</text>
-        <text x="524" y="496" class="s">dashed = optional / operator-dispatched · every node opens its receipts</text>
+        <text x="524" y="496" class="s">dashed = optional, operator-dispatched, or another harness · every node opens its receipts</text>
       </g>
     </svg>
     </div>
-    <figcaption>One change, end to end: the orchestrator turns a scoped issue into isolated lane work; the draft PR fans out to four parallel gates whose evidence converges on a single readiness verdict; a human turns the only merge key. Two loops close the system — failures return to the owning lane, and accepted lessons update the versioned skills that armed the run. Cyber stands as its own layer with three stations: the security-policy gate at the PR, nightly release certification feeding only certified images into deploy, and credential custody keeping secrets out of agent hands entirely.</figcaption>
+    <figcaption>One change, end to end: the shared deliver-work loop turns a scoped issue into isolated lane work under the repository's own policy; the draft PR fans out to four parallel gates whose evidence converges on a single readiness verdict — checked against a typed delivery checkpoint — and a human turns the only merge key. Release is not this harness's to grant: the checkpoint and evidence hand off to the operations harness, which holds the release grant and verifies the deployed path. Two loops close the system — failures return to the owning lane, and accepted lessons update the skills that armed the run. Cyber stands as its own layer with three stations: the security-policy gate at the PR, nightly release certification feeding only certified images into release, and credential custody keeping secrets out of agent hands entirely.</figcaption>
   </figure>
 
   <div class="toolbar" id="toolbar">
@@ -533,7 +533,7 @@
       <button class="chip" data-lens-btn="components" aria-pressed="false">Components</button>
       <button class="chip" data-lens-btn="quality" aria-pressed="false">CI + quality</button>
       <button class="chip" data-lens-btn="cyber" aria-pressed="false">Cyber</button>
-      <button class="chip" data-lens-btn="loop" aria-pressed="false">Orchestrator loop</button>
+      <button class="chip" data-lens-btn="loop" aria-pressed="false">Delivery loop</button>
       <button class="chip human-chip" data-lens-btn="human" aria-pressed="false">Human control</button>
       <button class="trace-btn" id="traceStart">▶ Trace a change</button>
       <div class="lens-note" id="lensNote" aria-live="polite"></div>
@@ -544,10 +544,28 @@
 <div class="wrap">
   <section class="band" id="band-skills">
     <div class="band-head">
-      <h2>Skill library — versioned workflow memory</h2>
-      <span class="note">AGENTS.md routes any agent into executable SKILL.md contracts; the CI harness job enforces their structure, so process changes ship like code.</span>
+      <h2>The shared loop — and the policy it obeys</h2>
+      <span class="note">One portable pack owns the delivery loop; the selected repository supplies the policy it must obey — issue shaping, lifecycle, checks, templates, merge readiness. Neither replaces the other.</span>
     </div>
-    <div class="band-grid g4">
+    <div class="band-grid g3">
+      <article class="card inspectable tone-accent" tabindex="0" data-lens="skills loop" data-detail="deliverwork" data-trace="t2">
+        <h3>deliver-work <code>1 skill · 5 references</code></h3>
+        <p>One compact coordinating skill owns the loop from intake to verified PR readiness — single issue, epic, or explicit issue set — with references for repository policy, issue and epic topology, issue sets, checkpoints, and the advisory repair loop.</p>
+        <div class="proof">a pushed commit, open PR, or pending advisor is an intermediate state</div>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="skills components" data-detail="roles" data-trace="t3">
+        <h3>Three bounded roles <code>provider-neutral</code></h3>
+        <p>Implementer (workspace-write), verifier (read-only), reviewer (read-only). Delegation is forbidden; the parent inspects diffs and accepts against stated checks — worker completion alone is never acceptance.</p>
+        <div class="proof">delivery_implementer · delivery_verifier · delivery_reviewer</div>
+      </article>
+      <article class="card inspectable" tabindex="0" data-lens="skills quality loop" data-detail="checkpoint" data-trace="t7">
+        <h3>Delivery checkpoint <code>1 contract · 5 states</code></h3>
+        <p>A typed checkpoint per PR lane records scope, lanes, head, checks, advisor receipts, and blockers; a deterministic evaluator — no network, no target code — validates the facts and names the next action.</p>
+        <div class="proof">work-needed · waiting · blocked · ready · merged</div>
+      </article>
+    </div>
+    <div class="col-label" style="margin-top: 20px">Repository policy — the reference repository's 11 skills, resolved at runtime</div>
+    <div class="band-grid g4" style="margin-top: 8px">
       <article class="card inspectable" tabindex="0" data-lens="skills loop human" data-detail="sk-shape" data-trace="t1">
         <h3>Shape &amp; govern</h3>
         <div class="skill-item"><code>feedback-approval-converter</code><span>Approved feedback → linked delivery issue(s)</span></div>
@@ -577,7 +595,7 @@
   <section class="band" id="band-components">
     <div class="band-head">
       <h2>Component surface — local proof mirrors CI</h2>
-      <span class="note">One path-aware router decides what each diff must prove; agents run the same commands locally that CI runs remotely.</span>
+      <span class="note">In the reference repository, one path-aware router decides what each diff must prove; deliver-work runs the same changed-area checks locally that CI runs remotely.</span>
     </div>
     <div class="router">
       <div class="card" data-lens="components loop">
@@ -604,7 +622,7 @@
   <section class="band" id="band-assurance">
     <div class="band-head">
       <h2>Assurance — independent evidence, one verdict</h2>
-      <span class="note">Nine workflows produce evidence in parallel; merge readiness consolidates only current-head evidence into one decision for the human.</span>
+      <span class="note">Nine repository workflows produce evidence in parallel; the advisory loop waits on them, repairs findings, and consolidates only current-head evidence into one decision for the human.</span>
     </div>
     <div class="band-grid g3">
       <div>
@@ -684,8 +702,8 @@
     </div>
     <div class="band-grid g4">
       <article class="card inspectable" tabindex="0" data-lens="loop skills" data-detail="orchestrator" data-trace="t2">
-        <h3>Orchestrator</h3>
-        <p>Reads labels first, audits scope, picks single-issue or epic mode, hands each lane a bounded contract, and integrates one lane at a time with a tracked test-and-risk table.</p>
+        <h3>deliver-work coordinator</h3>
+        <p>Reads labels before classifying, chooses single-issue, epic, or issue-set topology, hands each lane a self-contained task pack, integrates one lane at a time in dependency order, and resumes from the checkpoint without replaying completed work.</p>
       </article>
       <article class="card inspectable" tabindex="0" data-lens="loop" data-detail="events" data-trace="t9">
         <h3>Event hooks</h3>
@@ -709,25 +727,25 @@
       <b>Stale evidence voided; readiness aggregates again ↺</b>
     </div>
 
-    <div class="return-bar cd" data-lens="loop components" data-trace="t9">
+    <div class="return-bar cd" data-lens="loop human" data-trace="t9">
       <b>After human merge</b>
       <span class="arrow">→</span>
-      <b>Operator-run CD: build/push + AKS deploy for API, workers, MCP; App Service web; APIM revision + migrations</b>
+      <b>Hand-off to the <a href="../../datavein/operations/">operations harness</a>: checkpoint, evidence, exact revision — release needs its own grant, provenance, and rollback</b>
       <span class="arrow">→</span>
-      <b>Remote smoke + operational runbooks</b>
+      <b>Deployed-revision proof; the original operation resumes</b>
     </div>
 
     <div class="keys-strip" data-lens="human loop" data-trace="t8">
       <h3>The eight human keys — automation cannot turn any of them</h3>
       <ol>
         <li>Promote issue to Ready</li>
+        <li>Start a delivery lane</li>
         <li>Approve external intake</li>
         <li>Approve feedback conversion</li>
-        <li>Promote draft PR to review</li>
-        <li>Merge to dev</li>
+        <li>Merge to the base branch</li>
         <li>Accept visual baselines</li>
-        <li>Certification escalations</li>
         <li>Renew policy exceptions</li>
+        <li>Grant release — in operations</li>
       </ol>
     </div>
   </section>
@@ -737,11 +755,11 @@
     <span><span class="sw" style="background: var(--human)"></span>human control</span>
     <span><span class="sw" style="background: var(--cyber)"></span>cyber / policy</span>
     <span><span class="sw" style="background: var(--fail)"></span>return path</span>
-    <span>dashed = optional or operator-dispatched</span>
+    <span>dashed = optional, operator-dispatched, or another harness</span>
   </div>
 
   <footer>
-    <span>Grounded in the current repository: AGENTS.md, the 11 cataloged skills, <span class="mono">ci_changed_area_selector.py</span>, all nine GitHub workflows, the manager SOP and orchestrator ops loop, advisory and merge-readiness contracts, visual-gate policy, deployment-manifest policy, and the release-certification workflow. Snapshot: 2026-08-24.</span>
+    <span>Grounded in harness pack <span class="mono">org.harness-pack.delivery v1.0.0</span> — the deliver-work skill and its five references, three provider-neutral roles, the delivery-checkpoint contract and deterministic evaluator, and its migration record — applied to the reference repository's policy: 11 cataloged skills, <span class="mono">ci_changed_area_selector.py</span>, nine GitHub workflows, advisory and merge-readiness contracts, visual-gate, deployment-manifest, and release-certification policy. Companion to the <a href="../../datavein/operations/">DataVein operations harness</a>. Snapshot: 2026-09-05.</span>
   </footer>
 </div>
 
@@ -773,13 +791,16 @@
 
   /* ---------- drawer ---------- */
   const DETAILS = {
-    "skills-rail": { t: "Skill library", b: "<p>Eleven versioned skills externalize the repeatable decisions — shaping, lifecycle, isolation, validation, evidence capture, review, packaging, and readiness auditing. AGENTS.md routes any agent to the right skill; a CI validator enforces each skill's required structure, so improving the process is a reviewed code change, not tribal knowledge.</p>", r: ["skills/<name>/SKILL.md — 7 required sections", "skills/README.md — catalog index", "CI harness job — structure validation"] },
+    "skills-rail": { t: "The shared loop and its policy", b: "<p>One portable pack — deliver-work with its five references and three bounded roles — owns the delivery loop. It resolves the selected repository's policy at runtime: root and area AGENTS.md, issue shaping, lifecycle, worktree bring-up, changed-area checks, specialty reviews, UI evidence, PR packaging, merge readiness. In the reference repository that policy is eleven versioned skills whose structure CI enforces — so improving the process is a reviewed code change, not tribal knowledge.</p>", r: ["deliver-work · references: repository-policy, issue-and-epic, issue-set, checkpoints, advisory-loop", "roles: implementer · verifier · reviewer — delegation forbidden", "reference repository: 11 SKILL.md contracts, validated in CI"] },
+    "deliverwork": { t: "deliver-work", b: "<p>Bind the repository, the issue, epic, or explicit issue set, and the user's authorization; read the repository policy; search for existing lanes, worktrees, branches, and PRs before creating any. Choose topology — one branch, worktree, and PR per issue; an epic as independent worker lanes plus one integration PR; an explicit issue set as one checkpoint per PR lane with a durable index. Own the loop through verified PR readiness or an explicit external blocker; the repository's designated person owns merge.</p><p class='sub'>On resume it reconciles the checkpoint against live Git and GitHub, and never replays a completed mutation because a tool stream was empty.</p>", r: ["exactly one closing link per PR — never several in one", "worker completion ≠ acceptance; the parent inspects diffs", "reports one honest state: ready · waiting · blocked · merged"] },
+    "roles": { t: "Three bounded roles", b: "<p>Provider-neutral leaf roles with no model pins and no recursive delegation. The implementer works one owned lane in its assigned worktree and never opens a PR, integrates another lane, or deploys. The verifier runs only the assigned checks at the exact revision and reports actual commands and exit status — a skipped check is not passed. The reviewer cites file-and-line findings against the supplied revision and rubric and never approves its own implementation.</p>", r: ["workspace-write · read-only · read-only", "projected to the host by a small adapter", "the parent owns integration, PR, and advisor follow-through"] },
+    "checkpoint": { t: "Delivery checkpoint + evaluator", b: "<p>Every PR lane records repository and base, accepted scope, lanes and ownership, final head, checks, advisor receipts and attempts, review findings, PR facts, blockers, and follow-up identity — stored outside the pack and never holding secrets. The evaluator validates the recorded facts without contacting Git, GitHub, or target code, rejects contradictions, and names the next action.</p><p class='sub'>It cannot prove a reported test actually ran; before readiness the loop refreshes live state and re-reads the remote head.</p>", r: ["states: work-needed · waiting · blocked · ready · merged", "at most two advisor attempts before an explicit blocker", "ready ≠ merged ≠ deployed — each separately observed"] },
     "intent": { t: "Scoped issue", b: "<p>Work enters as one executable issue: outcome, requirements, acceptance criteria, demo plan, and non-goals. A human promotes it to Ready — the harness's first control point. External notes and approved feedback convert to issues only through explicit human confirmation.</p>", r: ["issue-shaper · feedback-approval-converter", "Definition of Ready", "state: Triage → Ready"] },
-    "orchestrator": { t: "Orchestrator", b: "<p>The orchestrator loads issue labels first and chooses the mode: a single issue gets one lane; an epic gets an integration branch plus bounded lanes merged back one at a time. Each lane receives a written contract — objective, scope, non-goals, validation, handoff — and workers are barred from opening PRs or merging on their own.</p><p class='sub'>It also enforces the advisor-receipt policy: one full AI review per PR head SHA, invalidated only by a new head.</p>", r: ["label-driven single/epic classification", "lane contract: objective · scope · non-goals · validation · handoff", "epic integration: one lane at a time, no-ff merges"] },
-    "lanes": { t: "Agent lanes", b: "<p>One pursued issue = one worktree = one branch = one PR. Every lane gets its own namespace: collision-free ports, temp roots, and a full local service stack, so parallel lanes never contaminate each other's evidence. Dozens of lanes have run this way.</p>", r: ["worktree-bringup · local-bringup", "namespaced ports, temp roots, service stack", "state: In Progress"] },
-    "pr": { t: "Evidence-bound draft PR", b: "<p>The packaging skill assembles the PR: exact local checks run, demo artifacts, docs impact, risks, and exactly one closing-issue link — all bound to the current head SHA. A sensitive-data gate blocks secrets, env files, connection strings, and sensitive samples from code, docs, logs, and screenshots.</p>", r: ["pr-packager · feature-demo-capture", "PR template parity enforced", "evidence ↔ head SHA binding"] },
+    "orchestrator": { t: "deliver-work coordinator", b: "<p>Labels first, then the accepted body: single issue, epic, or explicit issue set. Each worker receives a self-contained task pack — issue and accepted outcome, worktree and branch, allowed files and dependencies, non-goals and runtime authority, objective acceptance commands — and is told it is not alone. Lanes integrate one at a time in dependency order with conflicts resolved explicitly and affected checks rerun; only the final integration PR needs the authoritative full advisory review.</p><p class='sub'>It also enforces the advisor-receipt policy: one full AI review per exact head and accepted scope, invalidated only by material drift.</p>", r: ["label-driven topology, body-confirmed", "task pack per worker · lanes queued beyond available slots", "serial integration; revision recorded before marking integrated"] },
+    "lanes": { t: "Agent lanes", b: "<p>One pursued issue = one worktree = one branch = one PR. Every lane gets its own namespace — collision-free ports, temp roots, a full local service stack — so parallel lanes never contaminate each other's evidence. Inside a lane the pack's bounded roles do the work: an implementer with write access, a verifier and a reviewer with none.</p>", r: ["worktree-bringup · local-bringup (repository policy)", "implementer · verifier · reviewer (pack roles)", "namespaced ports, temp roots, service stack"] },
+    "pr": { t: "Evidence-bound draft PR", b: "<p>The repository's packaging policy assembles the PR: exact local checks run, demo artifacts, docs impact, risks, and exactly one closing-issue link — all bound to the current head SHA. A sensitive-data gate blocks secrets, env files, connection strings, and sensitive samples from code, docs, logs, and screenshots. The lane's checkpoint records the PR's facts alongside.</p>", r: ["pr-packager · feature-demo-capture", "PR template parity enforced", "evidence ↔ head SHA binding · one checkpoint per PR lane"] },
     "gate-ci": { t: "Changed-area CI", b: "<p>A path-aware router maps the diff to the narrowest credible checks across the repo's areas — harness, api, workers, web, mcp, infra, public docs. Skipped areas don't run, so signal stays fast; shared contracts intentionally fan out to adjacent areas.</p>", r: ["ci_changed_area_selector.py — same routing locally and in CI", "conditional area jobs behind one router", "blocking"] },
-    "gate-advisory": { t: "Advisory code review · AI", b: "<p>An AI reviewer applies the repo's own rubric — code-reviewer, test-selector, and SQL-reviewer skills plus planning and SOP docs — and posts one structured receipt per head SHA as a PR comment and artifact. It is advisory by design: findings inform the human decision, and an outage degrades to 'review unavailable' instead of blocking.</p>", r: ["one full receipt per head SHA", "schema-validated review artifact + single PR comment", "fork PRs bypass — secrets never meet untrusted code"] },
+    "gate-advisory": { t: "Advisory code review · AI", b: "<p>An AI reviewer applies the repo's own rubric — code-reviewer, test-selector, and SQL-reviewer skills plus planning and SOP docs — and posts one structured receipt per head SHA as a PR comment and artifact. It is advisory by design: findings inform the human decision, and an outage degrades to 'review unavailable' instead of blocking.</p><p class='sub'>The delivery loop treats it as the authoritative advisor: one successful full review per exact head and accepted scope; findings are repaired, pushed, and re-reviewed; a base-branch advance alone never voids a receipt — only material drift does.</p>", r: ["one full receipt per head SHA", "schema-validated review artifact + single PR comment", "fork PRs bypass — secrets never meet untrusted code"] },
     "gate-visual": { t: "Visual regression gate", b: "<p>A deterministic fixture build renders 37 UI routes; Playwright captures snapshots and demo clips; a pixel diff against accepted baselines warns at 0.2% and fails at 1.0%; an AI design review adds a second opinion where only an explicit fail blocks. Baseline changes require a separate human-dispatched acceptance.</p>", r: ["route spec: 37 routes · fixed viewport + theme", "pixelmatch thresholds 0.2% / 1.0%", "artifacts retained 14 days"] },
     "gate-baseline": { t: "Baseline acceptance", b: "<p>Updating what 'correct' looks like is a privileged, human-dispatched act. The workflow verifies the official gate run, the exact PR head SHA, the artifact's identity and digest, and the capture manifest before committing baselines — and a later pixel change never inherits an earlier acceptance.</p>", r: ["maintainer dispatch only", "artifact digest verification", "acceptance record committed with baselines"] },
     "gate-policy": { t: "Security manifest policy", b: "<p>Deployment manifests for long-lived services must pin images by digest, define readiness and liveness probes, and run non-root with no privilege escalation and all capabilities dropped. Exceptions are exact-fingerprint, owned, and time-boxed; expiry or any parse doubt fails the gate closed.</p>", r: ["digest-pinned images", "probes + non-root + drop ALL capabilities", "time-boxed exceptions · fails closed"] },
@@ -787,11 +808,11 @@
     "gate-cert": { t: "Release certification", b: "<p>Nightly and on demand, the worker runtime image is rebuilt reproducibly with provenance, emits CycloneDX SBOMs (runtime, Python, image), passes three secret scans (build tree, image + history, evidence bundle), and is scanned for vulnerabilities — HIGH/CRITICAL findings with available fixes block certification.</p>", r: ["reproducible build + provenance comparison", "3× SBOM · 3× secret scan", "vulnerability policy: HIGH/CRITICAL with fix ⇒ block"] },
     "custody": { t: "Credential custody", b: "<p>Jobs that touch source systems never carry secrets — only a reference (id, provider, purpose). The runtime resolves references against exact scope: organization, environment, region, source family, handler, provider, purpose. Missing, stale, revoked, or cross-scope references fail before any source is touched. Agents, queues, and logs never hold credential material.</p>", r: ["reference-only job payloads", "exact-scope resolution · fails closed", "credential lineage tracked per source"] },
     "boundaries": { t: "Known boundaries", b: "<p>The cyber story is honest about its edges: static analysis (SAST), dependency auditing, and PR-path secret scanning are scheduled follow-up slices on the platform-guardrails epic. Today, secret scanning runs in the release-certification path, and the sensitive-data gate covers the PR surface.</p><p class='sub'>Claiming only what's wired is itself a control: the readiness verdict cites evidence that exists.</p>", r: ["tracked follow-up slices on the guardrails epic", "no silent coverage claims"] },
-    "verdict": { t: "Readiness verdict", b: "<p>Merge readiness re-audits on every gate completion and consolidates only current-head evidence: one closing issue, complete PR sections, changed-area CI, advisory findings, visual evidence, unresolved reviews. It answers ready, ready-with-risks, or not-ready in a single PR comment with a 14-day evidence bundle — advice for the human, not an auto-merge.</p>", r: ["re-runs on CI / advisory / visual completion", "stale-SHA evidence voided", "single comment + evidence bundle"] },
-    "merge": { t: "Human merge", b: "<p>The Product Owner is the merge operator. Done begins only after a human merges to dev — automation proves and recommends but holds no merge key. An independent second approval stays optional by design.</p>", r: ["Definition of Done = a human merges", "unresolved findings are blockers", "one of eight human keys"] },
-    "deploy": { t: "Deploy + operate", b: "<p>Deployment stays operator-driven: build and push images, AKS rollouts for API, workers, and MCP, App Service for web, APIM revision and database migrations — followed by remote smoke checks and operational runbooks.</p>", r: ["operator-run CD scripts", "remote/prod smoke", "runbooks for every scan and rollout"] },
+    "verdict": { t: "Readiness verdict", b: "<p>Merge readiness re-audits on every gate completion and consolidates only current-head evidence: one closing issue, complete PR sections, changed-area CI, advisory findings, visual evidence, unresolved reviews. It answers ready, ready-with-risks, or not-ready — advice for the human, not an auto-merge. The delivery loop agrees only when its own checkpoint evaluates to ready and a re-read of the remote head still matches; then it marks the draft PR ready for review.</p>", r: ["re-runs on CI / advisory / visual completion", "checkpoint evaluator: ready — then live state re-verified", "never merges, never pushes a protected branch"] },
+    "merge": { t: "Human merge", b: "<p>The repository's designated person is the merge operator. Done begins only after a human merges to the base branch — automation proves and recommends but holds no merge key. An independent second approval stays optional by design.</p>", r: ["Definition of Done = a human merges", "unresolved findings are blockers", "one of eight human keys"] },
+    "ops": { t: "Operations harness — release and verification", b: "<p>Repository delivery ends at a verified, human-merged PR. It does not grant runtime access, authenticate to a product, authorize a production release, or prove recovery — those belong to the calling operations harness, which receives the checkpoint, evidence, and exact revision, maps them into its own delivery record, and holds a separate release-deploy grant with provenance and rollback. When operations invoked the lane for a code defect, the original operation resumes and retests the original condition.</p><p class='sub'>See the <a href='../../datavein/operations/'>DataVein operations harness</a> for the release side of this boundary.</p>", r: ["release-deploy grant is separate from merge", "an unmerged head is never a production release", "checkpoint + evidence + revision cross the boundary; secrets never do"] },
     "monitor": { t: "Monitor + events", b: "<p>Every ten minutes a deterministic, low-token audit compares the delivery board against labels, linked PRs, and check status, publishing a JSON drift report. Lifecycle events — task started, blocked, PR opened, ready to merge — can notify chat in real time. Auto-reconcile exists but is deliberately held back: detect and notify first.</p>", r: ["10-min scheduled audit · JSON artifact", "4 lifecycle events + notification adapter", "auto-reconcile: one flag away, off by choice"] },
-    "memory": { t: "Evidence becomes memory", b: "<p>The learning loop is human-curated: accepted review findings and operating lessons become edits to versioned skills, agent guidance, tests, or runbooks. Because CI validates the skill structure, a lesson learned is enforceable on the very next run — the harness gets stricter as it ships.</p>", r: ["findings → skills/ · AGENTS.md · tests · runbooks", "validated by the CI harness job"] },
+    "memory": { t: "Evidence becomes memory", b: "<p>The learning loop is human-curated: accepted review findings and operating lessons become edits to versioned skills, agent guidance, tests, or runbooks. Because CI validates the skill structure, a lesson learned is enforceable on the very next run — the harness gets stricter as it ships.</p><p class='sub'>The shared pack evolves the same way — versioned releases with deterministic scenario checks and a deprecation gate — never by editing itself mid-lane.</p>", r: ["findings → skills/ · AGENTS.md · tests · runbooks", "validated by the CI harness job", "pack releases: source validator · unit tests · deterministic build check"] },
     "sk-shape": { t: "Shape & govern", b: "<p>Three skills own the top of the funnel: converting approved feedback into linked delivery issues, shaping issues to the Definition of Ready, and moving them through lifecycle states to a human-merged Done.</p>", r: ["feedback-approval-converter", "issue-shaper", "manager-lifecycle"] },
     "sk-isolate": { t: "Isolate & run", b: "<p>Two skills make parallelism safe: the worktree contract assigns each lane collision-free ports, temp roots, and namespaces; local bringup stands up the full service stack, smoke-tests it, and resets it cleanly.</p>", r: ["worktree-bringup", "local-bringup"] },
     "sk-validate": { t: "Validate & demonstrate", b: "<p>Two skills make proof cheap: the test selector picks the narrowest credible checks for the diff (mirroring CI's router), and demo capture turns working software into screenshots, diffs, and route clips that ride the PR.</p>", r: ["changed-area-test-selector", "feature-demo-capture"] },
@@ -823,12 +844,12 @@
   /* ---------- lenses ---------- */
   const SUMMARIES = {
     all: "",
-    skills: "Skills lens: eleven versioned contracts externalize every repeatable decision — and the lessons loop feeds them, so the harness compounds.",
+    skills: "Skills lens: one shared loop — deliver-work, three bounded roles, a typed checkpoint — obeys the selected repository's policy: eleven versioned skills in the reference repository, fed by the lessons loop.",
     components: "Components lens: seven change surfaces share one path-aware router; each lane proves only what its diff can affect, locally and in CI.",
     quality: "Quality lens: changed-area CI, AI review, and visual evidence run in parallel; merge readiness consolidates current-head evidence into one verdict.",
     cyber: "Cyber lens: sensitive-data hygiene, hardening policy, SBOM + provenance + secret scans, credential custody by reference — and honest boundaries for what isn't wired yet.",
-    loop: "Loop lens: the orchestrator drives convergence, events notify, a 10-minute audit catches drift, failures return to their owning lane, lessons return to the skills.",
-    human: "Human lens: automation proves and recommends; people hold all eight keys — from Ready promotion to the merge itself."
+    loop: "Loop lens: deliver-work drives convergence to a verified PR; events notify, a 10-minute audit catches drift, failures return to their owning lane, lessons return to the skills — and release hands off to operations.",
+    human: "Human lens: automation proves and recommends; people hold all eight keys — from Ready promotion to the merge, with release granted in operations."
   };
   const lensBtns = $$("[data-lens-btn]");
   const lensTargets = $$("[data-lens]");
@@ -852,14 +873,14 @@
   /* ---------- trace ---------- */
   const STEPS = [
     { k:"STEP 1 · SHAPE", t:"Work becomes executable", b:"An approved request is shaped into one scoped issue — outcome, acceptance criteria, demo plan, non-goals — and a human promotes it to Ready.", ids:["sv-intent","sv-skills"], tr:"t1" },
-    { k:"STEP 2 · CLASSIFY", t:"The orchestrator picks the mode", b:"Labels decide single issue vs. epic. Each lane gets a bounded written contract; epics get an integration branch merged one lane at a time.", ids:["sv-orch"], tr:"t2" },
-    { k:"STEP 3 · ISOLATE", t:"A lane spins up", b:"One issue, one worktree, one branch. Namespaced ports, temp roots, and a full local stack keep parallel lanes from touching each other.", ids:["sv-lanes"], tr:"t3" },
+    { k:"STEP 2 · CLASSIFY", t:"deliver-work picks the topology", b:"Labels first, body confirmed: single issue, epic, or explicit issue set. Each lane gets a self-contained task pack; epics integrate one lane at a time in dependency order.", ids:["sv-orch"], tr:"t2" },
+    { k:"STEP 3 · ISOLATE", t:"A lane spins up", b:"One issue, one worktree, one branch. Namespaced ports, temp roots, and a full local stack keep parallel lanes apart; an implementer builds while a verifier and a reviewer stay read-only.", ids:["sv-lanes"], tr:"t3" },
     { k:"STEP 4 · PROVE LOCALLY", t:"Local proof mirrors CI", b:"The changed-area selector picks the narrowest credible checks for the diff — the same routing CI will use — so surprises die before the PR.", ids:["sv-lanes","sv-skills"], tr:"t4" },
     { k:"STEP 5 · PACKAGE", t:"The PR carries its evidence", b:"Checks run, demo artifacts, risks, and one closing link are bound to the head SHA. The sensitive-data gate screens everything.", ids:["sv-pr"], tr:"t5" },
     { k:"STEP 6 · GATES", t:"Four gates fire in parallel", b:"Changed-area CI, AI advisory review, the visual gate, and security policy each produce independent evidence. Any failure returns to the owning lane — and a new head SHA voids stale evidence.", ids:["sv-gate-ci","sv-gate-adv","sv-gate-vis","sv-gate-pol"], tr:"t6" },
-    { k:"STEP 7 · VERDICT", t:"Evidence converges", b:"Merge readiness re-audits on every gate completion and answers: ready, ready-with-risks, or not-ready — one comment, one evidence bundle.", ids:["sv-verdict"], tr:"t7" },
-    { k:"STEP 8 · DECIDE", t:"A human turns the key", b:"The Product Owner merges. Done starts only after merge — automation holds none of the eight human keys.", ids:["sv-merge"], tr:"t8" },
-    { k:"STEP 9 · SHIP + WATCH", t:"Deploy, then keep watching", b:"Operator-run CD ships the components — only nightly-certified runtime images (SBOM, secret + vulnerability scans) are eligible. Events notify on state changes; a 10-minute deterministic audit reconciles the board with reality.", ids:["sv-deploy","sv-monitor","sv-cyber"], tr:"t9" },
+    { k:"STEP 7 · VERDICT", t:"Evidence converges", b:"Merge readiness re-audits on every gate completion and answers ready, ready-with-risks, or not-ready; the delivery checkpoint must evaluate to ready too, and the remote head is re-read before anyone is told.", ids:["sv-verdict"], tr:"t7" },
+    { k:"STEP 8 · DECIDE", t:"A human turns the key", b:"The repository's designated person merges. Done starts only after merge — automation holds none of the eight human keys.", ids:["sv-merge"], tr:"t8" },
+    { k:"STEP 9 · RELEASE", t:"Hand off to operations", b:"Delivery ends at the merged PR. The checkpoint, evidence, and exact revision pass to the operations harness, which grants release separately — only nightly-certified runtime images are eligible — and verifies the deployed path. Events and the 10-minute audit keep the board honest.", ids:["sv-ops","sv-monitor","sv-cyber"], tr:"t9" },
     { k:"STEP 10 · LEARN", t:"The harness gets stricter", b:"Accepted findings become edits to versioned skills, guidance, and tests — validated by CI, enforceable on the very next run.", ids:["sv-memory","sv-skills"], tr:"t10" }
   ];
   const hud = $("#traceHud");
