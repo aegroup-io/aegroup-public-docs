@@ -164,6 +164,9 @@
   a.exec-card.product { margin-top: 10px; }
   a.exec-card.product:hover, a.exec-card.product:focus-visible { border-color: var(--cyber); }
   a.exec-card.product .label, a.exec-card.product .cta { color: var(--cyber); }
+  a.exec-card.shared { margin-top: 10px; }
+  a.exec-card.shared:hover, a.exec-card.shared:focus-visible { border-color: var(--accent); }
+  a.exec-card.shared .label, a.exec-card.shared .cta { color: var(--accent); }
   .exec-card .label {
     font-family: "IBM Plex Mono", monospace; font-size: 10.5px;
     letter-spacing: 0.12em; text-transform: uppercase; color: var(--human);
@@ -226,9 +229,9 @@
     <a class="hcard delivery" href="./harness/">
       <div class="label">02 · Deliver — software delivery harness</div>
       <h2>How a change earns its merge</h2>
-      <p>One shared loop — <em>deliver-work</em> with three bounded roles and a typed checkpoint — takes a scoped issue into an isolated agent lane under the repository's own policy, and every pull request is proven in parallel — changed-area CI, AI review, visual evidence, security policy — until a single readiness verdict puts the final decision in a human hand. Release belongs to operations; accepted lessons re-arm the skills.</p>
+      <p>One shared loop — <em>deliver-work</em> with three bounded roles and a typed checkpoint — takes a scoped issue into an isolated agent lane under the repository's own typed policy. A fresh reviewer reads every candidate before its first push, then every pull request is proven in parallel — changed-area CI, AI review, visual evidence, security policy — until a single readiness verdict puts the final decision in a human hand. Release belongs to operations; accepted lessons re-arm the skills.</p>
       <div class="chips" aria-hidden="true">
-        <span>one shared loop · deliver-work</span><span>3 bounded roles</span><span>isolated agent lanes</span><span>advisory AI review</span><span>1 human merge gate</span>
+        <span>one shared loop · deliver-work</span><span>3 bounded roles</span><span>fresh review before push</span><span>isolated agent lanes</span><span>advisory AI review</span><span>1 human merge gate</span>
       </div>
       <div class="cta">Explore the delivery harness →</div>
     </a>
@@ -241,6 +244,11 @@
 
   <a class="exec-card product" href="../datavein/">
     <span><span class="label">Products</span> &nbsp; <b>DataVein — operations harness</b> &nbsp; <span class="desc">when the data doesn't flow: 68 skills own every anomaly to verified data flow, and route code fixes back through delivery</span></span>
+    <span class="cta">Open →</span>
+  </a>
+
+  <a class="exec-card shared" href="./api-access/">
+    <span><span class="label">Shared packs</span> &nbsp; <b>Product API Access</b> &nbsp; <span class="desc">the bounded, noninteractive HTTPS client both harnesses reach products through — explicit profiles, no logins, no improvised curl</span></span>
     <span class="cta">Open →</span>
   </a>
 
